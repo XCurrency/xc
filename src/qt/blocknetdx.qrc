@@ -54,6 +54,7 @@
         <file alias="staking_inactive">res/icons/staking_inactive.png</file>
         <file alias="address-book-white">res/icons/address-book-white.png</file>
         <file alias="editpaste-white">res/icons/editpaste-white.png</file>
+        <file>res/images/XC_256px.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="default">res/css/default.css</file>
@@ -71,6 +72,7 @@
         <file alias="walletFrame">res/images/walletFrame.png</file>
         <file alias="splash">res/images/splash.png</file>
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
+        <file>res/images/XC_1024px.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>
@@ -108,5 +110,8 @@
         <file alias="spinner-032">res/movies/spinner-032.png</file>
         <file alias="spinner-033">res/movies/spinner-033.png</file>
         <file alias="spinner-034">res/movies/spinner-034.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>res/images/XC_512px.png</file>
     </qresource>
 </RCC>
