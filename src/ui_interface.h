@@ -6,11 +6,14 @@
 #ifndef BITCOIN_UI_INTERFACE_H
 #define BITCOIN_UI_INTERFACE_H
 
+#include "xchat/message.h"
+
 #include <stdint.h>
 #include <string>
 
 #include <boost/signals2/last_value.hpp>
 #include <boost/signals2/signal.hpp>
+
 
 class CBasicKeyStore;
 class CWallet;
@@ -73,16 +76,18 @@ public:
         MSG_INFORMATION = ICON_INFORMATION,
         MSG_WARNING = (ICON_WARNING | BTN_OK | MODAL),
         MSG_ERROR = (ICON_ERROR | BTN_OK | MODAL)
+
     };
 
     /** Show message box. */
-    boost::signals2::signal<bool(const std::string& message, const std::string& caption, unsigned int style), boost::signals2::last_value<bool> > ThreadSafeMessageBox;
+    boost::signals2::signal<bool(const std::string &message, const std::string &caption,
+                                 unsigned int style), boost::signals2::last_value<bool> > ThreadSafeMessageBox;
 
     /** Progress message during initialization. */
-    boost::signals2::signal<void(const std::string& message)> InitMessage;
+    boost::signals2::signal<void(const std::string &message)> InitMessage;
 
     /** Translate a message to the native language of the user. */
-    boost::signals2::signal<std::string(const char* psz)> Translate;
+    boost::signals2::signal<std::string(const char *psz)> Translate;
 
     /** Number of network connections changed. */
     boost::signals2::signal<void(int newNumConnections)> NotifyNumConnectionsChanged;
@@ -91,16 +96,29 @@ public:
      * New, updated or cancelled alert.
      * @note called with lock cs_mapAlerts held.
      */
-    boost::signals2::signal<void(const uint256& hash, ChangeType status)> NotifyAlertChanged;
+    boost::signals2::signal<void(const uint256 &hash, ChangeType status)> NotifyAlertChanged;
 
     /** A wallet has been loaded. */
-    boost::signals2::signal<void(CWallet* wallet)> LoadWallet;
+    boost::signals2::signal<void(CWallet *wallet)> LoadWallet;
 
     /** Show progress e.g. for verifychain */
-    boost::signals2::signal<void(const std::string& title, int nProgress)> ShowProgress;
+    boost::signals2::signal<void(const std::string &title, int nProgress)> ShowProgress;
 
     /** New block has been accepted */
-    boost::signals2::signal<void(const uint256& hash)> NotifyBlockTip;
+    boost::signals2::signal<void(const uint256 &hash)> NotifyBlockTip;
+
+    /**
+     * @brief NotifyNewMessage
+     * called when new message received
+     */
+    boost::signals2::signal<void(const Message &message)> NotifyNewMessage;
+
+    /**
+     * @brief NotifyDistmixPaymentStatusChanged
+     * called for change distmix status (for gui)
+     */
+    boost::signals2::signal<void(const std::string &status)> NotifyDistmixPaymentStatusChanged;
+
 };
 
 extern CClientUIInterface uiInterface;

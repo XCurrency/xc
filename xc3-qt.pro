@@ -273,7 +273,12 @@ SOURCES += \
     src/crypto/chacha20.cpp \
     src/bip38.cpp \
     src/s3downloader.cpp \
-    src/coinvalidator.cpp
+    src/coinvalidator.cpp \
+    src/xchat/message.cpp \
+    src/xchat/message_db.cpp \
+    src/xchat/stored_pub_keys_db.cpp \
+    src/lz4/lz4.c \
+    src/xchat/messagecrypter.cpp
 
 #protobuf generated
 SOURCES += \
@@ -533,7 +538,12 @@ HEADERS += \
     src/compat/endian.h \
     src/compat/byteswap.h \
     src/s3downloader.h \
-    src/coinvalidator.h
+    src/coinvalidator.h \
+    src/xchat/message.h \
+    src/xchat/message_db.h \
+    src/xchat/stored_pub_keys_db.h \
+    src/lz4/lz4.h \
+    src/xchat/messagecrypter.h
 
 #ENABLE_ZMQ
 #    src/zmq/zmqabstractnotifier.h \

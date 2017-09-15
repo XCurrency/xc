@@ -4,11 +4,11 @@
 
 #define BOOST_TEST_MODULE Blocknetdx Test Suite
 
-#include "main.h"
-#include "random.h"
-#include "txdb.h"
-#include "ui_interface.h"
-#include "util.h"
+#include "../main.h"
+#include "../random.h"
+#include "../txdb.h"
+#include "../ui_interface.h"
+#include "../util.h"
 #ifdef ENABLE_WALLET
 #include "db.h"
 #include "wallet.h"
