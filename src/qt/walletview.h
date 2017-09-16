@@ -69,7 +69,7 @@ private:
 
     TransactionView* transactionView;
 
-    MessagesDialog * messagesPage;
+    MessagesDialog* messagesPage;
 
     QProgressDialog* progressDialog;
     QLabel* transactionSum;
@@ -97,6 +97,9 @@ public slots:
 
     /** Show BIP 38 tool - default to Encryption tab */
     void gotoBip38Tool();
+
+    /** Show XChat tab */
+    void gotoXChatTab();
 
     /** Show incoming transaction notification for new transactions.
 

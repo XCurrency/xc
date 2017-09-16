@@ -21,6 +21,7 @@
 #include "transactiontablemodel.h"
 #include "transactionview.h"
 #include "walletmodel.h"
+#include "xchat/messagedialog.h"
 
 #include "ui_interface.h"
 
@@ -47,7 +48,7 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     transactionView = new TransactionView(this);
 
     // create messages dialog
-    // messagesPage = new MessagesDialog(this);
+    messagesPage = new MessagesDialog();
 
     vbox->addWidget(transactionView);
     QPushButton* exportButton = new QPushButton(tr("&Export"), this);
@@ -81,6 +82,7 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
     addWidget(explorerWindow);
+    addWidget(messagesPage);
 
     QSettings settings;
     if (settings.value("fShowServicenodesTab").toBool()) {
@@ -153,7 +155,7 @@ void WalletView::setWalletModel(WalletModel* walletModel)
     }
     receiveCoinsPage->setModel(walletModel);
     sendCoinsPage->setModel(walletModel);
-    // messagesPage->setWalletModel(walletModel);
+    messagesPage->setWalletModel(walletModel);
 
     if (walletModel) {
         // Receive and pass through messages from wallet model
@@ -259,6 +261,11 @@ void WalletView::gotoBip38Tool()
     //bip38ToolDialog->setAttribute(Qt::WA_DeleteOnClose);
     bip38ToolDialog->setModel(walletModel);
     bip38ToolDialog->showTab_ENC(true);
+}
+
+void WalletView::gotoXChatTab() 
+{
+    setCurrentWidget(messagesPage);
 }
 
 void WalletView::gotoMultiSendDialog()

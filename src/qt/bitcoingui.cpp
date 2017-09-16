@@ -326,6 +326,17 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(historyAction);
 
+    messagesPageAction = new QAction(QIcon(":/icons/history"), tr("&XChat"), this);
+    messagesPageAction->setStatusTip(tr("XChat"));
+    messagesPageAction->setToolTip(historyAction->statusTip());
+    messagesPageAction->setCheckable(true);
+#ifdef Q_OS_MAC
+    messagesPageAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
+#else
+    messagesPageAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+#endif
+    tabGroup->addAction(messagesPageAction);
+
 #ifdef ENABLE_WALLET
 
     QSettings settings;
@@ -354,6 +365,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(messagesPageAction, SIGNAL(triggered()), this, SLOT(gotoXChatPage()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -523,6 +535,7 @@ void BitcoinGUI::createToolBars()
             toolbar->addAction(servicenodeAction);
         }
 
+        toolbar->addAction(messagesPageAction);
         toolbar->setMovable(false); // remove unused icon in upper left corner
         overviewAction->setChecked(true);
 
@@ -748,6 +761,12 @@ void BitcoinGUI::gotoServicenodePage()
         servicenodeAction->setChecked(true);
         if (walletFrame) walletFrame->gotoServicenodePage();
     }
+}
+
+void BitcoinGUI::gotoXChatPage()
+{
+    messagesPageAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoXChatTab();
 }
 
 void BitcoinGUI::gotoReceiveCoinsPage()

@@ -94,6 +94,7 @@ private:
     QAction* overviewAction;
     QAction* historyAction;
     QAction* servicenodeAction;
+    QAction* messagesPageAction;
     QAction* quitAction;
     QAction* sendCoinsAction;
     QAction* usedSendingAddressesAction;
@@ -193,6 +194,8 @@ public slots:
 
 private slots:
 #ifdef ENABLE_WALLET
+    /** Swithch to XChat page */
+    void gotoXChatPage();
     /** Switch to overview (home) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
