@@ -10,9 +10,9 @@ bool ChatDb::load(const std::string &address, std::vector<Message> &messages) {
 
     {
         LOCK(criticalSection_);
-//        if (!Read(address, messages)) {
-//            return false;
-//        }
+        if (!Read(address, messages)) {
+            return false;
+        }
     }
     // TODO crypto
     return true;
@@ -22,12 +22,12 @@ bool ChatDb::save(const std::string &address, const std::vector<Message> &messag
     // TODO crypto
 
     LOCK(criticalSection_);
-//    return Write(address, messages);
+    return Write(address, messages);
 }
 
 bool ChatDb::erase(const std::string &address) {
     LOCK(criticalSection_);
-//    return Erase(address);
+    return Erase(address);
 }
 
 std::string ChatDb::undelivered_("undelivered");
@@ -36,21 +36,17 @@ bool ChatDb::loadUndelivered(UndeliveredMap &messages) {
     messages.clear();
     {
         LOCK(criticalSection_);
-/*
-        if (!Read(undelivered_, messages))
-        {
+
+        if (!Read(undelivered_, messages)) {
             return false;
         }
-*/
     }
     return true;
 }
 
 bool ChatDb::saveUndelivered(const UndeliveredMap &messages) {
     LOCK(criticalSection_);
-//    return Write(undelivered_, messages);
-
-    return false;
+    return Write(undelivered_, messages);
 }
 
 bool ChatDb::loadAddresses(std::vector<std::string> &addresses) {
@@ -89,6 +85,4 @@ bool ChatDb::loadAddresses(std::vector<std::string> &addresses) {
     cur->close();
 
     return success;
-
-
 }

@@ -64,6 +64,22 @@ struct Message {
      */
     time_t timestamp;
 
+
+    ADD_SERIALIZE_METHODS;
+
+    template<typename Stream, typename Operation>
+    inline void SerializationOp(Stream &s, Operation ser_action, int nType, int nVersion) {
+        READWRITE(from);
+        READWRITE(to);
+        READWRITE(date);
+        READWRITE(text);
+        READWRITE(signature);
+        READWRITE(publicRKey);
+        READWRITE(encryptedData);
+        READWRITE(mac);
+        READWRITE(iv);
+
+    };
     /**
      *
      */
