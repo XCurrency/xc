@@ -63,6 +63,19 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget* parent) : QDialog
             break;
         }
         break;
+    case ForSending:
+        switch (tab) {
+            case SendingTab:
+                ui->labelExplanation->setVisible(false);
+                break;
+            case ReceivingTab:
+                break;
+        }
+
+        connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(accept()));
+        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui->tableView->setFocus();
+        break;
     }
     switch (tab) {
     case SendingTab:

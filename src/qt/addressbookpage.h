@@ -37,11 +37,12 @@ public:
 
     enum Mode {
         ForSelection, /**< Open address book to pick address */
-        ForEditing    /**< Open address book for editing */
+        ForEditing,   /**< Open address book for editing */
+        ForSending    /**< Open address book for sending */
     };
 
     explicit AddressBookPage(Mode mode, Tabs tab, QWidget* parent);
-    ~AddressBookPage();
+    virtual ~AddressBookPage();
 
     void setModel(AddressTableModel* model);
     const QString& getReturnValue() const { return returnValue; }
