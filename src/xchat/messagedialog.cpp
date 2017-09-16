@@ -8,10 +8,10 @@
 #include "../qt/addressbookpage.h"
 #include "../qt/editaddressdialog.h"
 #include "../util/verify.h"
-#include "../../key.h"
-#include "../../base58.h"
-#include "../../wallet.h"
-#include "../../init.h"
+#include "../key.h"
+#include "../base58.h"
+#include "../wallet.h"
+#include "../init.h"
 
 #include <QDateTime>
 #include <QMessageBox>
@@ -23,27 +23,28 @@
 //*****************************************************************************
 //*****************************************************************************
 MessagesDialog::MessagesDialog(QWidget *parent)
-        : QDialog(parent), ui(new Ui::MessagesDialog), m_db(ChatDb::instance()), m_keys(StoredPubKeysDb::instance()),
-          m_model(0), m_walletModel(0) {
+        : QDialog(parent), ui(new Ui::MessagesDialog), chatDb_(ChatDb::instance()),
+          keysDb_(StoredPubKeysDb::instance()),
+          messagesModel_(0), walletModel(0) {
     ui->setupUi(this);
 
-    ui->messages_SM->setModel(&m_model);
-    ui->messages_SM->setItemDelegate(&m_messageDelegate);
+    ui->messages_SM->setModel(&messagesModel_);
+    ui->messages_SM->setItemDelegate(&messageDelegate_);
     ui->messages_SM->setAutoScroll(true);
 
-    ui->addresses_SM->setModel(&m_users);
-    ui->addresses_SM->setItemDelegate(&m_userDelegate);
+    ui->addresses_SM->setModel(&usersModel);
+    ui->addresses_SM->setItemDelegate(&userDelegate_);
 
     ui->outMessage_SM->setFocus();
 
     std::vector<std::string> addrs;
-    m_db.loadAddresses(addrs);
-    m_users.loadAddresses(addrs);
+    chatDb_.loadAddresses(addrs);
+    usersModel.loadAddresses(addrs);
 
-    m_addToAddressBookAction = new QAction(trUtf8("Add to address book"), this);
-    m_userContextMenu.addAction(m_addToAddressBookAction);
-    m_deleteAction = new QAction(trUtf8("Delete"), this);
-    m_userContextMenu.addAction(m_deleteAction);
+    addToAddressBookAction_ = new QAction(trUtf8("Add to address book"), this);
+    userContextMenu_.addAction(addToAddressBookAction_);
+    deleteAction_ = new QAction(trUtf8("Delete"), this);
+    userContextMenu_.addAction(deleteAction_);
 
     VERIFY(connect(ui->addresses_SM, SIGNAL(customContextMenuRequested(QPoint)),
                    this, SLOT(addrContextMenu(QPoint))));
@@ -61,12 +62,12 @@ MessagesDialog::~MessagesDialog() {
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::setWalletModel(WalletModel *model) {
-    m_walletModel = model;
-    m_users.setAddressTableModel(model->getAddressTableModel());
+    walletModel = model;
+    usersModel.setAddressTableModel(model->getAddressTableModel());
 
     // set from addr if empty
     if (ui->addressIn_SM->text().isEmpty()) {
-        AddressTableModel *atm = m_walletModel->getAddressTableModel();
+        AddressTableModel *atm = walletModel->getAddressTableModel();
         if (atm) {
             quint32 count = atm->rowCount(QModelIndex());
             for (quint32 i = 0; i < count; ++i) {
@@ -92,40 +93,37 @@ void MessagesDialog::setFromAddress(const QString &address) {
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::setToAddress(const QString &address) {
-    setWindowTitle(QString("Messages <%1>").arg(m_users.labelForAddressWithAddress(address)));
+    setWindowTitle(QString("Messages <%1>").arg(usersModel.labelForAddressWithAddress(address)));
 
     ui->pubKeyTo_SM->clear();
 
     CBitcoinAddress addr(address.toStdString());
     if (addr.IsValid()) {
         CPubKey pubKey;
-        m_keys.load(address.toStdString(), pubKey);
+        keysDb_.load(address.toStdString(), pubKey);
 
         if (pubKey.IsValid()) {
             ui->pubKeyTo_SM->setText(QString::fromStdString(EncodeBase58(pubKey.Raw())));
         }
 
-//        CKeyID id;
-//        if (addr.GetKeyID(id))
-//        {
-//            CKey key;
-//            if (pwalletMain->GetKey(id, key))
-//            {
-//                CPubKey pubKey = key.GetPubKey();
-//                if (pubKey.IsValid())
-//                {
-//                    std::vector<unsigned char> raw = pubKey.Raw();
-//                    QByteArray arr(static_cast<char *>(static_cast<void *>(&raw[0])), raw.size());
-//                    ui->pubKeyTo_SM->setText(QString(arr.toBase64()));
-//                }
-//            }
-//        }
+        CKeyID id;
+        if (addr.GetKeyID(id)) {
+            CKey key;
+            if (pwalletMain->GetKey(id, key)) {
+                CPubKey cPubKey = key.GetPubKey();
+                if (cPubKey.IsValid()) {
+                    std::vector<unsigned char> raw = cPubKey.Raw();
+                    QByteArray arr(static_cast<char *>(static_cast<void *>(&raw[0])), raw.size());
+                    ui->pubKeyTo_SM->setText(QString(arr.toBase64()));
+                }
+            }
+        }
     }
 
     // load messages for address
     std::vector<Message> messages;
     loadMessages(address, messages);
-    m_model.loadMessages(messages);
+    messagesModel_.loadMessages(messages);
 
     // set remote address
     ui->addressTo_SM->setText(address);
@@ -145,14 +143,14 @@ void MessagesDialog::setToAddress(const QString &address) {
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::showForAddress(const QString &address) {
-    m_readTimer.stop();
+    readTimer_.stop();
 
     setToAddress(address);
     // show();
 
     ui->messages_SM->scrollToBottom();
 
-    m_readTimer.singleShot(3000, this, SLOT(onReadTimer()));
+    readTimer_.singleShot(3000, this, SLOT(onReadTimer()));
 }
 
 //*****************************************************************************
@@ -181,14 +179,14 @@ void MessagesDialog::incomingMessage(Message &message) {
     bool forMy = false;
     CPubKey senderPubKey;
     if (!message.decrypt(key, forMy, senderPubKey)) {
-        if (forMy == true) {
+        if (forMy) {
             QMessageBox::warning(this, "", QString("cannot encrypt message from <%1>")
                     .arg(QString::fromStdString(message.from)));
         }
         return;
     }
 
-    QString from = QString::fromStdString(message.from);
+    auto from = QString::fromStdString(message.from);
 
     std::vector<Message> messages;
     loadMessages(from, messages);
@@ -197,19 +195,19 @@ void MessagesDialog::incomingMessage(Message &message) {
 
     // save sender pub key
     if (senderPubKey.IsValid()) {
-        m_keys.store(message.from, senderPubKey);
+        keysDb_.store(message.from, senderPubKey);
     }
 
     // add from address to model
     // or move to top
-    m_users.addAddress(from.toStdString());
+    usersModel.addAddress(from.toStdString());
 
     if (ui->addresses_SM->currentIndex().data(UsersModel::roleAddress).toString() == from ||
         !ui->addresses_SM->currentIndex().isValid()) {
         showForAddress(from);
     }
 
-    emit newIncomingMessage(m_users.labelForAddress(from), QString::fromStdString(message.text));
+    emit newIncomingMessage(usersModel.labelForAddress(from), QString::fromStdString(message.text));
 }
 
 //*****************************************************************************
@@ -218,9 +216,10 @@ bool MessagesDialog::loadMessages(const QString &address, std::vector<Message> &
     result.clear();
 
     std::vector<Message> messages;
-    if (!m_db.load(address.toStdString(), messages)) {
-        // QMessageBox::warning(this, "", trUtf8("Error when load messages for <%1>").arg(m_users.labelForAddress(address)));
-        // return;
+    if (!chatDb_.load(address.toStdString(), messages)) {
+        QMessageBox::warning(this, "",
+                             trUtf8("Error when load messages for <%1>").arg(usersModel.labelForAddress(address)));
+        return false;
     }
 
     BOOST_FOREACH(Message & msg, messages)
@@ -231,7 +230,7 @@ bool MessagesDialog::loadMessages(const QString &address, std::vector<Message> &
     }
 
     if (messages.size() != result.size()) {
-        m_db.save(address.toStdString(), result);
+        chatDb_.save(address.toStdString(), result);
     }
 
     return true;
@@ -240,34 +239,30 @@ bool MessagesDialog::loadMessages(const QString &address, std::vector<Message> &
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::saveMessages(const QString &address, const std::vector<Message> &messages) {
-    m_db.save(address.toStdString(), messages);
+    chatDb_.save(address.toStdString(), messages);
 }
 
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::clearMessages(const QString &address) {
-    m_db.save(address.toStdString(), std::vector<Message>());
+    chatDb_.save(address.toStdString(), std::vector<Message>());
 }
 
 //*****************************************************************************
 //*****************************************************************************
-void MessagesDialog::pushToUndelivered(const Message &m) {
+void MessagesDialog::pushToUndelivered(const Message &message) {
     UndeliveredMap messages;
-    m_db.loadUndelivered(messages);
+    chatDb_.loadUndelivered(messages);
 
     // check expired messages
     for (UndeliveredMap::iterator i = messages.begin(); i != messages.end();) {
-        if (i->second.isExpired()) {
-            messages.erase(i++);
-        } else {
-            ++i;
-        }
+        i->second.isExpired() ? messages.erase(i++) : ++i;
     }
 
-    uint256 hash = m.getStaticHash();
-    messages.insert(std::make_pair(hash, m));
+    uint256 hash = message.getStaticHash();
+    messages.insert(std::make_pair(hash, message));
 
-    m_db.saveUndelivered(messages);
+    chatDb_.saveUndelivered(messages);
 }
 
 //*****************************************************************************
@@ -291,35 +286,35 @@ void MessagesDialog::on_pasteButtonPublicKey_SM_clicked() {
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::on_addressBookButton_SM_clicked() {
-    if (!m_walletModel) {
+    if (!walletModel) {
         // TODO
         // alert
         return;
     }
 
-//    AddressBookPage dlg(AddressBookPage::ForSending, AddressBookPage::ReceivingTab, this);
-//    dlg.setModel(m_walletModel->getAddressTableModel());
-//    if (dlg.exec() != QDialog::Rejected)
-//    {
-//        setFromAddress(dlg.getReturnValue());
-//    }
+    AddressBookPage dlg(AddressBookPage::ForSending,
+                        AddressBookPage::ReceivingTab, this);
+    dlg.setModel(walletModel->getAddressTableModel());
+    if (dlg.exec() != QDialog::Rejected) {
+        setFromAddress(dlg.getReturnValue());
+    }
 }
 
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::on_addressBookButtonTo_SM_clicked() {
-    if (!m_walletModel) {
+    if (!walletModel) {
         // TODO
         // alert
         return;
     }
 
-//    AddressBookPage dlg(AddressBookPage::ForSending, AddressBookPage::SendingTab, this);
-//    dlg.setModel(m_walletModel->getAddressTableModel());
-//    if (dlg.exec() != QDialog::Rejected)
-//    {
-//        setToAddress(dlg.getReturnValue());
-//    }
+    AddressBookPage dlg(AddressBookPage::ForSending,
+                        AddressBookPage::SendingTab, this);
+    dlg.setModel(walletModel->getAddressTableModel());
+    if (dlg.exec() != QDialog::Rejected) {
+        setToAddress(dlg.getReturnValue());
+    }
 }
 
 //*****************************************************************************
@@ -335,6 +330,8 @@ bool MessagesDialog::checkAddress(const std::string &address) const {
     if (!addr.GetKeyID(keyID)) {
         // TODO
         // alert
+        QMessageBox::warning(this, tr("ERROR"),
+                             tr("Error get key  id"), QMessageBox::Ok);
         return false;
     }
 
@@ -344,7 +341,7 @@ bool MessagesDialog::checkAddress(const std::string &address) const {
 //*****************************************************************************
 //*****************************************************************************
 bool MessagesDialog::getKeyForAddress(const std::string &address, CKey &key) const {
-    if (!m_walletModel || !pwalletMain) {
+    if (!walletModel || !pwalletMain) {
         return false;
     }
 
@@ -366,7 +363,7 @@ bool MessagesDialog::getKeyForAddress(const std::string &address, CKey &key) con
         }
     } else {
         // locked
-        WalletModel::UnlockContext ctx = m_walletModel->requestUnlock();
+        WalletModel::UnlockContext ctx = walletModel->requestUnlock();
         if (!ctx.isValid()) {
             return false;
         }
@@ -391,10 +388,9 @@ void MessagesDialog::on_sendButton_SM_clicked() {
         return;
     }
 
-//    if (m.text.size() > Message::maxMessageSize)
-//    {
-//        m.text.resize(Message::maxMessageSize);
-//    }
+    if (m.text.size() > Message::DESCRIPTION::MAX_MESSAGE_SIZE) {
+        m.text.resize(Message::DESCRIPTION::MAX_MESSAGE_SIZE);
+    }
 
     // check source addr
     m.from = ui->addressIn_SM->text().toStdString();
@@ -436,26 +432,26 @@ void MessagesDialog::on_sendButton_SM_clicked() {
 //        destPubKey = destKey.GetPubKey();
 
 //        // key is correct - store it
-//        m_keys.store(m.to, destPubKey);
+//        keysDb_.store(m.to, destPubKey);
 //    }
 //    else
 //    {
 //        // not valid, check stored key
-//        if (!m_keys.load(m.to, destPubKey))
+//        if (!keysDb_.load(m.to, destPubKey))
 //        {
 //            QMessageBox::warning(this, "", "invalid destination public key");
 //            return;
 //        }
 //    }
 
-//    m.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
+    m.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
 
     // before send this message try to send undelivered
-//    {
-//        std::vector<std::string> addrs;
-//        addrs.push_back(m.to);
-//        resendUndelivered(addrs);
-//    }
+    {
+        std::vector<std::string> addrs;
+        addrs.push_back(m.to);
+        resendUndelivered(addrs);
+    }
 
     // send message
     {
@@ -468,13 +464,13 @@ void MessagesDialog::on_sendButton_SM_clicked() {
         pushToUndelivered(mCopy);
     }
 
-    m_model.addMessage(m);
-    saveMessages(ui->addressTo_SM->text(), m_model.plainData());
+    messagesModel_.addMessage(m);
+    saveMessages(ui->addressTo_SM->text(), messagesModel_.plainData());
 
     ui->outMessage_SM->clear();
     ui->messages_SM->scrollToBottom();
 
-    m_users.addAddress(m.to, false);
+    usersModel.addAddress(m.to, false);
 }
 
 //*****************************************************************************
@@ -493,7 +489,7 @@ void MessagesDialog::on_clearButton_SM_clicked() {
     QString addr = idx.data(UsersModel::roleAddress).toString();
 
     clearMessages(addr);
-//    m_model.loadMessages(std::vector<Message>());
+//    messagesModel_.loadMessages(std::vector<Message>());
 }
 
 //*****************************************************************************
@@ -501,11 +497,11 @@ void MessagesDialog::on_clearButton_SM_clicked() {
 std::vector<std::string> MessagesDialog::getLocalAddresses() const {
     std::vector<std::string> result;
 
-    if (!m_walletModel) {
+    if (!walletModel) {
         return result;
     }
 
-    AddressTableModel *addressesModel = m_walletModel->getAddressTableModel();
+    AddressTableModel *addressesModel = walletModel->getAddressTableModel();
     int rows = addressesModel->rowCount(QModelIndex());
 
     for (int i = 0; i < rows; ++i) {
@@ -559,9 +555,9 @@ void MessagesDialog::on_addresses_SM_clicked(const QModelIndex &index) {
 //*****************************************************************************
 void MessagesDialog::onReadTimer() {
     if (ui->addresses_SM->currentIndex().isValid()) {
-        m_users.onRead(ui->addresses_SM->currentIndex());
-    } else if (m_users.rowCount() > 0) {
-        m_users.onRead(m_users.index(0));
+        usersModel.onRead(ui->addresses_SM->currentIndex());
+    } else if (usersModel.rowCount() > 0) {
+        usersModel.onRead(usersModel.index(0));
     }
 }
 
@@ -573,7 +569,7 @@ void MessagesDialog::addrContextMenu(QPoint point) {
         return;
     }
 
-    AddressTableModel *atm = m_walletModel->getAddressTableModel();
+    AddressTableModel *atm = walletModel->getAddressTableModel();
     if (!atm) {
         return;
     }
@@ -581,28 +577,28 @@ void MessagesDialog::addrContextMenu(QPoint point) {
     QString addr = index.data(UsersModel::roleAddress).toString();
     QString label = atm->labelForAddress(addr);
 
-    m_addToAddressBookAction->setVisible(label.isEmpty());
+    addToAddressBookAction_->setVisible(label.isEmpty());
 
-    QAction *a = m_userContextMenu.exec(QCursor::pos());
+    QAction *a = userContextMenu_.exec(QCursor::pos());
 
-    if (a == m_addToAddressBookAction) {
+    if (a == addToAddressBookAction_) {
 //        EditAddressDialog dlg(EditAddressDialog::NewSendingAddress);
 //        dlg.setModel(atm);
 //        dlg.setAddress(addr);
 //        if (dlg.exec())
 //        {
-//            m_users.addAddress(addr.toStdString(), false);
+//            usersModel.addAddress(addr.toStdString(), false);
 //        }
-    } else if (a == m_deleteAction) {
+    } else if (a == deleteAction_) {
         int result = QMessageBox::information(this,
                                               trUtf8("Confirm delete"),
                                               trUtf8("Are you sure?"),
                                               QMessageBox::Yes | QMessageBox::Cancel);
         if (result == QMessageBox::Yes) {
-            m_users.deleteAddress(addr.toStdString());
-            m_db.erase(addr.toStdString());
+            usersModel.deleteAddress(addr.toStdString());
+            chatDb_.erase(addr.toStdString());
 
-            m_model.clear();
+            messagesModel_.clear();
         }
     }
 }

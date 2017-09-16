@@ -34,7 +34,7 @@ Q_OBJECT
 public:
     explicit MessagesDialog(QWidget *parent = 0);
 
-    ~MessagesDialog();
+    virtual ~MessagesDialog();
 
 public:
     void setWalletModel(WalletModel *model);
@@ -86,7 +86,7 @@ private:
 
     void clearMessages(const QString &address);
 
-    void pushToUndelivered(const Message &m);
+    void pushToUndelivered(const Message &message);
 
     bool checkAddress(const std::string &address) const;
 
@@ -100,22 +100,22 @@ private:
 private:
     Ui::MessagesDialog *ui;
 
-    ChatDb &m_db;
-    StoredPubKeysDb &m_keys;
+    ChatDb &chatDb_;
+    StoredPubKeysDb &keysDb_;
 
-    MessagesModel m_model;
-    MessageDelegate m_messageDelegate;
+    MessagesModel messagesModel_;
+    MessageDelegate messageDelegate_;
 
-    UsersModel m_users;
-    UserDelegate m_userDelegate;
+    UsersModel usersModel;
+    UserDelegate userDelegate_;
 
-    WalletModel *m_walletModel;
+    WalletModel *walletModel;
 
-    QTimer m_readTimer;
+    QTimer readTimer_;
 
-    QMenu m_userContextMenu;
-    QAction *m_addToAddressBookAction;
-    QAction *m_deleteAction;
+    QMenu userContextMenu_;
+    QAction *addToAddressBookAction_;
+    QAction *deleteAction_;
 };
 
 #endif // MESSAGEDIALOG_H
