@@ -25,13 +25,23 @@ const unsigned int BIP32_EXTKEY_SIZE = 74;
  * script supports up to 75 for single byte push
  */
 
+
+
 /** A reference to a CKey: the Hash160 of its serialized public key */
+
 class CKeyID : public uint160
 {
 public:
     CKeyID() : uint160() {}
     CKeyID(const uint160& in) : uint160(in) {}
 };
+
+class key_error : public std::runtime_error {
+public:
+    explicit key_error(const std::string &str) : std::runtime_error(str) {}
+};
+
+
 
 /** An encapsulated public key. */
 class CPubKey

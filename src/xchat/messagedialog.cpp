@@ -47,7 +47,7 @@ MessagesDialog::MessagesDialog(QWidget *parent)
     userContextMenu_.addAction(deleteAction_);
 
     VERIFY(connect(ui->addresses_SM, SIGNAL(customContextMenuRequested(QPoint)),
-                   this, SLOT(addrContextMenu(QPoint))));
+                   this, SLOT(addressContextMenu(QPoint))));
     VERIFY(connect(ui->outMessage_SM, SIGNAL(returnPressed()),
                    this, SLOT(on_sendButton_SM_clicked())));
     show();
@@ -69,8 +69,8 @@ void MessagesDialog::setWalletModel(WalletModel *model) {
     if (ui->addressIn_SM->text().isEmpty()) {
         AddressTableModel *atm = walletModel->getAddressTableModel();
         if (atm) {
-            quint32 count = atm->rowCount(QModelIndex());
-            for (quint32 i = 0; i < count; ++i) {
+            auto count = atm->rowCount(QModelIndex());
+            for (auto i = 0; i < count; ++i) {
                 QModelIndex idx = atm->index(i, AddressTableModel::Address, QModelIndex());
                 if (atm->data(idx, AddressTableModel::TypeRole).toString() == AddressTableModel::Receive) {
                     setFromAddress(atm->data(idx, Qt::DisplayRole).toString());
@@ -97,8 +97,8 @@ void MessagesDialog::setToAddress(const QString &address) {
 
     ui->pubKeyTo_SM->clear();
 
-    CBitcoinAddress addr(address.toStdString());
-    if (addr.IsValid()) {
+    CBitcoinAddress bitcoinAddress(address.toStdString());
+    if (bitcoinAddress.IsValid()) {
         CPubKey pubKey;
         keysDb_.load(address.toStdString(), pubKey);
 
@@ -107,7 +107,7 @@ void MessagesDialog::setToAddress(const QString &address) {
         }
 
         CKeyID id;
-        if (addr.GetKeyID(id)) {
+        if (bitcoinAddress.GetKeyID(id)) {
             CKey key;
             if (pwalletMain->GetKey(id, key)) {
                 CPubKey cPubKey = key.GetPubKey();
@@ -320,18 +320,17 @@ void MessagesDialog::on_addressBookButtonTo_SM_clicked() {
 //*****************************************************************************
 //*****************************************************************************
 bool MessagesDialog::checkAddress(const std::string &address) const {
-    CBitcoinAddress addr(address);
-    if (!addr.IsValid()) {
+    CBitcoinAddress bitcoinAddress(address);
+    if (!bitcoinAddress.IsValid()) {
         // TODO
         // alert
         return false;
     }
     CKeyID keyID;
-    if (!addr.GetKeyID(keyID)) {
+    if (!bitcoinAddress.GetKeyID(keyID)) {
         // TODO
         // alert
-        QMessageBox::warning(this, tr("ERROR"),
-                             tr("Error get key  id"), QMessageBox::Ok);
+        QMessageBox::warning(this, tr("ERROR"), tr("Error get key  id"));
         return false;
     }
 
@@ -345,13 +344,13 @@ bool MessagesDialog::getKeyForAddress(const std::string &address, CKey &key) con
         return false;
     }
 
-    CBitcoinAddress addr(address);
-    if (!addr.IsValid()) {
+    CBitcoinAddress bitcoinAddress(address);
+    if (!bitcoinAddress.IsValid()) {
         return false;
     }
 
     CKeyID keyID;
-    if (!addr.GetKeyID(keyID)) {
+    if (!bitcoinAddress.GetKeyID(keyID)) {
         return false;
     }
 
@@ -379,42 +378,42 @@ bool MessagesDialog::getKeyForAddress(const std::string &address, CKey &key) con
 //*****************************************************************************
 //*****************************************************************************
 void MessagesDialog::on_sendButton_SM_clicked() {
-    Message m;
+    Message message;
 
     // check empty message
-    m.text = ui->outMessage_SM->text().toStdString();
-    if (m.text.length() == 0) {
+    message.text = ui->outMessage_SM->text().toStdString();
+    if (message.text.length() == 0) {
         QMessageBox::warning(this, "", "empty message");
         return;
     }
 
-    if (m.text.size() > Message::DESCRIPTION::MAX_MESSAGE_SIZE) {
-        m.text.resize(Message::DESCRIPTION::MAX_MESSAGE_SIZE);
+    if (message.text.size() > Message::DESCRIPTION::MAX_MESSAGE_SIZE) {
+        message.text.resize(Message::DESCRIPTION::MAX_MESSAGE_SIZE);
     }
 
     // check source addr
-    m.from = ui->addressIn_SM->text().toStdString();
-    if (!checkAddress(m.from)) {
+    message.from = ui->addressIn_SM->text().toStdString();
+    if (!checkAddress(message.from)) {
         ui->addressIn_SM->setValid(false);
         QMessageBox::warning(this, "", "invalid address");
         return;
     }
 
     // check destination addr
-    m.to = ui->addressTo_SM->text().toStdString();
-    if (!checkAddress(m.to)) {
+    message.to = ui->addressTo_SM->text().toStdString();
+    if (!checkAddress(message.to)) {
         ui->addressTo_SM->setValid(false);
         QMessageBox::warning(this, "", "invalid address");
         return;
     }
 
     CKey myKey;
-    if (!getKeyForAddress(m.from, myKey)) {
+    if (!getKeyForAddress(message.from, myKey)) {
         QMessageBox::warning(this, "", "key not found");
         return;
     }
 
-    if (!m.sign(myKey)) {
+    if (!message.sign(myKey)) {
         QMessageBox::warning(this, "", "sign error");
         return;
     }
@@ -427,35 +426,31 @@ void MessagesDialog::on_sendButton_SM_clicked() {
     // check input key
     CKey destKey;
     CPubKey destPubKey;
-//    if (vkey.size() && destKey.SetPubKey(vkey))
-//    {
-//        destPubKey = destKey.GetPubKey();
+    if (vkey.size() && destKey.SetPubKey(vkey)) {
+        destPubKey = destKey.GetPubKey();
 
-//        // key is correct - store it
-//        keysDb_.store(m.to, destPubKey);
-//    }
-//    else
-//    {
-//        // not valid, check stored key
-//        if (!keysDb_.load(m.to, destPubKey))
-//        {
-//            QMessageBox::warning(this, "", "invalid destination public key");
-//            return;
-//        }
-//    }
+        // key is correct - store it
+        keysDb_.store(message.to, destPubKey);
+    } else {
+        // not valid, check stored key
+        if (!keysDb_.load(message.to, destPubKey)) {
+            QMessageBox::warning(this, "", "invalid destination public key");
+            return;
+        }
+    }
 
-    m.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
+    message.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
 
     // before send this message try to send undelivered
     {
         std::vector<std::string> addrs;
-        addrs.push_back(m.to);
+        addrs.push_back(message.to);
         resendUndelivered(addrs);
     }
 
     // send message
     {
-        Message mCopy = m;
+        Message mCopy = message;
         if (!mCopy.encrypt(destPubKey)) {
             QMessageBox::warning(this, "", "message encryption failed");
             return;
@@ -464,13 +459,13 @@ void MessagesDialog::on_sendButton_SM_clicked() {
         pushToUndelivered(mCopy);
     }
 
-    messagesModel_.addMessage(m);
+    messagesModel_.addMessage(message);
     saveMessages(ui->addressTo_SM->text(), messagesModel_.plainData());
 
     ui->outMessage_SM->clear();
     ui->messages_SM->scrollToBottom();
 
-    usersModel.addAddress(m.to, false);
+    usersModel.addAddress(message.to, false);
 }
 
 //*****************************************************************************
@@ -486,10 +481,11 @@ void MessagesDialog::on_clearButton_SM_clicked() {
         return;
     }
 
-    QString addr = idx.data(UsersModel::roleAddress).toString();
+    auto address = idx.data(UsersModel::roleAddress).toString();
 
-    clearMessages(addr);
-//    messagesModel_.loadMessages(std::vector<Message>());
+    clearMessages(address);
+    std::vector<Message> messages;
+    messagesModel_.loadMessages(messages);
 }
 
 //*****************************************************************************
@@ -522,19 +518,18 @@ std::vector<std::string> MessagesDialog::getLocalAddresses() const {
 void MessagesDialog::requestUndeliveredMessages() {
     static quint64 requestCounter = 0;
 
-    std::vector<std::string> addrs = getLocalAddresses();
-    if (!addrs.size()) {
+    std::vector<std::string> addresses = getLocalAddresses();
+    if (!addresses.size()) {
         return;
     }
 
     // send empty message for all addresses
-    BOOST_FOREACH(std::string
-    addr, addrs)
+    BOOST_FOREACH(std::string address, addresses)
     {
-        Message m;
-        m.from = addr;
-        m.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
-        m.send();
+        Message message;
+        message.from = address;
+        message.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
+        message.send();
     }
 
     QTimer::singleShot(60000 * (++requestCounter > 8 ? 2 : 10), this, SLOT(requestUndeliveredMessages()));
@@ -547,8 +542,8 @@ void MessagesDialog::on_addresses_SM_clicked(const QModelIndex &index) {
         return;
     }
 
-    QString addr = index.data(UsersModel::roleAddress).toString();
-    showForAddress(addr);
+    QString address = index.data(UsersModel::roleAddress).toString();
+    showForAddress(address);
 }
 
 //*****************************************************************************
@@ -563,41 +558,41 @@ void MessagesDialog::onReadTimer() {
 
 //*****************************************************************************
 //*****************************************************************************
-void MessagesDialog::addrContextMenu(QPoint point) {
+void MessagesDialog::addressContextMenu(QPoint point) {
     QModelIndex index = ui->addresses_SM->indexAt(point);
     if (!index.isValid()) {
         return;
     }
 
-    AddressTableModel *atm = walletModel->getAddressTableModel();
-    if (!atm) {
+    AddressTableModel *addressTableModel = walletModel->getAddressTableModel();
+    if (!addressTableModel) {
         return;
     }
 
-    QString addr = index.data(UsersModel::roleAddress).toString();
-    QString label = atm->labelForAddress(addr);
+    QString address = index.data(UsersModel::roleAddress).toString();
+    QString label = addressTableModel->labelForAddress(address);
 
     addToAddressBookAction_->setVisible(label.isEmpty());
 
-    QAction *a = userContextMenu_.exec(QCursor::pos());
+    QAction *action = userContextMenu_.exec(QCursor::pos());
 
-    if (a == addToAddressBookAction_) {
-//        EditAddressDialog dlg(EditAddressDialog::NewSendingAddress);
-//        dlg.setModel(atm);
-//        dlg.setAddress(addr);
-//        if (dlg.exec())
-//        {
-//            usersModel.addAddress(addr.toStdString(), false);
-//        }
-    } else if (a == deleteAction_) {
+
+    if (action == addToAddressBookAction_) {
+
+        EditAddressDialog editAddressDialog(EditAddressDialog::NewSendingAddress);
+        editAddressDialog.setModel(addressTableModel);
+        editAddressDialog.setAddress(address);
+        if (editAddressDialog.exec()) {
+            usersModel.addAddress(address.toStdString(), false);
+        }
+    } else if (action == deleteAction_) {
         int result = QMessageBox::information(this,
                                               trUtf8("Confirm delete"),
                                               trUtf8("Are you sure?"),
                                               QMessageBox::Yes | QMessageBox::Cancel);
         if (result == QMessageBox::Yes) {
-            usersModel.deleteAddress(addr.toStdString());
-            chatDb_.erase(addr.toStdString());
-
+            usersModel.deleteAddress(address.toStdString());
+            chatDb_.erase(address.toStdString());
             messagesModel_.clear();
         }
     }
@@ -607,28 +602,26 @@ void MessagesDialog::addrContextMenu(QPoint point) {
 //*****************************************************************************
 // static
 bool MessagesDialog::resendUndelivered(const std::vector<std::string> &addresses) {
-    ChatDb &db = ChatDb::instance();
+    ChatDb &chatDb = ChatDb::instance();
 
     UndeliveredMap map;
-    if (!db.loadUndelivered(map)) {
+    if (!chatDb.loadUndelivered(map)) {
         return false;
     }
 
     bool needToSaveUndelivered = false;
-    BOOST_FOREACH(
-    const std::string addr, addresses)
-    {
+    BOOST_FOREACH(const std::string address, addresses) {
         for (UndeliveredMap::iterator i = map.begin(); i != map.end();) {
             if (i->second.isExpired()) {
                 // expired, delete
                 map.erase(i++);
             } else {
-                if (i->second.to == addr) {
+                if (i->second.to == address) {
                     // update timestamp and resend message
-                    Message mcopy = i->second;
-                    // mcopy.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
-                    mcopy.timestamp = std::time(0);
-                    mcopy.send();
+                    Message mCopy = i->second;
+                    // mCopy.date = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
+                    mCopy.timestamp = std::time(0);
+                    mCopy.send();
                 }
                 ++i;
             }
@@ -636,7 +629,7 @@ bool MessagesDialog::resendUndelivered(const std::vector<std::string> &addresses
     }
 
     if (needToSaveUndelivered) {
-        db.saveUndelivered(map);
+        chatDb.saveUndelivered(map);
     }
 
     return true;

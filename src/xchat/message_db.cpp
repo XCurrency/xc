@@ -1,5 +1,6 @@
 #include "message_db.h"
 
+std::string ChatDb::undelivered_ = "undelivered";
 ChatDb &ChatDb::instance() {
     static ChatDb db;
     return db;
@@ -10,12 +11,10 @@ bool ChatDb::load(const std::string &address, std::vector<Message> &messages) {
 
     {
         LOCK(criticalSection_);
-        if (!Read(address, messages)) {
-            return false;
-        }
+        return Read(address, messages);
     }
     // TODO crypto
-    return true;
+
 }
 
 bool ChatDb::save(const std::string &address, const std::vector<Message> &messages) {
@@ -30,18 +29,13 @@ bool ChatDb::erase(const std::string &address) {
     return Erase(address);
 }
 
-std::string ChatDb::undelivered_("undelivered");
 
 bool ChatDb::loadUndelivered(UndeliveredMap &messages) {
     messages.clear();
     {
         LOCK(criticalSection_);
-
-        if (!Read(undelivered_, messages)) {
-            return false;
-        }
+        return Read(undelivered_, messages);
     }
-    return true;
 }
 
 bool ChatDb::saveUndelivered(const UndeliveredMap &messages) {

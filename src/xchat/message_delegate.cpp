@@ -6,6 +6,7 @@
 QSize MessageDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const {
 
+
     QRectF rect = option.rect;
     rect.adjust(8, 0, -8, 0);
 
@@ -14,11 +15,11 @@ QSize MessageDelegate::sizeHint(const QStyleOptionViewItem &option,
     {
         QString dateTime = index.data(MessagesModel::roleDateTimeString).toString();
 
-        QFont f;
-        f.setPixelSize(fontSizeForDate);
+        QFont font;
+        font.setPixelSize(fontSizeForDate);
 
-        QFontMetricsF fm(f);
-        rectForDate = fm.boundingRect(rect, Qt::AlignBottom, dateTime);
+        QFontMetricsF fontMetrics(font);
+        rectForDate = fontMetrics.boundingRect(rect, Qt::AlignBottom, dateTime);
 
     }
 
@@ -27,11 +28,11 @@ QSize MessageDelegate::sizeHint(const QStyleOptionViewItem &option,
     {
         QString text = index.data().toString();
 
-        QFont f;
-        f.setPixelSize(fontSizeForText);
+        QFont font;
+        font.setPixelSize(fontSizeForText);
 
-        QFontMetricsF fm(f);
-        rectForText = fm.boundingRect(rect, Qt::AlignBottom | Qt::TextWordWrap, text);
+        QFontMetricsF fontMetrics(font);
+        rectForText = fontMetrics.boundingRect(rect, Qt::AlignBottom | Qt::TextWordWrap, text);
     }
 
 
@@ -69,23 +70,23 @@ void MessageDelegate::paint(QPainter *painter,
     // painter->drawLine(QLine(option.rect.topRight(), option.rect.bottomRight()));
 
     // font size
-    auto f = painter->font();
+    auto font = painter->font();
 
     // ajust rect
     QRect rect(option.rect);
     rect.adjust(8, 0, -8, 0);
 
     // text options
-    QTextOption to;
-    to.setWrapMode(QTextOption::WordWrap);
-    to.setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::WordWrap);
+    textOption.setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 
     // draw text
     {
         painter->setPen(QColor(Qt::black));
-        f.setPixelSize(fontSizeForText);
-        painter->setFont(f);
-        painter->drawText(rect, text, to);
+        font.setPixelSize(fontSizeForText);
+        painter->setFont(font);
+        painter->drawText(rect, text, textOption);
     }
 
     if (isIncoming) {
@@ -98,15 +99,15 @@ void MessageDelegate::paint(QPainter *painter,
     rect.setHeight(fontSizeForDate);
 
     // draw date
-    f.setPixelSize(fontSizeForDate);
-    painter->setFont(f);
+    font.setPixelSize(fontSizeForDate);
+    painter->setFont(font);
 
-    to.setWrapMode(QTextOption::NoWrap);
-    // to.setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    textOption.setWrapMode(QTextOption::NoWrap);
+    // textOption.setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     if (isIncoming) {
-        painter->drawText(rect, ">> " + dateTime, to);
+        painter->drawText(rect, ">> " + dateTime, textOption);
     } else {
-        painter->drawText(rect, "<< " + dateTime, to);
+        painter->drawText(rect, "<< " + dateTime, textOption);
     }
 }

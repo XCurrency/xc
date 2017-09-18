@@ -54,8 +54,8 @@ QVariant UsersModel::data(const QModelIndex &index, int role) const {
 void UsersModel::loadAddresses(const std::vector<std::string> &addresses) {
     emit beginResetModel();
     // items_ = addresses;
-    for (auto i = addresses.begin(); i != addresses.end(); ++i) {
-        items_.emplace_back(*i, true);
+    for (const auto &address : addresses) {
+        items_.emplace_back(address, true);
     }
     emit endResetModel();
 }
@@ -65,7 +65,6 @@ void UsersModel::loadAddresses(const std::vector<std::string> &addresses) {
 void UsersModel::addAddress(const std::string &address, bool isNewMessage) {
     emit beginResetModel();
     items_.erase(std::remove(items_.begin(), items_.end(), address), items_.end());
-
     items_.insert(items_.begin(), Item(address, !isNewMessage));
     emit endResetModel();
 }

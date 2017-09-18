@@ -20,8 +20,8 @@
 
 #include <boost/algorithm/string.hpp>
 
-boost::recursive_mutex Message::m_knownMessagesLocker;
-std::set<uint256>      Message::m_knownMessages;
+//CCriticalSection Message::&m_knownMessagesLocker;
+std::set<uint256>      Message::knownMessages_;
 
 
 uint256 Message::getNetworkHash() const {
@@ -39,8 +39,8 @@ uint256 Message::getHash() const {
 }
 
 uint256 Message::getStaticHash() const {
-    std::string hashstr = from + to;
-    return Hash(hashstr.begin(), hashstr.end(),
+    std::string hashStr = from + to;
+    return Hash(hashStr.begin(), hashStr.end(),
                 encryptedData.begin(), encryptedData.end());
 }
 
@@ -50,13 +50,13 @@ bool Message::appliesToMe() const {
         return true;
     }
 
-    CBitcoinAddress addr(to);
-    if (!addr.IsValid()) {
+    CBitcoinAddress address(to);
+    if (!address.IsValid()) {
         return false;
     }
 
     CKeyID id;
-    if (!addr.GetKeyID(id)) {
+    if (!address.GetKeyID(id)) {
         return false;
     }
 
@@ -83,16 +83,15 @@ time_t Message::getTime() const {
 }
 
 bool Message::isExpired() const {
-//    auto secs = static_cast<int>(std::time(nullptr) - getTime());
-//
+    auto secs = static_cast<int>(std::time(nullptr) - getTime());
 //    // +-2 days
-//    return (secs < -60 * 60 * 24 * 2) || (secs > 60 * 60 * 24 * 2);
+    return (secs < -60 * 60 * 24 * 2) || (secs > 60 * 60 * 24 * 2);
 
 
 }
 
 bool Message::send() {
-//    return broadcast();
+    return broadcast();
 }
 
 bool Message::process(bool &isForMe) {
@@ -102,14 +101,14 @@ bool Message::process(bool &isForMe) {
         isForMe = true;
 
         {
-//            LOCK(m_knownMessagesLocker);
+            LOCK(knownMessagesLocker_);
 
-//            uint256 hash = getHash();
-//            if (knownMessages_.count(hash) > 0) {
-//                // already received and processed
-//                return true;
-//            }
-//            knownMessages_.insert(hash);
+            uint256 hash = getHash();
+            if (knownMessages_.count(hash) > 0) {
+                // already received and processed
+                return true;
+            }
+            knownMessages_.insert(hash);
         }
         uiInterface.NotifyNewMessage(*this);
 
@@ -148,8 +147,7 @@ bool Message::broadcast() const {
 bool Message::sign(CKey &key) {
     signature.clear();
 
-    if (!key.IsValid())//TODO: add isNull method
-    {
+    if (!key.IsValid()) {//TODO: add isNull method
         // TODO alert
         return false;
     }
@@ -190,25 +188,23 @@ bool Message::encrypt(const CPubKey &senderPubKey) {
 
     // destination public key
     CKey keyK;
-//    if (!keyK.SetPubKey(senderPubKey))
-//    {
-//        // unvalid destination public key
-//        return false;
-//    };
+    if (!keyK.SetPubKey(senderPubKey)) {
+        // unvalid destination public key
+        return false;
+    };
 
-//    EC_KEY* pkeyr = keyR.GetECKey();
-//    EC_KEY* pkeyK = keyK.GetECKey();
+    EC_KEY *pkeyr = keyR.GetECKey();
+    EC_KEY *pkeyK = keyK.GetECKey();
 
     // ECDH_compute_key returns the same P if fed compressed or uncompressed public keys
     std::vector<unsigned char> vchP;
     vchP.resize(32);
-//    ECDH_set_method(pkeyr, ECDH_OpenSSL());
-//    int lenP = ECDH_compute_key(&vchP[0], 32, EC_KEY_get0_public_key(pkeyK), pkeyr, NULL);
-//    if (lenP != 32)
-//    {
-//        // ECDH_compute_key failed
-//        return false;
-//    };
+    ECDH_set_method(pkeyr, ECDH_OpenSSL());
+    int lenP = ECDH_compute_key(&vchP[0], 32, EC_KEY_get0_public_key(pkeyK), pkeyr, NULL);
+    if (lenP != 32) {
+        // ECDH_compute_key failed
+        return false;
+    };
 
     CPubKey cpkR = keyR.GetPubKey();
     if (!cpkR.IsValid() || !cpkR.IsCompressed()) {
@@ -355,12 +351,184 @@ bool Message::encrypt(const CPubKey &senderPubKey) {
 
 }
 
-bool Message::decrypt(const CKey &receiverKey, bool &isMessageForMy, CPubKey &senderPubKey) {
-    return false;
+bool Message::decrypt(const CKey &_receiverKey, bool &isMessageForMy,
+                      CPubKey &senderPubKey) {
+    CKey &receiverKey = const_cast<CKey &>(_receiverKey);
+
+    isMessageForMy = false;
+
+    if (!encryptedData.size() || !publicRKey.size()) {
+        // no data
+        return false;
+    };
+
+    CKey keyR;
+    CPubKey cpkR(publicRKey);
+    if (!cpkR.IsValid() || !keyR.SetPubKey(cpkR)) {
+        // invalid key
+        return false;
+    };
+
+    cpkR = keyR.GetPubKey();
+    if (!cpkR.IsValid() || !cpkR.IsCompressed()) {
+        // invalid key
+        return false;
+    };
+
+    // Do an EC point multiply with private key k and public key R. This gives you public key P.
+    EC_KEY *pkeyk = receiverKey.GetECKey();
+    EC_KEY *pkeyR = keyR.GetECKey();
+
+    ECDH_set_method(pkeyk, ECDH_OpenSSL());
+
+    std::vector<unsigned char> vchP;
+    vchP.resize(32);
+    int lenPdec = ECDH_compute_key(&vchP[0], 32, EC_KEY_get0_public_key(pkeyR), pkeyk, NULL);
+    if (lenPdec != 32) {
+        // ECDH_compute_key failed
+        return false;
+    };
+
+    // Use public key P to calculate the SHA512 hash H.
+    // The first 32 bytes of H are called key_e and the last 32 bytes are called key_m.
+    std::vector<unsigned char> vchHashedDec;
+    vchHashedDec.resize(64);    // 512 bits
+    SHA512(&vchP[0], vchP.size(), (unsigned char *) &vchHashedDec[0]);
+    std::vector<unsigned char> key_e(&vchHashedDec[0], &vchHashedDec[0] + 32);
+    std::vector<unsigned char> key_m(&vchHashedDec[32], &vchHashedDec[32] + 32);
+
+    // check mac
+    {
+        // Message authentication code, (hash of timestamp + destination + payload)
+        unsigned char MAC[32];
+
+        HMAC_CTX ctx;
+        HMAC_CTX_init(&ctx);
+
+        unsigned int nBytes = 32;
+        if (!HMAC_Init_ex(&ctx, &key_m[0], 32, EVP_sha256(), NULL)
+            // || !HMAC_Update(&ctx, (unsigned char*) &psmsg->timestamp, sizeof(psmsg->timestamp))
+            // || !HMAC_Update(&ctx, (unsigned char*) &psmsg->destHash[0], sizeof(psmsg->destHash))
+            // || !HMAC_Update(&ctx, (unsigned char*) &date[0], date.size())
+            || !HMAC_Update(&ctx, &encryptedData[0], encryptedData.size())
+            || !HMAC_Final(&ctx, MAC, &nBytes)
+            || nBytes != 32) {
+            HMAC_CTX_cleanup(&ctx);
+
+            // generate message auth code error
+            return false;
+        }
+
+        HMAC_CTX_cleanup(&ctx);
+
+        if (memcmp(MAC, &mac[0], 32) != 0) {
+            // expected if message is not to address on node
+            return false;
+        };
+
+        isMessageForMy = true;
+    }
+
+    MessageCrypter crypter;
+    crypter.SetKey(key_e, &iv[0]);
+
+    std::vector<unsigned char> vchPayload;
+    if (!crypter.Decrypt(&encryptedData[0], encryptedData.size(), vchPayload)) {
+        // decryption failed
+        return false;
+    };
+
+    uint32_t lenData = 0;
+    uint32_t lenPlain = 0;
+
+    unsigned char *pMsgData = 0;
+
+    lenData = vchPayload.size() - (DESCRIPTION::ENCRYPTE_HEADER_LENGTH);
+    memcpy(&lenPlain, &vchPayload[1 + 20 + 65], 4);
+    pMsgData = &vchPayload[DESCRIPTION::ENCRYPTE_HEADER_LENGTH];
+
+    try {
+        // text.resize(lenPlain + 1);
+        text.resize(lenPlain);
+    }
+    catch (std::exception &) {
+        // no memory
+        return false;
+    };
+
+
+    if (lenPlain > 128) {
+        // decompress
+        if (LZ4_decompress_safe((char *) pMsgData, &text[0],
+                                lenData, lenPlain) != (int) lenPlain) {
+            // decompress failed
+            return false;
+        };
+    } else {
+        // plaintext
+        memcpy(&text[0], pMsgData, lenPlain);
+    };
+
+    // text[lenPlain] = '\0';
+
+    // source address check and signature validation
+    {
+        CBitcoinAddress coinAddrFrom;
+        {
+            std::vector<unsigned char> vchUint160;
+            vchUint160.resize(20);
+
+            memcpy(&vchUint160[0], &vchPayload[1], 20);
+
+            uint160 ui160(vchUint160);
+            CKeyID ckidFrom(ui160);
+
+            coinAddrFrom.Set(ckidFrom);
+            if (!coinAddrFrom.IsValid()) {
+                // invalid address
+                return false;
+            };
+        }
+
+        // signature
+        CBitcoinAddress coinAddrFromSig;
+        {
+            signature.resize(65);
+            memcpy(&signature[0], &vchPayload[1 + 20], 65);
+
+            CDataStream ss(SER_GETHASH, 0);
+            ss << strMessageMagic << text;
+
+            CKey keyFrom;
+            keyFrom.SetCompactSignature(Hash(ss.begin(), ss.end()), signature);
+            senderPubKey = keyFrom.GetPubKey();
+            if (!senderPubKey.IsValid()) {
+                // signature valifation failed
+                return false;
+            };
+
+            // get address for the compressed public key
+            coinAddrFromSig.Set(senderPubKey.GetID());
+            if (!coinAddrFromSig.IsValid()) {
+                // invalid address
+                return false;
+            };
+        }
+
+        if (!(coinAddrFrom == coinAddrFromSig)) {
+            // signature valifation failed
+            return false;
+        };
+
+        // save source public key
+    }
+
+    return true;
 }
 
+
 bool Message::isEmpty() const {
-    return false;
+    return encryptedData.empty();
 }
 
 bool Message::processReceived(const uint256 &hash) {

@@ -65,7 +65,7 @@ struct Message {
     time_t timestamp;
 
 
-    ADD_SERIALIZE_METHODS;
+    ADD_SERIALIZE_METHODS
 
     template<typename Stream, typename Operation>
     inline void SerializationOp(Stream &s, Operation ser_action, int nType, int nVersion) {
@@ -79,18 +79,40 @@ struct Message {
         READWRITE(mac);
         READWRITE(iv);
 
-    };
+    }
     /**
      *
      */
-    Message() : timestamp(std::time(nullptr)) {
+    Message() : timestamp(std::time(nullptr)) {}
 
-    }
-
+    /**
+     * @Message -default  constructor
+     */
     Message(const Message &) = default;
 
-    Message &operator=(const Message &) = default;
+    /**
+     *
+     * @return
+     */
+    Message &operator=(const Message &other) {
+        from = other.from;
+        to = other.to;
+        date = other.date;
+        text = other.text;
+        signature = other.signature;
+        publicRKey = other.publicRKey;
+        encryptedData = other.encryptedData;
+        mac = other.mac;
+        iv = other.iv;
+        timestamp = other.timestamp;
+        return *this;
+    }
 
+    /**
+     *
+     * @param other
+     * @return
+     */
     bool operator<(const Message &other) {
         return date < other.date;
     }
@@ -199,9 +221,9 @@ struct Message {
     bool isEmpty() const;
 
 private:
-    static boost::recursive_mutex m_knownMessagesLocker;
+    /*static */CCriticalSection &knownMessagesLocker_;
 
-    static std::set<uint256> m_knownMessages;
+    static std::set<uint256> knownMessages_;
 
 };
 

@@ -27,17 +27,17 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    const auto &m = messages_[row];
+    const auto &message = messages_[row];
     if (role == Qt::DisplayRole) {
-        return QString::fromStdString(m.text);
+        return QString::fromStdString(message.text);
     } else if (role == roleMessage) {
-        return QVariant::fromValue(m);
+        return QVariant::fromValue(message);
     } else if (role == roleIncoming) {
-        return m.appliesToMe();
+        return message.appliesToMe();
     } else if (role == roleDateTime) {
-        return QDateTime::fromTime_t(m.getTime());
+        return QDateTime::fromTime_t(message.getTime());
     } else if (role == roleDateTimeString) {
-        return QDateTime::fromTime_t(m.getTime()).toString("yyyy-MM-dd hh:mm:ss");
+        return QDateTime::fromTime_t(message.getTime()).toString("yyyy-MM-dd hh:mm:ss");
     }
 
     return QVariant();
@@ -55,7 +55,7 @@ void MessagesModel::loadMessages(vector<Message> &messages) {
 //*****************************************************************************
 //*****************************************************************************
 void MessagesModel::addMessage(const Message &message) {
-    std::size_t size = messages_.size();
+    auto size = messages_.size();
     beginInsertRows(QModelIndex(), size, size + 1);
     messages_.push_back(message);
     endInsertRows();

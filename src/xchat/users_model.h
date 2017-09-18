@@ -27,8 +27,8 @@ public:
         std::string addr;
         bool isRead_;
 
-        explicit Item(std::string address,
-                      const bool isRead = false) : addr(std::move(address)), isRead_(isRead) {}
+        explicit Item(std::string address, const bool isRead = false)
+                : addr(std::move(address)), isRead_(isRead) {}
 
         bool operator==(const std::string &address) const {
             return addr == address;

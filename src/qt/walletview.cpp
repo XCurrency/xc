@@ -11,7 +11,7 @@
 #include "blockexplorer.h"
 #include "clientmodel.h"
 #include "guiutil.h"
-#include "servicenodeconfig.h"
+#include "../servicenodeconfig.h"
 #include "multisenddialog.h"
 #include "optionsmodel.h"
 #include "overviewpage.h"

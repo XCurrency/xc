@@ -10,6 +10,8 @@
 #include "user_delegate.h"
 #include "message_db.h"
 #include "stored_pub_keys_db.h"
+#include "../qt/editaddressdialog.h"
+
 #include <QDialog>
 #include <QTimer>
 #include <QMenu>
@@ -75,7 +77,7 @@ private slots:
 
     void onReadTimer();
 
-    void addrContextMenu(QPoint point);
+    void addressContextMenu(QPoint point);
 
 private:
     std::vector<std::string> getLocalAddresses() const;

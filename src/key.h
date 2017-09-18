@@ -13,7 +13,7 @@
 
 #include <stdexcept>
 #include <vector>
-
+#include <openssl/ec.h> // for EC_KEY definition
 class CPubKey;
 
 struct CExtPubKey;
@@ -37,6 +37,15 @@ typedef std::vector<unsigned char, secure_allocator<unsigned char> > CPrivKey;
 /** An encapsulated private key. */
 class CKey
 {
+protected:
+    EC_KEY *pkey;
+    bool fSet;
+    bool fCompressedPubKey;
+
+    void SetCompressedPubKey();
+
+public:
+    EC_KEY *GetECKey() { pkey; }
 private:
     //! Whether this private key is valid. We check for correctness when modifying the key
     //! data, so fValid should always correspond to the actual state.
@@ -124,6 +133,11 @@ public:
      */
     CPubKey GetPubKey() const;
 
+    bool SetPubKey(const std::vector<unsigned char> &vchPubKey);
+
+    bool SetPubKey(const CPubKey &vchPubKey);
+
+    void Reset();
     /**
      * Create a DER-serialized signature.
      * The test_case parameter tweaks the deterministic nonce, and is only for
@@ -139,6 +153,12 @@ public:
      *                  add 0x04 for compressed keys.
      */
     bool SignCompact(const uint256& hash, std::vector<unsigned char>& vchSig) const;
+
+    // reconstruct public key from a compact signature
+    // This is only slightly more CPU intensive than just verifying it.
+    // If this function succeeds, the recovered public key is guaranteed to be valid
+    // (the signature is a valid signature of the given data for that key)
+    bool SetCompactSignature(uint256 hash, const std::vector<unsigned char> &vchSig);
 
     //! Derive BIP32 child key.
     bool Derive(CKey& keyChild, ChainCode &ccChild, unsigned int nChild, const ChainCode &cc) const;
