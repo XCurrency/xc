@@ -45,7 +45,7 @@ protected:
     void SetCompressedPubKey();
 
 public:
-    EC_KEY *GetECKey() { pkey; }
+    EC_KEY *GetECKey() { return pkey; }
 private:
     //! Whether this private key is valid. We check for correctness when modifying the key
     //! data, so fValid should always correspond to the actual state.
