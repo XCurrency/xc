@@ -15,6 +15,10 @@
 #include <string>
 #include <vector>
 
+typedef long long int64;
+typedef unsigned long long uint64;
+
+
 class uint_error : public std::runtime_error
 {
 public:

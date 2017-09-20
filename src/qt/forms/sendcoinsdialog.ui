@@ -54,7 +54,7 @@
        <number>6</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayoutCoinControl" stretch="0,0,0,0,1">
+          <layout class="QVBoxLayout" name="verticalLayoutCoinControl" stretch="0,0,0,0,0,1,0">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -324,7 +324,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string notr="true">0.00 BLOCK</string>
+                  <string notr="true">0.00 XC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -404,7 +404,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string notr="true">0.00 BLOCK</string>
+                  <string notr="true">0.00 XC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -484,7 +484,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string notr="true">0.00 BLOCK</string>
+                  <string notr="true">0.00 XC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -513,7 +513,7 @@
                   <enum>Qt::ActionsContextMenu</enum>
                  </property>
                  <property name="text">
-                  <string notr="true">0.00 BLOCK</string>
+                  <string notr="true">0.00 XC</string>
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -594,7 +594,7 @@
           <item>
            <widget class="QLabel" name="labelBlockSize">
             <property name="text">
-             <string>0 BLOCK</string>
+             <string>0 XC</string>
             </property>
            </widget>
           </item>
@@ -623,18 +623,81 @@
          </layout>
         </item>
         <item>
-         <spacer name="verticalSpacerCoinControl">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>800</width>
-            <height>1</height>
-           </size>
-          </property>
-         </spacer>
+            <spacer name="verticalSpacer_8">
+                <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                    <size>
+                        <width>20</width>
+                        <height>40</height>
+                    </size>
+                </property>
+            </spacer>
         </item>
+              <item>
+                  <spacer name="verticalSpacerCoinControl">
+                      <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                          <size>
+                              <width>800</width>
+                              <height>1</height>
+                          </size>
+                      </property>
+                  </spacer>
+              </item>
+              <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                      <item>
+                          <widget class="QCheckBox" name="txWithImage">
+                              <property name="text">
+                                  <string>Send document with transaction</string>
+                              </property>
+                          </widget>
+                      </item>
+                      <item>
+                          <widget class="QLineEdit" name="filePathEdit">
+                              <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                      <horstretch>0</horstretch>
+                                      <verstretch>0</verstretch>
+                                  </sizepolicy>
+                              </property>
+                              <property name="readOnly">
+                                  <bool>true</bool>
+                              </property>
+                          </widget>
+                      </item>
+                      <item>
+                          <widget class="QToolButton" name="pathButton">
+                              <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                                      <horstretch>0</horstretch>
+                                      <verstretch>0</verstretch>
+                                  </sizepolicy>
+                              </property>
+                              <property name="text">
+                                  <string>...</string>
+                              </property>
+                          </widget>
+                      </item>
+                      <item>
+                          <spacer name="horizontalSpacer_7">
+                              <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                                  <size>
+                                      <width>40</width>
+                                      <height>20</height>
+                                  </size>
+                              </property>
+                          </spacer>
+                      </item>
+                  </layout>
+              </item>
        </layout>
       </item>
      </layout>
@@ -651,10 +714,10 @@
         <x>0</x>
         <y>0</y>
         <width>830</width>
-        <height>95</height>
+           <height>80</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -889,7 +952,7 @@
                  <item>
                   <widget class="QRadioButton" name="radioCustomPerKilobyte">
                    <property name="toolTip">
-                    <string>If the custom fee is set to 1000 uXCs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uXCs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uXCs. For transactions bigger than a kilobyte both pay by kilobyte.</string>
+                    <string>If the custom fee is set to 1000 uBLOCKs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uBLOCKs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uBLOCKs. For transactions bigger than a kilobyte both pay by kilobyte.</string>
                    </property>
                    <property name="text">
                     <string>per kilobyte</string>
@@ -905,7 +968,7 @@
                  <item>
                   <widget class="QRadioButton" name="radioCustomAtLeast">
                    <property name="toolTip">
-                    <string>If the custom fee is set to 1000 uXCs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uXCs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uXCs. For transactions bigger than a kilobyte both pay by kilobyte.</string>
+                    <string>If the custom fee is set to 1000 uBLOCKs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uBLOCKs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uBLOCKs. For transactions bigger than a kilobyte both pay by kilobyte.</string>
                    </property>
                    <property name="text">
                     <string>total at least</string>
@@ -1315,7 +1378,7 @@
         <string>S&amp;end</string>
        </property>
        <property name="icon">
-        <iconset resource="../xc3.qrc">
+        <iconset resource="../blocknetdx.qrc">
          <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
        </property>
        <property name="autoDefault">
@@ -1341,7 +1404,7 @@
         <string>Clear &amp;All</string>
        </property>
        <property name="icon">
-        <iconset resource="../xc3.qrc">
+        <iconset resource="../blocknetdx.qrc">
          <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
        </property>
        <property name="autoDefault">
@@ -1358,7 +1421,7 @@
         <string>Add &amp;Recipient</string>
        </property>
        <property name="icon">
-        <iconset resource="../xc3.qrc">
+        <iconset resource="../blocknetdx.qrc">
          <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
        </property>
        <property name="autoDefault">
@@ -1435,7 +1498,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string notr="true">123.456 BLOCK</string>
+          <string notr="true">123.456 XC</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -1462,7 +1525,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../xc3.qrc"/>
+  <include location="../blocknetdx.qrc"/>
  </resources>
  <connections/>
  <buttongroups>
