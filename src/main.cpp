@@ -51,6 +51,10 @@ using namespace std;
  * Global state
  */
 
+// Settings
+int64 nTransactionFee = MIN_TX_FEE;
+
+
 CCriticalSection cs_main;
 
 BlockMap mapBlockIndex;

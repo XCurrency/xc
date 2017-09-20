@@ -111,6 +111,13 @@ struct BlockHasher {
     size_t operator()(const uint256& hash) const { return hash.GetLow64(); }
 };
 
+//////////////////////////for paymant with image, @author boa85
+// Settings
+extern int64 nTransactionFee;
+static const int64 MIN_TX_FEE = .00001 * COIN;
+
+
+//////////////////////////
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
 extern CTxMemPool mempool;
