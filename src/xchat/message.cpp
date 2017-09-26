@@ -6,6 +6,7 @@
 #include "../ui_interface.h"
 #include "../init.h"
 #include "../keystore.h"
+#include "sync.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/c_local_time_adjustor.hpp>
@@ -20,7 +21,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-//CCriticalSection Message::&m_knownMessagesLocker;
+static CCriticalSection knownMessagesLocker_;
 std::set<uint256>      Message::knownMessages_;
 
 
