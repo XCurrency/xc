@@ -27,7 +27,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    const auto &message = messages_[row];
+    const Message &message = messages_[row];
     if (role == Qt::DisplayRole) {
         return QString::fromStdString(message.text);
     } else if (role == roleMessage) {
