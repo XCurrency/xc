@@ -1,47 +1,45 @@
 
-#include "message.h"
+#include "util.h"
+#include "key.h"
+#include "net.h"
+#include "ui_interface.h"
+#include "base58.h"
+#include "init.h"
+#include "lz4/lz4.h"
+#include "main.h"
 #include "message_db.h"
-#include "../util.h"
-#include "../net.h"
-#include "../ui_interface.h"
-#include "../init.h"
-#include "../keystore.h"
-#include "sync.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/c_local_time_adjustor.hpp>
-
-#include "../base58.h"
-#include "../main.h"
-#include "../rpcserver.h"
-#include "../wallet.h"
-#include "../lz4/lz4.h"
-#include "messagecrypter.h"
-#include <fstream>
-
-#include <boost/algorithm/string.hpp>
 
 static CCriticalSection knownMessagesLocker_;
 std::set<uint256>      Message::knownMessages_;
 
 
-uint256 Message::getNetworkHash() const {
-    auto hashStr = from + to + date = std::to_string(timestamp);
-    return Hash(hashStr.begin(), hashStr.end(),
+//*****************************************************************************
+//*****************************************************************************
+uint256 Message::getNetworkHash() const
+{
+    std::string hashstr = from + to + date = boost::lexical_cast<std::string>(timestamp);
+    return Hash(hashstr.begin(), hashstr.end(),
                 encryptedData.begin(), encryptedData.end());
-
 }
 
-uint256 Message::getHash() const {
-    auto hashStr = from + to + date;
-    return Hash(hashStr.begin(), hashStr.end(),
+//*****************************************************************************
+//*****************************************************************************
+uint256 Message::getHash() const
+{
+    std::string hashstr = from + to + date;
+    return Hash(hashstr.begin(), hashstr.end(),
                 encryptedData.begin(), encryptedData.end());
-
 }
 
-uint256 Message::getStaticHash() const {
-    std::string hashStr = from + to;
-    return Hash(hashStr.begin(), hashStr.end(),
+//*****************************************************************************
+//*****************************************************************************
+uint256 Message::getStaticHash() const
+{
+    std::string hashstr = from + to;
+    return Hash(hashstr.begin(), hashstr.end(),
                 encryptedData.begin(), encryptedData.end());
 }
 
@@ -61,30 +59,31 @@ bool Message::appliesToMe() const {
         return false;
     }
 
-    return pwalletMain->HaveKey(id);
+//    return pwalletMain->HaveKey(id);
 
+    return true;
 
 }
 
 time_t Message::getTime() const {
-    try {
-        // date is "yyyy-MM-dd hh:mm:ss"
-        auto pt = boost::posix_time::time_from_string(date);
+//    try {
+//        // date is "yyyy-MM-dd hh:mm:ss"
+//        boost::posix_time::ptime pt = boost::posix_time::time_from_string(date);
 
-        // local time adjustor
-        static boost::date_time::c_local_adjustor<boost::posix_time::ptime> adj;
+//        // local time adjustor
+//        static boost::date_time::c_local_adjustor<boost::posix_time::ptime> adj;
 
-        auto t = boost::posix_time::to_tm(adj.utc_to_local(pt));
-
-        return std::mktime(&t);
-    }
-    catch (std::exception &) {
-    }
+//        std::tm t = boost::posix_time::to_tm(adj.utc_to_local(pt));
+//        return std::mktime(&t);
+//    }
+//    catch (std::exception &)
+//    {
+//    }
     return 0;
 }
 
 bool Message::isExpired() const {
-    auto secs = static_cast<int>(std::time(nullptr) - getTime());
+    int secs = std::time(0) - getTime();
 //    // +-2 days
     return (secs < -60 * 60 * 24 * 2) || (secs > 60 * 60 * 24 * 2);
 
@@ -126,10 +125,11 @@ bool Message::process(bool &isForMe) {
 }
 
 bool Message::relayTo(CNode *pnode) const {
-    auto hash = getHash();
+    uint256 hash = getHash();
 
     // returns true if wasn't already contained in the set
-    if (pnode->setKnown.insert(hash).second) {
+    if (pnode->setKnown.insert(hash).second)
+    {
         pnode->PushMessage("message", *this);
         return true;
     }
