@@ -1,7 +1,6 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "message.h"
 #include "../uint256.h"
 #include "../sync.h"
 #include "../key.h"
