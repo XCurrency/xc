@@ -90,10 +90,10 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 4-byte int at any alignment.
          */
-        pchMessageStart[0] = 0xa1;
-        pchMessageStart[1] = 0xa0;
-        pchMessageStart[2] = 0xa2;
-        pchMessageStart[3] = 0xa3;
+        pchMessageStart[0] = 0xc1;
+        pchMessageStart[1] = 0xc0;
+        pchMessageStart[2] = 0xc2;
+        pchMessageStart[3] = 0xc3;
         vAlertPubKey = ParseHex("0415758705177c87c35dadf7ebf66e93ecc2710253bbac955e695664011fa39ff29a84fa21ae9e203a43debb487170c143ab6eaffe4fa3b12e162d8a6d4da87395");
         nDefaultPort = 14333;
         bnProofOfWorkLimit = ~uint256() >> 20; // BlocknetDX starting difficulty is 1 / 2^12
@@ -120,7 +120,7 @@ public:
          *     CTxOut(nValue=50.00000000, scriptPubKey=0xA9037BAC7050C479B121CF)
          *   vMerkleTree: e0028e
          */
-        const char* pszTimestamp = "decentralized consensus based democracy is the future";
+        const char* pszTimestamp = "iMac Pro, the most powerful Mac ever, available today";
         CMutableTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -131,17 +131,17 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1502214073;
+        genesis.nTime = 1513280196;
         genesis.nBits = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce = 734967;
+        genesis.nNonce = 630043;
 
         hashGenesisBlock = genesis.GetHash();
-	assert(hashGenesisBlock == uint256("0x00000eb7919102da5a07dc90905651664e6ebf0811c28f06573b9a0fd84ab7b8"));
-        assert(genesis.hashMerkleRoot == uint256("0xb1f0e93f6df55af4c23a0719ab33be2b8115e2b6127fc1d926a06c60a8b56bf2"));
+        assert(hashGenesisBlock == uint256("00000e3fa8a2a4d5ccc1c400d4be59f7134a49db8c3081e864b1fc527b0a8710"));
+        assert(genesis.hashMerkleRoot == uint256("14b902a9bbb1edd9723960e8478568ced1bd9942bd8eed1cc988d5e96a01920f"));
 
-        vSeeds.push_back(CDNSSeedData("178.62.90.213", "178.62.90.213")); // seed node
-        vSeeds.push_back(CDNSSeedData("138.197.73.214", "138.197.73.214")); // seed node
-        vSeeds.push_back(CDNSSeedData("34.235.49.248", "34.235.49.248")); // seed node
+        vSeeds.push_back(CDNSSeedData("76.164.207.5", "76.164.207.5")); // danbtcfull3
+        vSeeds.push_back(CDNSSeedData("104.238.198.165", "104.238.198.165")); // fbtc1
+        vSeeds.push_back(CDNSSeedData("88.99.169.175", "88.99.169.175")); // josip
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 26);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 28);
@@ -204,22 +204,21 @@ public:
         nTargetSpacing = 1 * 60;  // BlocknetDX: 1 minute
         nLastPOWBlock = 2000;
         nMaturity = 15;
-        nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
+        nModifierUpdateBlock = 51197; 
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1503571000;
-        genesis.nNonce = 2158962;
+        genesis.nTime = 1513280196;
+        genesis.nNonce = 3221484;
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x00000f90ac260859e4515356719d94c9fb8cadb1a3dda186a64ac41ce4c3c7a7"));
+        assert(hashGenesisBlock == uint256("000007badb6cd5e85569169613b11f7bd4419cb41a315dad9b8d7699fd65c5ea"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
 	
-	
-        vSeeds.push_back(CDNSSeedData("178.62.90.213", "178.62.90.213")); // seed node
-        vSeeds.push_back(CDNSSeedData("138.197.73.214", "138.197.73.214")); // seed node
-        vSeeds.push_back(CDNSSeedData("34.235.49.248", "34.235.49.248")); // seed node
+        vSeeds.push_back(CDNSSeedData("76.164.207.5", "76.164.207.5")); // danbtcfull3
+        vSeeds.push_back(CDNSSeedData("104.238.198.165", "104.238.198.165")); // fbtc1
+        vSeeds.push_back(CDNSSeedData("88.99.169.175", "88.99.169.175")); // josip
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet blocknetdx addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet blocknetdx script addresses start with '8' or '9'
