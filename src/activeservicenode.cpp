@@ -371,11 +371,14 @@ bool CActiveServicenode::GetServiceNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& se
 
 bool CActiveServicenode::GetServiceNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secretKey, std::string strTxHash, std::string strOutputIndex)
 {
-    // Find possible candidates
-    TRY_LOCK(pwalletMain->cs_wallet, fWallet);
-    if (!fWallet) return false;
-
+    // Get servicenode coins
     vector<COutput> possibleCoins = SelectCoinsServicenode();
+    // If no coins return
+    if (possibleCoins.empty()) {
+        LogPrintf("CActiveServicenode::GetServiceNodeVin - No coins, could not locate valid vin\n");
+        return false;
+    }
+
     COutput* selectedOutput;
 
     // Find the vin
@@ -453,6 +456,7 @@ vector<COutput> CActiveServicenode::SelectCoinsServicenode()
 
     // Temporary unlock MN coins from servicenode.conf
     if (GetBoolArg("-mnconflock", true)) {
+        LOCK(pwalletMain->cs_wallet);
         uint256 mnTxHash;
         BOOST_FOREACH (CServicenodeConfig::CServicenodeEntry mne, servicenodeConfig.getEntries()) {
             mnTxHash.SetHex(mne.getTxHash());
@@ -472,6 +476,7 @@ vector<COutput> CActiveServicenode::SelectCoinsServicenode()
 
     // Lock MN coins from servicenode.conf back if they where temporary unlocked
     if (!confLockedCoins.empty()) {
+        LOCK(pwalletMain->cs_wallet);
         BOOST_FOREACH (COutPoint outpoint, confLockedCoins)
             pwalletMain->LockCoin(outpoint);
     }
