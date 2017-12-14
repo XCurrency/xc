@@ -91,12 +91,7 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletframe.cpp \
   qt/moc_walletmodel.cpp \
-  qt/moc_walletview.cpp \
-  qt/xbridgeui/moc_xbridgeaddressbookmodel.cpp \
-  qt/xbridgeui/moc_xbridgeaddressbookview.cpp \
-  qt/xbridgeui/moc_xbridgetransactiondialog.cpp \
-  qt/xbridgeui/moc_xbridgetransactionsmodel.cpp \
-  qt/xbridgeui/moc_xbridgetransactionsview.cpp
+  qt/moc_walletview.cpp 
 
 
 BITCOIN_MM = \
@@ -174,12 +169,7 @@ BITCOIN_QT_H = \
   qt/walletmodel.h \
   qt/walletmodeltransaction.h \
   qt/walletview.h \
-  qt/winshutdownmonitor.h \
-  qt/xbridgeui/xbridgeaddressbookmodel.h \
-  qt/xbridgeui/xbridgeaddressbookview.h \
-  qt/xbridgeui/xbridgetransactiondialog.h \
-  qt/xbridgeui/xbridgetransactionsmodel.h \
-  qt/xbridgeui/xbridgetransactionsview.h
+  qt/winshutdownmonitor.h 
 
 
 RES_ICONS = \
@@ -265,12 +255,7 @@ BITCOIN_QT_CPP = \
   qt/splashscreen.cpp \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp \
-  qt/winshutdownmonitor.cpp \
-  qt/xbridgeui/xbridgeaddressbookmodel.cpp \
-  qt/xbridgeui/xbridgeaddressbookview.cpp \
-  qt/xbridgeui/xbridgetransactiondialog.cpp \
-  qt/xbridgeui/xbridgetransactionsmodel.cpp \
-  qt/xbridgeui/xbridgetransactionsview.cpp
+  qt/winshutdownmonitor.cpp 
 
 if ENABLE_WALLET
 BITCOIN_QT_CPP += \
@@ -375,7 +360,7 @@ endif
 if ENABLE_ZMQ
 qt_blocknetdx_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_blocknetdx_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBXBRIDGE_XBRIDGE) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_UNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
+qt_blocknetdx_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_UNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1)
 qt_blocknetdx_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 qt_blocknetdx_qt_LIBTOOLFLAGS = --tag CXX

@@ -32,7 +32,6 @@
 #include "util.h"
 #include "utilmoneystr.h"
 #include "validationinterface.h"
-#include "xbridge/xbridgeapp.h"
 #include "coinvalidator.h"
 
 #ifdef ENABLE_WALLET
@@ -1675,14 +1674,6 @@ bool AppInit2(boost::thread_group& threadGroup)
         threadGroup.create_thread(boost::bind(&ThreadFlushWalletDB, boost::ref(pwalletMain->strWalletFile)));
     }
 #endif
-
-    // start xbridge
-    if (!fRequestShutdown)
-    {
-        uiInterface.InitMessage(_("Init xbridge service"));
-        XBridgeApp & xapp = XBridgeApp::instance();
-        xapp.start();
-    }
 
     return !fRequestShutdown;
 }

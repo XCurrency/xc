@@ -269,35 +269,9 @@ SOURCES += \
     src/univalue/univalue_write.cpp \
     src/compat/glibc_sanity.cpp \
     src/compat/glibcxx_sanity.cpp \
-    src/xbridge/util/logger.cpp \
-    src/xbridge/util/settings.cpp \
-    src/xbridge/util/txlog.cpp \
-    src/xbridge/util/xutil.cpp \
-    src/xbridge/bitcoinrpcconnector.cpp \
-    src/xbridge/xbridge.cpp \
-    src/xbridge/xbridgeapp.cpp \
-    src/xbridge/xbridgeexchange.cpp \
-    src/xbridge/xbridgesession.cpp \
-    src/xbridge/xbridgesessionbtc.cpp \
-    src/xbridge/xbridgetransaction.cpp \
-    src/xbridge/xbridgetransactionmember.cpp \
     src/support/cleanse.cpp \
     src/crypto/chacha20.cpp \
     src/bip38.cpp \
-    src/xbridge/xkey.cpp \
-    src/xbridge/xpubkey.cpp \
-    src/xbridge/xbitcoinaddress.cpp \
-    src/xbridge/xbitcoinsecret.cpp \
-    src/qt/xbridgeui/xbridgeaddressbookmodel.cpp \
-    src/qt/xbridgeui/xbridgeaddressbookview.cpp \
-    src/qt/xbridgeui/xbridgetransactiondialog.cpp \
-    src/qt/xbridgeui/xbridgetransactionsmodel.cpp \
-    src/qt/xbridgeui/xbridgetransactionsview.cpp \
-    src/xbridge/xbitcointransaction.cpp \
-    src/xbridge/rpcxbridge.cpp \
-    src/xbridge/xbridgeservicesession.cpp \
-    src/xbridge/xbridgesessionbcc.cpp \
-    src/xbridge/xbridgesessiondcr.cpp \
     src/s3downloader.cpp \
     src/coinvalidator.cpp
 
@@ -552,41 +526,12 @@ HEADERS += \
     src/script/standard.h \
     src/univalue/univalue.h \
     src/univalue/univalue_escapes.h \
-    src/xbridge/util/logger.h \
-    src/xbridge/util/settings.h \
-    src/xbridge/util/txlog.h \
-    src/xbridge/util/xutil.h \
-    src/xbridge/bitcoinrpcconnector.h \
-    src/xbridge/version.h \
-    src/xbridge/xbridge.h \
-    src/xbridge/xbridgeapp.h \
-    src/xbridge/xbridgeexchange.h \
-    src/xbridge/xbridgepacket.h \
-    src/xbridge/xbridgesession.h \
-    src/xbridge/xbridgesessionbtc.h \
-    src/xbridge/xbridgetransaction.h \
-    src/xbridge/xbridgetransactiondescr.h \
-    src/xbridge/xbridgetransactionmember.h \
-    src/xbridge/xuiconnector.h \
     src/FastDelegate.h \
     src/support/cleanse.h \
     src/ptr.h \
     src/crypto/chacha20.h \
     src/compat/endian.h \
     src/compat/byteswap.h \
-    src/xbridge/xkey.h \
-    src/xbridge/xpubkey.h \
-    src/xbridge/xbitcoinaddress.h \
-    src/xbridge/xbitcoinsecret.h \
-    src/qt/xbridgeui/xbridgeaddressbookmodel.h \
-    src/qt/xbridgeui/xbridgeaddressbookview.h \
-    src/qt/xbridgeui/xbridgetransactiondialog.h \
-    src/qt/xbridgeui/xbridgetransactionsmodel.h \
-    src/qt/xbridgeui/xbridgetransactionsview.h \
-    src/xbridge/xbitcointransaction.h \
-    src/xbridge/xbridgeservicesession.h \
-    src/xbridge/xbridgesessionbcc.h \
-    src/xbridge/xbridgesessiondcr.h \
     src/s3downloader.h \
     src/coinvalidator.h
 

@@ -11,7 +11,6 @@
 #include "sync.h"
 #include "wallet.h"
 #include "walletmodel.h"
-#include "xbridge/xbridgeexchange.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -96,11 +95,8 @@ void ServicenodeList::StartAlias(std::string strAlias)
             std::string strError;
             CServicenodeBroadcast mnb;
 
-            XBridgeExchange & e = XBridgeExchange::instance();
-
             bool fSuccess = CServicenodeBroadcast::Create(mne.getIp(), mne.getPrivKey(),
                                                           mne.getTxHash(), mne.getOutputIndex(),
-                                                          e.isEnabled() ? e.connectedWallets() : std::vector<std::string>(),
                                                           strError, mnb);
 
             if (fSuccess) {
@@ -144,11 +140,8 @@ void ServicenodeList::StartAll(std::string strCommand)
             continue;
         }
 
-        XBridgeExchange & e = XBridgeExchange::instance();
-
         bool fSuccess = CServicenodeBroadcast::Create(mne.getIp(), mne.getPrivKey(),
                                                       mne.getTxHash(), mne.getOutputIndex(),
-                                                      e.isEnabled() ? e.connectedWallets() : std::vector<std::string>(),
                                                       strError, mnb);
 
         if (fSuccess) {

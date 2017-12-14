@@ -20,7 +20,6 @@
 #include "utilitydialog.h"
 #include "servicenode-sync.h"
 #include "wallet.h"
-#include "xbridge/xbridgeapp.h"
 
 #ifdef ENABLE_WALLET
 #include "blockexplorer.h"
@@ -36,7 +35,6 @@
 #include "servicenodelist.h"
 #include "ui_interface.h"
 #include "util.h"
-#include "xbridge/xbridgeexchange.h"
 
 #include <iostream>
 
@@ -137,12 +135,6 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
 #else
     MacDockIconHandler::instance()->setIcon(networkStyle->getAppIcon());
 #endif
-
-    XBridgeExchange & e = XBridgeExchange::instance();
-    if (e.isEnabled())
-    {
-        windowTitle += QString(" [%1] ").arg(tr("exchange mode"));
-    }
 
     setWindowTitle(windowTitle);
 
@@ -336,16 +328,6 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 
 #ifdef ENABLE_WALLET
 
-    // TODO icons
-    xbridgeAction = new QAction(QIcon(":/icons/servicenodes"), tr("&blocknet dx"), this);
-    xbridgeAction->setToolTip(tr("Show xbridge dialog"));
-    // xbridgeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-    xbridgeAction->setCheckable(true);
-    if (XBridgeApp::isEnabled())
-    {
-        tabGroup->addAction(xbridgeAction);
-    }
-
     QSettings settings;
     if (settings.value("fShowServicenodesTab").toBool()) {
         servicenodeAction = new QAction(QIcon(":/icons/servicenodes"), tr("&service nodes"), this);
@@ -372,7 +354,6 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
-    connect(xbridgeAction,      SIGNAL(triggered()), this, SLOT(gotoXBridgePage()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -536,11 +517,6 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
-
-        if (XBridgeApp::isEnabled())
-        {
-            toolbar->addAction(xbridgeAction);
-        }
 
         QSettings settings;
         if (settings.value("fShowServicenodesTab").toBool()) {
@@ -763,12 +739,6 @@ void BitcoinGUI::gotoHistoryPage()
 {
     historyAction->setChecked(true);
     if (walletFrame) walletFrame->gotoHistoryPage();
-}
-
-void BitcoinGUI::gotoXBridgePage()
-{
-    xbridgeAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoXBridgePage();
 }
 
 void BitcoinGUI::gotoServicenodePage()
