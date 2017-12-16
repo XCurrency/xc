@@ -1,0 +1,6 @@
+usr/local/bin/xc3-qt usr/bin
+share/pixmaps/bitcoin32.xpm usr/share/pixmaps
+share/pixmaps/bitcoin16.xpm usr/share/pixmaps
+share/pixmaps/bitcoin128.png usr/share/pixmaps
+debian/xc3-qt.desktop usr/share/applications
+debian/xc3-qt.protocol usr/share/kde4/services/

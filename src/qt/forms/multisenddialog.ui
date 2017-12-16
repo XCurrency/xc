@@ -137,7 +137,7 @@ MultiSend will not be activated unless you have clicked Activate</string>
     <string/>
    </property>
    <property name="icon">
-    <iconset resource="../blocknetdx.qrc">
+    <iconset resource="../xc3.qrc">
      <normaloff>:/icons/address-book-white</normaloff>:/icons/address-book-white</iconset>
    </property>
    <property name="shortcut">
@@ -261,7 +261,7 @@ MultiSend will not be activated unless you have clicked Activate</string>
   </widget>
  </widget>
  <resources>
-  <include location="../blocknetdx.qrc"/>
+  <include location="../xc3.qrc"/>
  </resources>
  <connections/>
 </ui>

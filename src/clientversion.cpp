@@ -10,10 +10,10 @@
 
 /**
  * Name of client reported in the 'version' message. Report the same name
- * for both blocknetdxd and blocknetdx-qt, to make it harder for attackers to
+ * for both xc3d and xc3-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("BlocknetDX Core");
+const std::string CLIENT_NAME("XCurrency Core");
 
 /**
  * Client version number

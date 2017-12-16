@@ -103,7 +103,7 @@ bool isObscured(QWidget* w);
 // Open debug.log
 void openDebugLogfile();
 
-// Open blocknetdx.conf
+// Open xcurrency.conf
 void openConfigfile();
 
 // Open servicenode.conf

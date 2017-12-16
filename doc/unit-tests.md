@@ -6,13 +6,13 @@ and tests weren't explicitly disabled.
 
 After configuring, they can be run with 'make check'.
 
-To run the blocknetdxd tests manually, launch src/test/test_blocknetdx .
+To run the xc3d tests manually, launch src/test/test_xc3 .
 
-To add more blocknetdxd tests, add `BOOST_AUTO_TEST_CASE` functions to the existing
+To add more xc3d tests, add `BOOST_AUTO_TEST_CASE` functions to the existing
 .cpp files in the test/ directory or add new .cpp files that
 implement new BOOST_AUTO_TEST_SUITE sections.
 
-To run the blocknetdx-qt tests manually, launch src/qt/test/blocknetdx-qt_test
+To run the xc3-qt tests manually, launch src/qt/test/xc3-qt_test
 
-To add more blocknetdx-qt tests, add them to the `src/qt/test/` directory and
+To add more xc3-qt tests, add them to the `src/qt/test/` directory and
 the `src/qt/test/test_main.cpp` file.

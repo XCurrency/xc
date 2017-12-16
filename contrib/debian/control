@@ -22,11 +22,11 @@ Build-Depends: debhelper,
  libqrencode-dev,
  libprotobuf-dev, protobuf-compiler
 Standards-Version: 3.9.2
-Homepage: http://www.blocknetdx.org
+Homepage: http://www.xcurrency.org
 Vcs-Git: git://github.com/BlocknetDX-Project/BlocknetDX.git
 Vcs-Browser: http://github.com/BlocknetDX-Project/BlocknetDX
 
-Package: blocknetdxd
+Package: xc3d
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - daemon
@@ -39,10 +39,10 @@ Description: peer-to-peer network based digital currency - daemon
  Full transaction history is stored locally at each client.  This
  requires 1+ GB of space, slowly growing.
  .
- This package provides the daemon, blocknetdxd, and the CLI tool
- blocknetdx-cli to interact with the daemon.
+ This package provides the daemon, xc3d, and the CLI tool
+ xc3-cli to interact with the daemon.
 
-Package: blocknetdx-qt
+Package: xc3-qt
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - Qt GUI
@@ -55,4 +55,4 @@ Description: peer-to-peer network based digital currency - Qt GUI
  Full transaction history is stored locally at each client.  This
  requires 1+ GB of space, slowly growing.
  .
- This package provides Blocknetdx-Qt, a GUI for Blocknetdx based on Qt.
+ This package provides Xcurrency-Qt, a GUI for Blocknetdx based on Qt.

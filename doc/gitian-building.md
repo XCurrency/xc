@@ -345,7 +345,7 @@ tail -f var/build.log
 Output from `gbuild` will look something like
 
 ```bash
-    Initialized empty Git repository in /home/debian/gitian-builder/inputs/blocknetdx/.git/
+    Initialized empty Git repository in /home/debian/gitian-builder/inputs/xcurrency/.git/
     remote: Reusing existing pack: 35606, done.
     remote: Total 35606 (delta 0), reused 0 (delta 0)
     Receiving objects: 100% (35606/35606), 26.52 MiB | 4.28 MiB/s, done.
@@ -379,9 +379,9 @@ For example:
 ```bash
 URL=https://github.com/crowning-/blocknetdx.git
 COMMIT=b616fb8ef0d49a919b72b0388b091aaec5849b96
-./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
-./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
-./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
+./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+./bin/gbuild --commit blocknetdx=${COMMIT} --url blocknetdx=${URL} ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
 ```
 
 Signing externally

@@ -25,9 +25,9 @@ Check out the source code in the following directory hierarchy.
 
     cd /path/to/your/toplevel/build
     git clone https://github.com/blocknetdx-project/gitian.sigs.git
-    git clone https://github.com/blocknetdx-project/blocknetdx-detached-sigs.git
+    git clone https://github.com/XCurrency/xc3-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
-    git clone https://github.com/blocknetdx-project/blocknetdx.git
+    git clone https://github.com/XCurrency/xc3.git
 
 ### BlocknetDX maintainers/release engineers, suggestion for writing release notes
 
@@ -84,7 +84,7 @@ Create the OS X SDK tarball, see the [OS X readme](README_osx.md) for details, a
 By default, Gitian will fetch source files as needed. To cache them ahead of time:
 
     pushd ./gitian-builder
-    make -C ../blocknetdx/depends download SOURCES_PATH=`pwd`/cache/common
+    make -C ../xcurrency/depends download SOURCES_PATH=`pwd`/cache/common
     popd
 
 Only missing files will be fetched, so this is safe to re-run for each build.
@@ -97,20 +97,20 @@ NOTE: Offline builds must use the --url flag to ensure Gitian fetches only from 
 
 The gbuild invocations below <b>DO NOT DO THIS</b> by default.
 
-### Build and sign BlocknetDX Core for Linux, Windows, and OS X:
+### Build and sign XCurrency Core for Linux, Windows, and OS X:
 
     pushd ./gitian-builder
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
     mv build/out/blocknetdx-*.tar.gz build/out/src/blocknetdx-*.tar.gz ../
 
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
     mv build/out/blocknetdx-*-win-unsigned.tar.gz inputs/blocknetdx-win-unsigned.tar.gz
     mv build/out/blocknetdx-*.zip build/out/blocknetdx-*.exe ../
 
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
     mv build/out/blocknetdx-*-osx-unsigned.tar.gz inputs/blocknetdx-osx-unsigned.tar.gz
     mv build/out/blocknetdx-*.tar.gz build/out/blocknetdx-*.dmg ../
     popd
@@ -133,9 +133,9 @@ Add other gitian builders keys to your gpg keyring, and/or refresh keys.
 Verify the signatures
 
     pushd ./gitian-builder
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
     popd
 
 ### Next steps:
@@ -189,18 +189,18 @@ Non-codesigners: wait for Windows/OS X detached signatures:
 Create (and optionally verify) the signed OS X binary:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gbuild -i --commit signature=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
     mv build/out/blocknetdx-osx-signed.dmg ../blocknetdx-${VERSION}-osx.dmg
     popd
 
 Create (and optionally verify) the signed Windows binaries:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../blocknetdx/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../blocknetdx/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gbuild -i --commit signature=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
     mv build/out/blocknetdx-*win64-setup.exe ../blocknetdx-${VERSION}-win64-setup.exe
     mv build/out/blocknetdx-*win32-setup.exe ../blocknetdx-${VERSION}-win32-setup.exe
     popd
