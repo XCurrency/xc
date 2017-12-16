@@ -1,9 +1,9 @@
-BlocknetDX Core
+XCurrency Core
 =====================
 
 Setup
 ---------------------
-[BlocknetDX Core](http://blocknetdx.org/wallet) is the original BlocknetDX client and it builds the backbone of the network. However, it downloads and stores the entire history of BlocknetDX transactions; depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once.
+[XCurrency Core](http://blocknetdx.org/wallet) is the original BlocknetDX client and it builds the backbone of the network. However, it downloads and stores the entire history of BlocknetDX transactions; depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once.
 
 Running
 ---------------------
@@ -13,22 +13,22 @@ The following are some helpful notes on how to run BlocknetDX on your native pla
 
 Unpack the files into a directory and run:
 
-- bin/32/blocknetdx-qt (GUI, 32-bit) or bin/32/blocknetdxd (headless, 32-bit)
-- bin/64/blocknetdx-qt (GUI, 64-bit) or bin/64/blocknetdxd (headless, 64-bit)
+- bin/32/xc3-qt (GUI, 32-bit) or bin/32/xc3d (headless, 32-bit)
+- bin/64/xc3-qt (GUI, 64-bit) or bin/64/xc3d (headless, 64-bit)
 
 ### Windows
 
-Unpack the files into a directory, and then run blocknetdx-qt.exe.
+Unpack the files into a directory, and then run xc3-qt.exe.
 
 ### OSX
 
-Drag BlocknetDX-Qt to your applications folder, and then run BlocknetDX-Qt.
+Drag XCurrency-Qt to your applications folder, and then run XCurrency-Qt.
 
 ### Need Help?
 
 * See the documentation at the [BlocknetDX Wiki](https://en.bitcoin.it/wiki/Main_Page) ***TODO***
 for help and more information.
-* Ask for help on [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or on the [BlocknetDX Forum](http://forum.blocknetdx.org/).
+* Ask for help on [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or on the [BlocknetDX Forum](http://forum.xcurrency.org/).
 * Join one of our Slack groups [BlocknetDX Slack Groups](https://blocknetdx.org/slack-logins/).
 
 Building
@@ -55,7 +55,7 @@ The Blocknetdx repo's [root README](https://github.com/BlocknetDX-Project/Blockn
 
 ### Resources
 
-* Discuss on the [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or the [BlocknetDX](http://forum.blocknetdx.org/) forum.
+* Discuss on the [BitcoinTalk](https://bitcointalk.org/index.php?topic=1262920.0) or the [BlocknetDX](http://forum.xcurrency.org/) forum.
 * Join the [BlocknetDX-Dev](https://blocknetdx-dev.slack.com/) Slack group ([Sign-Up](https://blocknetdx-dev.herokuapp.com/)).
 
 ### Miscellaneous

@@ -414,7 +414,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../blocknetdx.qrc">
+            <iconset resource="../xc3.qrc">
              <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
            </property>
            <property name="shortcut">
@@ -1348,7 +1348,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../blocknetdx.qrc"/>
+  <include location="../xc3.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build blocknetdxd (headless client) for OSX.
+This guide will show you how to build xc3d (headless client) for OSX.
 
 Notes
 -----
@@ -40,14 +40,14 @@ Instructions: Homebrew
 
         brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5
 
-### Building `blocknetdxd`
+### Building `xc3d`
 
 1. Clone the github tree to get the source code and go into the directory.
 
         git clone https://github.com/BlocknetDX-Project/BlocknetDX.git
         cd BlocknetDX
 
-2.  Build blocknetdxd:
+2.  Build xc3d:
 
         ./autogen.sh
         ./configure --with-gui=qt5
@@ -57,7 +57,7 @@ Instructions: Homebrew
 
         make check
 
-4.  (Optional) You can also install blocknetdxd to your path:
+4.  (Optional) You can also install xc3d to your path:
 
         make install
 
@@ -69,7 +69,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 1. Make sure you installed everything through homebrew mentioned above
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "blocknetdx-qt" as project name, enter src/qt as location
+4. Enter "xc3-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -79,11 +79,11 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this section if you are building `blocknetdxd` for your own use.
+You can ignore this section if you are building `xc3d` for your own use.
 
-blocknetdxd/blocknetdx-cli binaries are not included in the blocknetdx-Qt.app bundle.
+xc3d/xc3-cli binaries are not included in the blocknetdx-Qt.app bundle.
 
-If you are building `blocknetdxd` or `blocknetdx-qt` for others, your build machine should be set up
+If you are building `xc3d` or `xc3-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -92,20 +92,20 @@ All dependencies should be compiled with these flags:
  -arch x86_64
  -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
 
-Once dependencies are compiled, see release-process.md for how the BlocknetDX-Qt.app
+Once dependencies are compiled, see release-process.md for how the XCurrency-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
 
 Running
 -------
 
-It's now available at `./blocknetdxd`, provided that you are still in the `src`
+It's now available at `./xc3d`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./blocknetdxd` to get the filename where it should be put, or just try these
+Run `./xc3d` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=blocknetdxrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/BlocknetDX/blocknetdx.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/BlocknetDX/blocknetdx.conf"
+    echo -e "rpcuser=blocknetdxrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/BlocknetDX/xcurrency.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/BlocknetDX/xcurrency.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
@@ -116,6 +116,6 @@ you can monitor its process by looking at the debug.log file, like this:
 Other commands:
 -------
 
-    ./blocknetdxd -daemon # to start the blocknetdx daemon.
-    ./blocknetdx-cli --help  # for a list of command-line options.
-    ./blocknetdx-cli help    # When the daemon is running, to get a list of RPC commands
+    ./xc3d -daemon # to start the blocknetdx daemon.
+    ./xc3-cli --help  # for a list of command-line options.
+    ./xc3-cli help    # When the daemon is running, to get a list of RPC commands

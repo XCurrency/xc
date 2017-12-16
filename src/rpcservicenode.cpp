@@ -142,7 +142,7 @@ Value servicenode(const Array& params, bool fHelp)
             "  genkey       - Generate new servicenodeprivkey\n"
             "  enforce      - Enforce servicenode payments\n"
             "  outputs      - Print servicenode compatible outputs\n"
-            "  start        - Start servicenode configured in blocknetdx.conf\n"
+            "  start        - Start servicenode configured in xcurrency.conf\n"
             "  start-alias  - Start single servicenode by assigned alias configured in servicenode.conf\n"
             "  start-<mode> - Start servicenodes configured in servicenode.conf (<mode>: 'all', 'missing', 'disabled')\n"
             "  status       - Print servicenode status information\n"

@@ -14,7 +14,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"io.blocknetdx.Blocknetdx-Qt";
+        return @"io.xcurrency.Xcurrency-Qt";
     } else {
         return [self __bundleIdentifier];
     }

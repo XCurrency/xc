@@ -95,7 +95,7 @@ Issue the following:
 Make note of the hash (which is your collaterla_output) and index.
 
 ### Enter your ServiceNode details into your servicenode.conf file
-[From the blocknetdx github repo](https://github.com/blocknetdx-crypto/blocknetdx/blob/master/doc/servicenode_conf.md)
+[From the blocknetdx github repo](https://github.com/blocknetdx-crypto/xcurrency/blob/master/doc/servicenode_conf.md)
 
 The new servicenode.conf format consists of a space seperated text file. Each line consisting of an alias, IP address followed by port, servicenode private key, collateral output transaction id and collateral output index, donation address and donation percentage (the latter two are optional and should be in format "address:percentage").
 
@@ -112,20 +112,20 @@ mn01 127.0.0.1:51472 93HaYBVUCYjEMeeH1Y4sBGLALQZE1Yc1K64xiqgX37tGBDQL8Xg 2bcd3c8
 mn02 127.0.0.2:51472 93WaAb3htPJEV8E9aQcN23Jt97bPex7YvWfgMDTUdWJvzmrMqey aa9f1034d973377a5e733272c3d0eced1de22555ad45d6b24abadff8087948d4 0 7gnwGHt17heGpG9Crfeh4KGpYNFugPhJdh:25
 ```
 
-## What about the blocknetdx.conf file?
+## What about the xcurrency.conf file?
 
-If you are using a servicenode.conf file you no longer need the blocknetdx.conf file. The exception is if you need custom settings (thanks oblox). 
+If you are using a servicenode.conf file you no longer need the xcurrency.conf file. The exception is if you need custom settings (thanks oblox). 
 
-## Update blocknetdx.conf on server
+## Update xcurrency.conf on server
 
-If you generated a new servicenode private key, you will need to update the remote blocknetdx.conf files.
+If you generated a new servicenode private key, you will need to update the remote xcurrency.conf files.
 
 Shut down the daemon and then edit the file.
 
-```sudo nano .blocknetdx/blocknetdx.conf```
+```sudo nano .xcurrency/xcurrency.conf```
 
 ### Edit the servicenodeprivkey
-If you generated a new servicenode private key, you will need to update the servicenodeprivkey value in your remote blocknetdx.conf file.
+If you generated a new servicenode private key, you will need to update the servicenodeprivkey value in your remote xcurrency.conf file.
 
 ## Start your ServiceNodes
 
@@ -135,7 +135,7 @@ If your remote server is not running, start your remote daemon as you normally w
 
 I usually confirm that remote is on the correct block by issuing:
 
-```blocknetdxd getinfo```
+```xc3d getinfo```
 
 And compare with the official explorer at http://blocknetdxexplorer.coin-server.com <or> dnet.presstab.pw
 

@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  xc3d The BlocknetDX core server.
+#
+#
+# chkconfig: 345 80 20
+# description: xc3d
+# processname: xc3d
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/xc3d, see below
+if [ -f /etc/sysconfig/xc3d ]; then
+        . /etc/sysconfig/xc3d
+fi
+
+RETVAL=0
+
+prog=xc3d
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/xc3d
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/xc3d}
+
+# xc3d defaults to /usr/bin/xc3d, override with BITCOIND_BIN
+bitcoind=${BITCOIND_BIN-/usr/bin/xc3d}
+
+# xc3d opts default to -disablewallet, override with BITCOIND_OPTS
+bitcoind_opts=${BITCOIND_OPTS}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $bitcoind $bitcoind_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

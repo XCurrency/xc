@@ -577,7 +577,7 @@ void StartRPCThreads()
         unsigned char rand_pwd[32];
         GetRandBytes(rand_pwd, 32);
         uiInterface.ThreadSafeMessageBox(strprintf(
-                                             _("To use blocknetdxd, or the -server option to blocknetdx-qt, you must set an rpcpassword in the configuration file:\n"
+                                             _("To use xc3d, or the -server option to xc3-qt, you must set an rpcpassword in the configuration file:\n"
                                                "%s\n"
                                                "It is recommended you use the following random password:\n"
                                                "rpcuser=blocknetdxrpc\n"
@@ -1026,7 +1026,7 @@ json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_s
 
 std::string HelpExampleCli(string methodname, string args)
 {
-    return "> blocknetdx-cli " + methodname + " " + args + "\n";
+    return "> xc3-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args)
