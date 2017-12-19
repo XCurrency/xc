@@ -278,7 +278,13 @@ SOURCES += \
     src/xchat/message_db.cpp \
     src/xchat/stored_pub_keys_db.cpp \
     src/lz4/lz4.c \
-    src/xchat/messagecrypter.cpp
+    src/xchat/messagecrypter.cpp \
+    src/xchat/messagesmodel.cpp \
+    src/xchat/message_delegate.cpp \
+    src/xchat/users_model.cpp \
+    src/xchat/user_delegate.cpp \
+    src/xchat/messagedialog.cpp \
+    src/qt/jsonconstructeddialog.cpp
 
 #protobuf generated
 SOURCES += \
@@ -543,7 +549,15 @@ HEADERS += \
     src/xchat/message_db.h \
     src/xchat/stored_pub_keys_db.h \
     src/lz4/lz4.h \
-    src/xchat/messagecrypter.h
+    src/xchat/messagecrypter.h \
+    src/xchat/message_meta_type.h \
+    src/xchat/messagesmodel.h \
+    src/xchat/message_delegate.h \
+    src/xchat/users_model.h \
+    src/xchat/user_delegate.h \
+    src/xchat/messagedialog.h \
+    src/util/verify.h \
+    src/qt/jsonconstructeddialog.h
 
 #ENABLE_ZMQ
 #    src/zmq/zmqabstractnotifier.h \
