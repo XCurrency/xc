@@ -41,7 +41,8 @@ QT_FORMS_UI = \
   qt/forms/sendcoinsdialog.ui \
   qt/forms/sendcoinsentry.ui \
   qt/forms/signverifymessagedialog.ui \
-  qt/forms/transactiondescdialog.ui
+  qt/forms/transactiondescdialog.ui \
+  xchat/messagedialog.ui
 
 QT_MOC_CPP = \
   qt/moc_addressbookpage.cpp \
@@ -91,7 +92,14 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletframe.cpp \
   qt/moc_walletmodel.cpp \
-  qt/moc_walletview.cpp 
+  qt/moc_walletview.cpp \
+  xchat/moc_messagecrypter.cpp \
+  xchat/moc_messagesmodel.cpp \
+  xchat/moc_message_delegate.cpp \
+  xchat/moc_users_model.cpp \
+  xchat/moc_user_delegate.cpp \
+  xchat/moc_messagedialog.cpp \
+  qt/moc_jsonconstructeddialog.cpp
 
 
 BITCOIN_MM = \
@@ -169,7 +177,18 @@ BITCOIN_QT_H = \
   qt/walletmodel.h \
   qt/walletmodeltransaction.h \
   qt/walletview.h \
-  qt/winshutdownmonitor.h 
+  qt/winshutdownmonitor.h \
+  xchat/message.h \
+  xchat/message_db.h \
+  xchat/stored_pub_keys_db.h \
+  xchat/messagecrypter.h \
+  xchat/message_meta_type.h \
+  xchat/messagesmodel.h \
+  xchat/message_delegate.h \
+  xchat/users_model.h \
+  xchat/user_delegate.h \
+  xchat/messagedialog.h \
+  qt/jsonconstructeddialog.h
 
 
 RES_ICONS = \
@@ -255,7 +274,17 @@ BITCOIN_QT_CPP = \
   qt/splashscreen.cpp \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp \
-  qt/winshutdownmonitor.cpp 
+  qt/winshutdownmonitor.cpp \
+  xchat/message.cpp \
+  xchat/message_db.cpp \
+  xchat/stored_pub_keys_db.cpp \
+  xchat/messagecrypter.cpp \
+  xchat/messagesmodel.cpp \
+  xchat/message_delegate.cpp \
+  xchat/users_model.cpp \
+  xchat/user_delegate.cpp \
+  xchat/messagedialog.cpp \
+  qt/jsonconstructeddialog.cpp
 
 if ENABLE_WALLET
 BITCOIN_QT_CPP += \
@@ -289,7 +318,17 @@ BITCOIN_QT_CPP += \
   qt/walletframe.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
-  qt/walletview.cpp
+  qt/walletview.cpp \
+  xchat/message.cpp \
+  xchat/message_db.cpp \
+  xchat/stored_pub_keys_db.cpp \
+  xchat/messagecrypter.cpp \
+  xchat/messagesmodel.cpp \
+  xchat/message_delegate.cpp \
+  xchat/users_model.cpp \
+  xchat/user_delegate.cpp \
+  xchat/messagedialog.cpp \
+  qt/jsonconstructeddialog.cpp
 
 endif
 
