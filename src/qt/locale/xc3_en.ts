@@ -5246,7 +5246,7 @@ https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations</so
         <source>To use xc3d, or the -server option to xc3-qt, you must set an rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=blocknetdxrpc
+rpcuser=xcurrencyrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
