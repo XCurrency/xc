@@ -211,7 +211,7 @@ cov: test_xc3.coverage/.dirstamp total.coverage/.dirstamp
 
 endif
 
-# BlocknetDX: disable the outdated comparison tool test
+# XCurrency: disable the outdated comparison tool test
 # Ref https://github.com/bitcoin/bitcoin/issues/4545
 if USE_COMPARISON_TOOL
 check-local:

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  xc3d The BlocknetDX core server.
+#  xc3d The XCurrency core server.
 #
 #
 # chkconfig: 345 80 20

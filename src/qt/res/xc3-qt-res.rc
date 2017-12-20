@@ -19,8 +19,8 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "BlocknetDX"
-            VALUE "FileDescription",    "XCurrency Core (OSS GUI client for BlocknetDX)"
+            VALUE "CompanyName",        "XCurrency"
+            VALUE "FileDescription",    "XCurrency Core (OSS GUI client for XCurrency)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "xc3-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR

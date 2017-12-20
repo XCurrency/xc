@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -96,15 +96,15 @@ public:
         pchMessageStart[3] = 0xc3;
         vAlertPubKey = ParseHex("0415758705177c87c35dadf7ebf66e93ecc2710253bbac955e695664011fa39ff29a84fa21ae9e203a43debb487170c143ab6eaffe4fa3b12e162d8a6d4da87395");
         nDefaultPort = 14333;
-        bnProofOfWorkLimit = ~uint256() >> 20; // BlocknetDX starting difficulty is 1 / 2^12
+        bnProofOfWorkLimit = ~uint256() >> 20; // XCurrency starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 210000;
         nMaxReorganizationDepth = 100;
         nEnforceBlockUpgradeMajority = 750;
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // BlocknetDX: 1 day
-        nTargetSpacing = 1 * 60;  // BlocknetDX: 1 minute
+        nTargetTimespan = 1 * 60; // XCurrency: 1 day
+        nTargetSpacing = 1 * 60;  // XCurrency: 1 minute
         nLastPOWBlock = 2000;
         nMaturity = 100;
         nServicenodeCountDrift = 20;
@@ -200,8 +200,8 @@ public:
         nRejectBlockOutdatedMajority = 75;
         nToCheckBlockUpgradeMajority = 100;
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // BlocknetDX: 1 day
-        nTargetSpacing = 1 * 60;  // BlocknetDX: 1 minute
+        nTargetTimespan = 1 * 60; // XCurrency: 1 day
+        nTargetSpacing = 1 * 60;  // XCurrency: 1 minute
         nLastPOWBlock = 2000;
         nMaturity = 15;
         nModifierUpdateBlock = 51197; 

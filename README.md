@@ -1,12 +1,12 @@
-BlocknetDX repository
+XCurrency repository
 
-BlocknetDX is an open source community driven project building a blockchain based P2P atomic swap exchange using BIP65 capable chains
+XCurrency is an open source community driven project building a blockchain based P2P atomic swap exchange using BIP65 capable chains
 
 Join the community on slack
 
 Contributors are welcome
 
-BlocknetDX Specs:
+XCurrency Specs:
 - 1 Minute Block Time
 - 5k for servicenodes
 - Diff. adjustment per block
@@ -14,7 +14,7 @@ BlocknetDX Specs:
 - Supports Decentralized voting/funding
 
 
-## BlocknetDX
+## XCurrency
 -- Decentralized Atomic Swap algo summary
 
 ```Step1.

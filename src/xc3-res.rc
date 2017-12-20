@@ -16,7 +16,7 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "BlocknetDX"
+            VALUE "CompanyName",        "XCurrency"
             VALUE "FileDescription",    "xc3d (OSS daemon/client for Blocknetdx)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "xc3d"

@@ -1,5 +1,5 @@
 // Copyright (c) 2017 Michael Madgett <mike@madgett.io>
-// Copyright (c) 2017 The BlocknetDX developers
+// Copyright (c) 2017 The XCurrency developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 

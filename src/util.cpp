@@ -105,7 +105,7 @@ std::string to_internal(const std::string&);
 
 using namespace std;
 
-//BlocknetDX only features
+//XCurrency only features
 bool fServiceNode = false;
 string strServiceNodePrivKey = "";
 string strServiceNodeAddr = "";

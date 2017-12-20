@@ -89,7 +89,7 @@ use old versions of Upstart and do not supply the start-stop-daemon uitility.
 Copy xc3d.init to /etc/init.d/xc3d. Test by running "service xc3d start".
 
 Using this script, you can adjust the path and flags to the xc3d program by
-setting the BlocknetDXD and FLAGS environment variables in the file
+setting the XCurrencyD and FLAGS environment variables in the file
 /etc/sysconfig/xc3d. You can also use the DAEMONOPTS environment variable here.
 
 5. Auto-respawn

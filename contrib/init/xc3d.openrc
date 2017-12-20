@@ -17,7 +17,7 @@ BITCOIND_GROUP=${BITCOIND_GROUP:-blocknetdx}
 BITCOIND_BIN=${BITCOIND_BIN:-/usr/bin/xc3d}
 
 name="XCurrency Core Daemon"
-description="BlocknetDX crypto-currency p2p network daemon"
+description="XCurrency crypto-currency p2p network daemon"
 
 command="/usr/bin/xc3d"
 command_args="-pid=\"${BITCOIND_PIDFILE}\" \

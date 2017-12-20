@@ -23,8 +23,8 @@ Build-Depends: debhelper,
  libprotobuf-dev, protobuf-compiler
 Standards-Version: 3.9.2
 Homepage: http://www.xcurrency.org
-Vcs-Git: git://github.com/BlocknetDX-Project/BlocknetDX.git
-Vcs-Browser: http://github.com/BlocknetDX-Project/BlocknetDX
+Vcs-Git: git://github.com/XCurrency-Project/XCurrency.git
+Vcs-Browser: http://github.com/XCurrency-Project/XCurrency
 
 Package: xc3d
 Architecture: any

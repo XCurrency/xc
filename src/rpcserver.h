@@ -95,7 +95,7 @@ public:
 };
 
 /**
- * BlocknetDX RPC command dispatcher.
+ * XCurrency RPC command dispatcher.
  */
 class CRPCTable
 {

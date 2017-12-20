@@ -1,6 +1,6 @@
 UNIX BUILD NOTES
 ====================
-Some notes on how to build BlocknetDX in Unix.
+Some notes on how to build XCurrency in Unix.
 
 Note
 ---------------------
@@ -130,10 +130,10 @@ Berkeley DB
 It is recommended to use Berkeley DB 4.8. If you have to build it yourself:
 
 ```bash
-BlocknetDX_ROOT=$(pwd)
+XCurrency_ROOT=$(pwd)
 
 # Pick some path to install BDB to, here we create a directory within the blocknetdx directory
-BDB_PREFIX="${BlocknetDX_ROOT}/db4"
+BDB_PREFIX="${XCurrency_ROOT}/db4"
 mkdir -p $BDB_PREFIX
 
 # Fetch the source and verify that it is not tampered with
@@ -149,7 +149,7 @@ cd db-4.8.30.NC/build_unix/
 make install
 
 # Configure XCurrency Core to use our own-built instance of BDB
-cd $BlocknetDX_ROOT
+cd $XCurrency_ROOT
 ./configure (other args...) LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/"
 ```
 
@@ -166,7 +166,7 @@ If you need to build Boost yourself:
 
 Security
 --------
-To help make your BlocknetDX installation more secure by making certain attacks impossible to
+To help make your XCurrency installation more secure by making certain attacks impossible to
 exploit even if a vulnerability is found, binaries are hardened by default.
 This can be disabled with:
 

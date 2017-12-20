@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -569,7 +569,7 @@ Value servicenodelist(const Array& params, bool fHelp)
             "    \"txhash\": \"hash\",       (string) Collateral transaction hash\n"
             "    \"outidx\": n,              (numeric) Collateral transaction output index\n"
             "    \"status\": s,              (string) Status (ENABLED/EXPIRED/REMOVE/etc)\n"
-            "    \"addr\": \"addr\",         (string) Servicenode BlocknetDX address\n"
+            "    \"addr\": \"addr\",         (string) Servicenode XCurrency address\n"
             "    \"version\": v,             (numeric) Servicenode protocol version\n"
             "    \"lastseen\": ttt,          (numeric) The time in seconds since epoch (Jan 1 1970 GMT) of the last seen\n"
             "    \"activetime\": ttt,        (numeric) The time in seconds since epoch (Jan 1 1970 GMT) servicenode has been active\n"
