@@ -330,7 +330,7 @@ bool MessagesDialog::checkAddress(const std::string &address) const {
     if (!bitcoinAddress.GetKeyID(keyID)) {
         // TODO
         // alert
-        QMessageBox::warning(this, tr("ERROR"), tr("Error get key  id"));
+        QMessageBox::warning(nullptr, tr("ERROR"), tr("Error get key  id"));
         return false;
     }
 

@@ -67,7 +67,7 @@ void UserDelegate::paint(QPainter *painter,
 
     // background
     if (option.state & QStyle::State_Selected) {
-        QBrush bb(QColor(Qt::lightGray));
+        QBrush bb((QColor(Qt::lightGray)));
         painter->fillRect(rect, bb);
     }
 

@@ -111,7 +111,7 @@ struct Message {
      * @param other
      * @return
      */
-    bool operator<(const Message &other) {
+    bool operator<(const Message &other) const {
         return date < other.date;
     }
 
