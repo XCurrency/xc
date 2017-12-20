@@ -56,8 +56,8 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1493667067, // * UNIX timestamp of last checkpoint block
-    1157185,    // * total number of transactions between genesis and last checkpoint
+    1513784712, // * UNIX timestamp of last checkpoint block
+    0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -66,7 +66,7 @@ static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1454124731,
+    1513784712,
     0,
     250};
 
@@ -131,9 +131,29 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1513280196;
+        genesis.nTime = 1513784712;
         genesis.nBits = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce = 630043;
+        genesis.nNonce = 1;
+
+//// Create genesis
+        printf("block.GetHash() == %s\n", genesis.GetHash().ToString().c_str());
+        if (true && (genesis.GetHash() != hashGenesisBlock)) {
+                uint256 hashTarget = uint256().SetCompact(genesis.nBits);
+                while (genesis.GetHash() > hashTarget) {
+                    ++genesis.nNonce;
+                    if (genesis.nNonce == 0) { ++genesis.nTime; }
+                }
+        }
+
+        printf("block.GetHash() == %s\n", genesis.GetHash().ToString().c_str());
+        printf("block.hashMerkleRoot == %s\n", genesis.hashMerkleRoot.ToString().c_str());
+        printf("block.nTime = %u \n", genesis.nTime);
+        printf("block.nNonce = %u \n", genesis.nNonce);
+        printf("block.nBits = %u \n", genesis.nBits);
+        printf("debug debug debug **********  print");
+        printf("current hash %s\n", hashGenesisBlock.ToString().c_str());
+
+//// Create genesis
 
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("00000e3fa8a2a4d5ccc1c400d4be59f7134a49db8c3081e864b1fc527b0a8710"));
@@ -143,9 +163,9 @@ public:
         vSeeds.push_back(CDNSSeedData("104.238.198.165", "104.238.198.165")); // fbtc1
         vSeeds.push_back(CDNSSeedData("88.99.169.175", "88.99.169.175")); // josip
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 26);
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 28);
-        base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 154);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 75);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 8);
+        base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 203);
 	/*
 	https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki
 	Because this scheme can be used to generate nodes for more cryptocurrencies at once, or even something totally unrelated to cryptocurrencies, there's no point in using a special version magic described in section "Serialization format" of BIP32. We suggest to use always 0x0488B21E for public and 0x0488ADE4 for private nodes (leading to prefixes "xpub" and "xprv" respectively).
@@ -207,8 +227,28 @@ public:
         nModifierUpdateBlock = 51197; 
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1513280196;
-        genesis.nNonce = 3221484;
+        genesis.nTime = 1513784712;
+        genesis.nNonce = 1;
+
+//// Create genesis
+        printf("block.GetHash() == %s\n", genesis.GetHash().ToString().c_str());
+        if (true && (genesis.GetHash() != hashGenesisBlock)) {
+                uint256 hashTarget = uint256().SetCompact(genesis.nBits);
+                while (genesis.GetHash() > hashTarget) {
+                    ++genesis.nNonce;
+                    if (genesis.nNonce == 0) { ++genesis.nTime; }
+                }
+        }
+
+        printf("block.GetHash() == %s\n", genesis.GetHash().ToString().c_str());
+        printf("block.hashMerkleRoot == %s\n", genesis.hashMerkleRoot.ToString().c_str());
+        printf("block.nTime = %u \n", genesis.nTime);
+        printf("block.nNonce = %u \n", genesis.nNonce);
+        printf("block.nBits = %u \n", genesis.nBits);
+        printf("debug debug debug **********  print");
+        printf("current hash %s\n", hashGenesisBlock.ToString().c_str());
+
+//// Create genesis
 
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("000007badb6cd5e85569169613b11f7bd4419cb41a315dad9b8d7699fd65c5ea"));
@@ -220,14 +260,14 @@ public:
         vSeeds.push_back(CDNSSeedData("104.238.198.165", "104.238.198.165")); // fbtc1
         vSeeds.push_back(CDNSSeedData("88.99.169.175", "88.99.169.175")); // josip
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet blocknetdx addresses start with 'x' or 'y'
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet blocknetdx script addresses start with '8' or '9'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 111); 
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 196); 
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 239);     // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
-        // Testnet blocknetdx BIP32 pubkeys start with 'DRKV'
+        // Testnet xc3 BIP32 pubkeys start with 'DRKV'
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x3a)(0x80)(0x61)(0xa0).convert_to_container<std::vector<unsigned char> >();
-        // Testnet blocknetdx BIP32 prvkeys start with 'DRKP'
+        // Testnet xc3 BIP32 prvkeys start with 'DRKP'
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x3a)(0x80)(0x58)(0x37).convert_to_container<std::vector<unsigned char> >();
-        // Testnet blocknetdx BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet xc3 BIP44 coin type is '1' (All coin's testnet default)
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0x01).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
