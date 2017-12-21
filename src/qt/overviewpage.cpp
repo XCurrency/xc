@@ -167,7 +167,7 @@ void OverviewPage::handleTransactionClicked(const QModelIndex& index)
 
 OverviewPage::~OverviewPage()
 {
-    if (!fLiteMode && !fServiceNode) disconnect(timer, SIGNAL(timeout()), this, SLOT(obfuScationStatus()));
+    // if (!fLiteMode && !fServiceNode) disconnect(timer, SIGNAL(timeout()), this, SLOT(obfuScationStatus()));
     delete ui;
 }
 
