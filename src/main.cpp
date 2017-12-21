@@ -1658,19 +1658,13 @@ int64_t GetBlockValue(int nHeight)
             return 250000 * COIN;
     }
 
-    // Reduce Reward starting year 1
     if (nHeight == 0) {
-        nSubsidy = 4160024 * COIN; }
-    /* TBD/Review servicenode returns before changing
-    } else if (nHeight < 525600 && nHeight > 0) {
-	nSubsidy = 1 * COIN;
-    } else if (nHeight <= 1051200 && nHeight >= 525600) {
-	nSubsidy = 0.75 * COIN;
-    } else if (nHeight <= 1576800 && nHeight >= 1051201) {
-	nSubsidy = 0.50 * COIN;
-    } else if (nHeight >= 1576801) {
-	nSubsidy = 0.25 * COIN;
-    } */ else {
+        nSubsidy = 6100000 * COIN; 
+    }
+    else if (nHeight <= Params().LAST_POW_BLOCK()) {
+        nSubsidy = 250 * COIN;
+    }
+    else {
         nSubsidy = 1 * COIN;
     }
 
