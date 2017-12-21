@@ -272,8 +272,8 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 24 * 60 * 60; // Blocknetdx: 1 day
-        nTargetSpacing = 1 * 60;        // Blocknetdx: 1 minutes
+        nTargetTimespan = 24 * 60 * 60; // xcurrency: 1 day
+        nTargetSpacing = 1 * 60;        // xcurrency: 1 minutes
         bnProofOfWorkLimit = ~uint256() >> 1;
         genesis.nTime = 1454124731;
         genesis.nBits = 0x207fffff;

@@ -4,7 +4,7 @@ Debian
 This directory contains files used to package xc3d/xc3-qt
 for Debian-based Linux systems. If you compile xc3d/xc3-qt yourself, there are some useful files here.
 
-## blocknetdx: URI support ##
+## xcurrency: URI support ##
 
 
 xc3-qt.desktop  (Gnome / Open Desktop)

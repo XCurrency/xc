@@ -786,7 +786,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <source>Request payments (generates QR codes and blocknetdx: URIs)</source>
+        <source>Request payments (generates QR codes and xcurrency: URIs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2693,7 +2693,7 @@ https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations</so
     </message>
     <message>
         <location line="-118"/>
-        <source>Cannot start blocknetdx: click-to-pay handler</source>
+        <source>Cannot start xcurrency: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

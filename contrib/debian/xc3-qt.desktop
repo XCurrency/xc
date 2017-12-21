@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Blocknetdx
-Comment=Blocknetdx P2P Cryptocurrency
-Comment[fr]=Blocknetdx, monnaie virtuelle cryptographique pair à pair
-Comment[tr]=Blocknetdx, eşten eşe kriptografik sanal para birimi
+Name=XCurrency
+Comment=XCurrency P2P Cryptocurrency
+Comment[fr]=XCurrency, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=XCurrency, eşten eşe kriptografik sanal para birimi
 Exec=xc3-qt %u
 Terminal=false
 Type=Application
-Icon=blocknetdx128
-MimeType=x-scheme-handler/blocknetdx;
+Icon=xcurrency128
+MimeType=x-scheme-handler/xcurrency;
 Categories=Office;Finance;
