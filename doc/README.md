@@ -41,7 +41,7 @@ The following are developer notes on how to build XCurrency on your native platf
 
 Development
 ---------------------
-The Blocknetdx repo's [root README](https://github.com/XCurrency-Project/XCurrency/blob/master/README.md) contains relevant information on the development process and automated testing.
+The Blocknetdx repo's [root README](https://github.com/XCurrency/xc/blob/master/README.md) contains relevant information on the development process and automated testing.
 
 - [Developer Notes](developer-notes.md)
 - [Multiwallet Qt Development](multiwallet-qt.md)

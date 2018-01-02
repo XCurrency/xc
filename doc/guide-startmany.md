@@ -95,7 +95,7 @@ Issue the following:
 Make note of the hash (which is your collaterla_output) and index.
 
 ### Enter your ServiceNode details into your servicenode.conf file
-[From the blocknetdx github repo](https://github.com/blocknetdx-crypto/xcurrency/blob/master/doc/servicenode_conf.md)
+[From the blocknetdx github repo](https://github.com/XCurrency/xc/blob/master/doc/servicenode_conf.md)
 
 The new servicenode.conf format consists of a space seperated text file. Each line consisting of an alias, IP address followed by port, servicenode private key, collateral output transaction id and collateral output index, donation address and donation percentage (the latter two are optional and should be in format "address:percentage").
 

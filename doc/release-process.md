@@ -3,7 +3,7 @@ Release Process
 
 Before every release candidate:
 
-* Update translations (ping Fuzzbawls on Slack) see [translation_process.md](https://github.com/XCurrency-Project/XCurrency/blob/master/doc/translation_process.md#synchronising-translations).
+* Update translations (ping Fuzzbawls on Slack) see [translation_process.md](https://github.com/XCurrency/xc/blob/master/doc/translation_process.md#synchronising-translations).
 
 Before every minor and major release:
 
@@ -24,10 +24,10 @@ If you're using the automated script (found in [contrib/gitian-build.sh](/contri
 Check out the source code in the following directory hierarchy.
 
     cd /path/to/your/toplevel/build
-    git clone https://github.com/blocknetdx-project/gitian.sigs.git
-    git clone https://github.com/XCurrency/xc3-detached-sigs.git
+    git clone https://github.com/XCurrency/gitian.sigs.git
+    git clone https://github.com/XCurrency/xc-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
-    git clone https://github.com/XCurrency/xc3.git
+    git clone https://github.com/XCurrency/xc.git
 
 ### XCurrency maintainers/release engineers, suggestion for writing release notes
 

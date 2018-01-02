@@ -2,14 +2,14 @@
 
 XCurrency Core version *version* is now available from:
 
-  <https://github.com/blocknetdx-project/xcurrency/releases>
+  <https://github.com/XCurrency/xc/releases>
 
 This is a new major version release, including various bug fixes and
 performance improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at github:
 
-  <https://github.com/blocknetdx-project/xcurrency/issues>
+  <https://github.com/XCurrency/xc/issues>
 
 Compatibility
 ==============
