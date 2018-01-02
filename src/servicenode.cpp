@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -109,7 +109,6 @@ CServicenode::CServicenode(const CServicenode& other)
     lastTimeChecked               = 0;
     nLastDsee                     = other.nLastDsee;  // temporary, do not save. Remove after migration to v12
     nLastDseep                    = other.nLastDseep; // temporary, do not save. Remove after migration to v12
-    connectedWallets              = other.connectedWallets;
 }
 
 CServicenode::CServicenode(const CServicenodeBroadcast& mnb)
@@ -136,7 +135,6 @@ CServicenode::CServicenode(const CServicenodeBroadcast& mnb)
     lastTimeChecked               = 0;
     nLastDsee                     = 0; // temporary, do not save. Remove after migration to v12
     nLastDseep                    = 0; // temporary, do not save. Remove after migration to v12
-    connectedWallets              = mnb.connectedWallets;
 }
 
 //
@@ -152,7 +150,6 @@ bool CServicenode::UpdateFromNewBroadcast(CServicenodeBroadcast& mnb)
         protocolVersion         = mnb.protocolVersion;
         addr                    = mnb.addr;
         lastTimeChecked         = 0;
-        connectedWallets        = mnb.connectedWallets;
         int nDoS                = 0;
         if (mnb.lastPing == CServicenodePing() ||
             (mnb.lastPing != CServicenodePing() && mnb.lastPing.CheckAndUpdate(nDoS, false)))
@@ -359,8 +356,7 @@ CServicenodeBroadcast::CServicenodeBroadcast(const CService & newAddr,
                                              const CTxIn & newVin,
                                              const CPubKey & pubKeyCollateralAddressNew,
                                              const CPubKey & pubKeyServicenodeNew,
-                                             const int protocolVersionIn,
-                                             const std::vector<string> & exchangeWallets)
+                                             const int protocolVersionIn)
 {
     vin = newVin;
     addr = newAddr;
@@ -378,7 +374,6 @@ CServicenodeBroadcast::CServicenodeBroadcast(const CService & newAddr,
     nLastDsq = 0;
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
-    connectedWallets = exchangeWallets;
 }
 
 CServicenodeBroadcast::CServicenodeBroadcast(const CServicenode& mn)
@@ -399,14 +394,12 @@ CServicenodeBroadcast::CServicenodeBroadcast(const CServicenode& mn)
     nLastDsq = mn.nLastDsq;
     nScanningErrorCount = mn.nScanningErrorCount;
     nLastScanningErrorBlockHeight = mn.nLastScanningErrorBlockHeight;
-    connectedWallets = mn.connectedWallets;
 }
 
 bool CServicenodeBroadcast::Create(const string & strService,
                                    const string & strKeyServicenode,
                                    const string & strTxHash,
                                    const string & strOutputIndex,
-                                   const std::vector<string> & exchangeWallets,
                                    std::string & strErrorRet,
                                    CServicenodeBroadcast & mnbRet,
                                    const bool fOffline)
@@ -452,7 +445,7 @@ bool CServicenodeBroadcast::Create(const string & strService,
 
     return Create(txin, CService(strService), keyCollateralAddressNew,
                   pubKeyCollateralAddressNew, keyServicenodeNew,
-                  pubKeyServicenodeNew, exchangeWallets,
+                  pubKeyServicenodeNew,
                   strErrorRet, mnbRet);
 }
 
@@ -462,7 +455,6 @@ bool CServicenodeBroadcast::Create(const CTxIn & txin,
                                    const CPubKey &pubKeyCollateralAddressNew,
                                    const CKey & keyServicenodeNew,
                                    const CPubKey & pubKeyServicenodeNew,
-                                   const std::vector<string> & exchangeWallets,
                                    std::string & strErrorRet,
                                    CServicenodeBroadcast & mnbRet)
 {
@@ -483,7 +475,7 @@ bool CServicenodeBroadcast::Create(const CTxIn & txin,
     }
 
     mnbRet = CServicenodeBroadcast(service, txin, pubKeyCollateralAddressNew,
-                                   pubKeyServicenodeNew, PROTOCOL_VERSION, exchangeWallets);
+                                   pubKeyServicenodeNew, PROTOCOL_VERSION);
 
     if (!mnbRet.IsValidNetAddr()) {
         strErrorRet = strprintf("Invalid IP address, servicenode=%s", txin.prevout.hash.ToString());
@@ -552,8 +544,8 @@ bool CServicenodeBroadcast::CheckAndUpdate(int& nDos)
     }
 
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 41412) return false;
-    } else if (addr.GetPort() == 41412)
+        if (addr.GetPort() != 14333) return false;
+    } else if (addr.GetPort() == 14333)
         return false;
 
     //search existing Servicenode list, this is where we update existing Servicenodes with new mnb broadcasts
@@ -645,7 +637,7 @@ bool CServicenodeBroadcast::CheckInputsAndAdd(int& nDoS)
     GetTransaction(vin.prevout.hash, tx2, hashBlock, true);
     BlockMap::iterator mi = mapBlockIndex.find(hashBlock);
     if (mi != mapBlockIndex.end() && (*mi).second) {
-        CBlockIndex* pMNIndex = (*mi).second;                                                        // block for 1000 BlocknetDX tx -> 1 confirmation
+        CBlockIndex* pMNIndex = (*mi).second;                                                        // block for 1000 XCurrency tx -> 1 confirmation
         CBlockIndex* pConfIndex = chainActive[pMNIndex->nHeight + SERVICENODE_MIN_CONFIRMATIONS - 1]; // block where tx got SERVICENODE_MIN_CONFIRMATIONS
         if (pConfIndex->GetBlockTime() > sigTime) {
             LogPrintf("mnb - Bad sigTime %d for Servicenode %s (%i conf block is at %d)\n",

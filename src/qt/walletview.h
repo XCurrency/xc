@@ -71,8 +71,6 @@ private:
 
     MessagesDialog * messagesPage;
 
-    QWidget * xbridgePage;
-
     QProgressDialog* progressDialog;
     QLabel* transactionSum;
 
@@ -81,8 +79,6 @@ public slots:
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
-    /** Switch to xbridge page */
-    void gotoXBridgePage();
     /** Switch to servicenode page */
     void gotoServicenodePage();
     /** Switch to explorer page */

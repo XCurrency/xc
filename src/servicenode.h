@@ -1,6 +1,6 @@
 
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef SERVICENODE_H
@@ -143,9 +143,6 @@ public:
     int nLastScanningErrorBlockHeight;
     CServicenodePing lastPing;
 
-    // xbridge wallets list, connected to service node
-    std::vector<string> connectedWallets;
-
     int64_t nLastDsee;  // temporary, do not save. Remove after migration to v12
     int64_t nLastDseep; // temporary, do not save. Remove after migration to v12
 
@@ -177,7 +174,6 @@ public:
         swap(first.nLastDsq, second.nLastDsq);
         swap(first.nScanningErrorCount, second.nScanningErrorCount);
         swap(first.nLastScanningErrorBlockHeight, second.nLastScanningErrorBlockHeight);
-        swap(first.connectedWallets, second.connectedWallets);
     }
 
     CServicenode& operator=(CServicenode from)
@@ -301,8 +297,7 @@ public:
                           const CTxIn & newVin,
                           const CPubKey & pubKeyCollateralAddressNew,
                           const CPubKey & pubKeyServicenodeNew,
-                          const int protocolVersionIn,
-                          const std::vector<std::string> & exchangeWallets);
+                          const int protocolVersionIn);
     CServicenodeBroadcast(const CServicenode& mn);
 
     bool CheckAndUpdate(int& nDoS);
@@ -324,14 +319,6 @@ public:
         READWRITE(protocolVersion);
         READWRITE(lastPing);
         READWRITE(nLastDsq);
-        if (nType == SER_NETWORK && nVersion >= SERVICENODE_WITH_XBRIDGE_INFO_PROTO_VERSION)
-        {
-            READWRITE(connectedWallets);
-        }
-        else if (nType != SER_NETWORK)
-        {
-            READWRITE(connectedWallets);
-        }
     }
 
     uint256 GetHash()
@@ -349,14 +336,12 @@ public:
                        const CPubKey & pubKeyCollateralAddressNew,
                        const CKey & keyServicenodeNew,
                        const CPubKey & pubKeyServicenodeNew,
-                       const std::vector<string> & exchangeWallets,
                        std::string & strErrorRet,
                        CServicenodeBroadcast & mnbRet);
     static bool Create(const std::string & strService,
                        const std::string & strKey,
                        const std::string & strTxHash,
                        const std::string & strOutputIndex,
-                       const std::vector<string> & exchangeWallets,
                        std::string & strErrorRet,
                        CServicenodeBroadcast & mnbRet,
                        const bool fOffline = false);

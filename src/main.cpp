@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Copyright (c) 2014-2017 PPCoin Developers
 // Copyright (c) 2017 PIVX Developers
 // Distributed under the MIT software license, see the accompanying
@@ -30,7 +30,6 @@
 #include "ui_interface.h"
 #include "util.h"
 #include "utilmoneystr.h"
-#include "xbridge/xbridgeapp.h"
 #include "coinvalidator.h"
 
 #include <sstream>
@@ -45,7 +44,7 @@ using namespace boost;
 using namespace std;
 
 #if defined(NDEBUG)
-#error "BlocknetDX cannot be compiled without assertions."
+#error "XCurrency cannot be compiled without assertions."
 #endif
 
 /**
@@ -1659,19 +1658,13 @@ int64_t GetBlockValue(int nHeight)
             return 250000 * COIN;
     }
 
-    // Reduce Reward starting year 1
     if (nHeight == 0) {
-        nSubsidy = 4160024 * COIN; }
-    /* TBD/Review servicenode returns before changing
-    } else if (nHeight < 525600 && nHeight > 0) {
-	nSubsidy = 1 * COIN;
-    } else if (nHeight <= 1051200 && nHeight >= 525600) {
-	nSubsidy = 0.75 * COIN;
-    } else if (nHeight <= 1576800 && nHeight >= 1051201) {
-	nSubsidy = 0.50 * COIN;
-    } else if (nHeight >= 1576801) {
-	nSubsidy = 0.25 * COIN;
-    } */ else {
+        nSubsidy = 6100000 * COIN; 
+    }
+    else if (nHeight <= Params().LAST_POW_BLOCK()) {
+        nSubsidy = 250 * COIN;
+    }
+    else {
         nSubsidy = 1 * COIN;
     }
 
@@ -1705,7 +1698,7 @@ int64_t GetServicenodePayment(int nHeight, int64_t blockValue, int nServicenodeC
         if (mNodeCoins == 0) {
             ret = 0;
 	}
-	ret = blockValue * .7;
+	ret = blockValue * .6;
 
     }
 
@@ -5559,104 +5552,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             }
         }
     }
-
-    else if (strCommand == "xbridge")
-    {
-        std::vector<unsigned char> raw;
-        vRecv >> raw;
-
-        uint256 hash = Hash(raw.begin(), raw.end());
-        if (!pfrom->setKnown.count(hash))
-        {
-            pfrom->setKnown.insert(hash);
-
-            // Relay
-            {
-                LOCK(cs_vNodes);
-                for  (CNode * pnode : vNodes)
-                {
-                    if (pnode->setKnown.insert(hash).second)
-                    {
-                        pnode->PushMessage("xbridge", raw);
-                    }
-                }
-            }
-
-            static bool isEnabled = XBridgeApp::isEnabled();
-            if (isEnabled)
-            {
-                if (raw.size() > 20 + sizeof(time_t))
-                {
-                    static std::vector<unsigned char> zero(20, 0);
-                    std::vector<unsigned char> addr(raw.begin(), raw.begin()+20);
-                    // remove addr from raw
-                    raw.erase(raw.begin(), raw.begin()+20);
-                    // remove timestamp from raw
-                    raw.erase(raw.begin(), raw.begin()+sizeof(uint64_t));
-
-                    XBridgeApp & app = XBridgeApp::instance();
-
-                    if (addr != zero)
-                    {
-                        app.onMessageReceived(addr, raw);
-                    }
-                    else
-                    {
-                        app.onBroadcastReceived(raw);
-                    }
-                }
-            }
-        } // if (isEnabled)
-    }
-
-    // messages
-    // TODO move to xbridge packet processing fn
-//    else if (strCommand == "message")
-//    {
-//        // received message
-//        Message msg;
-//        vRecv >> msg;
-
-//        // check known
-//        uint256 hash = msg.getNetworkHash();
-//        if (pfrom->setKnown.count(hash) == 0)
-//        {
-//            pfrom->setKnown.insert(hash);
-
-//            bool isForMe = false;
-//            if (!msg.process(isForMe))
-//            {
-//                pfrom->Misbehaving(10);
-//            }
-
-//            if (!isForMe)
-//            {
-//                // relay, if message not for me
-//                msg.broadcast();
-//            }
-//        }
-//    }
-//    else if (strCommand == "msgack")
-//    {
-//        // message delivered
-//        uint256 hash;
-//        vRecv >> hash;
-
-//        if (pfrom->setKnown.count(hash) == 0)
-//        {
-//            pfrom->setKnown.insert(hash);
-
-//            if (!Message::processReceived(hash))
-//            {
-//                // relay, if not for me
-//                LOCK(cs_vNodes);
-//                for (CNode* pnode : vNodes)
-//                {
-//                    pnode->PushMessage("msgack", hash);
-//                }
-//            }
-//        }
-//    }
 
     else
     {

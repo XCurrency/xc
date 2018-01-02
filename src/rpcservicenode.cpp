@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -142,7 +142,7 @@ Value servicenode(const Array& params, bool fHelp)
             "  genkey       - Generate new servicenodeprivkey\n"
             "  enforce      - Enforce servicenode payments\n"
             "  outputs      - Print servicenode compatible outputs\n"
-            "  start        - Start servicenode configured in blocknetdx.conf\n"
+            "  start        - Start servicenode configured in xcurrency.conf\n"
             "  start-alias  - Start single servicenode by assigned alias configured in servicenode.conf\n"
             "  start-<mode> - Start servicenodes configured in servicenode.conf (<mode>: 'all', 'missing', 'disabled')\n"
             "  status       - Print servicenode status information\n"
@@ -569,12 +569,11 @@ Value servicenodelist(const Array& params, bool fHelp)
             "    \"txhash\": \"hash\",       (string) Collateral transaction hash\n"
             "    \"outidx\": n,              (numeric) Collateral transaction output index\n"
             "    \"status\": s,              (string) Status (ENABLED/EXPIRED/REMOVE/etc)\n"
-            "    \"addr\": \"addr\",         (string) Servicenode BlocknetDX address\n"
+            "    \"addr\": \"addr\",         (string) Servicenode XCurrency address\n"
             "    \"version\": v,             (numeric) Servicenode protocol version\n"
             "    \"lastseen\": ttt,          (numeric) The time in seconds since epoch (Jan 1 1970 GMT) of the last seen\n"
             "    \"activetime\": ttt,        (numeric) The time in seconds since epoch (Jan 1 1970 GMT) servicenode has been active\n"
             "    \"lastpaid\": ttt,          (numeric) The time in seconds since epoch (Jan 1 1970 GMT) servicenode was last paid\n"
-            "    \"xwallets\": \"xwallets\", (string) xbridge, connected wallets\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -614,8 +613,6 @@ Value servicenodelist(const Array& params, bool fHelp)
         obj.push_back(Pair("lastseen", (int64_t)mn->lastPing.sigTime));
         obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
         obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
-        std::string xwallets = boost::algorithm::join(mn->connectedWallets, ",");
-        obj.push_back(Pair("xwallets", xwallets));
 
         ret.push_back(obj);
     }

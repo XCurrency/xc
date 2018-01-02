@@ -17,7 +17,7 @@ osx=true
 SIGNER=
 VERSION=
 commit=false
-url=https://github.com/blocknetdx-project/blocknetdx
+url=https://github.com/XCurrency/xc
 proc=2
 mem=2000
 lxc=true
@@ -31,7 +31,7 @@ commitFiles=true
 read -d '' usage <<- EOF
 Usage: $scriptName [-c|u|v|b|s|B|o|h|j|m|] signer version
 
-Run this script from the directory containing the blocknetdx, gitian-builder, gitian.sigs, and blocknetdx-detached-sigs.
+Run this script from the directory containing the xcurrency, gitian-builder, gitian.sigs, and xcurrency-detached-sigs.
 
 Arguments:
 signer          GPG signer to sign each build assert file
@@ -39,7 +39,7 @@ version		Version number, commit, or branch to build. If building a commit or bra
 
 Options:
 -c|--commit	Indicate that the version argument is for a commit or branch
--u|--url	Specify the URL of the repository. Default is https://github.com/blocknetdx-project/blocknetdx
+-u|--url	Specify the URL of the repository. Default is https://github.com/XCurrency/xc
 -v|--verify 	Verify the gitian build
 -b|--build	Do a gitian build
 -s|--sign	Make signed binaries for Windows and Mac OSX
@@ -232,8 +232,8 @@ echo ${COMMIT}
 if [[ $setup = true ]]
 then
     sudo apt-get install ruby apache2 git apt-cacher-ng python-vm-builder qemu-kvm qemu-utils
-    git clone https://github.com/blocknetdx-project/gitian.sigs.git
-    git clone https://github.com/blocknetdx-project/blocknetdx-detached-sigs.git
+    git clone https://github.com/XCurrency/gitian.sigs.git
+    git clone https://github.com/XCurrency/xc-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
     pushd ./gitian-builder
     if [[ -n "$USE_LXC" ]]
@@ -247,7 +247,7 @@ then
 fi
 
 # Set up build
-pushd ./blocknetdx
+pushd ./xcurrency
 git fetch
 git checkout ${COMMIT}
 popd
@@ -256,7 +256,7 @@ popd
 if [[ $build = true ]]
 then
 	# Make output folder
-	mkdir -p ./blocknetdx-binaries/${VERSION}
+	mkdir -p ./xcurrency-binaries/${VERSION}
 
 	# Build Dependencies
 	echo ""
@@ -266,7 +266,7 @@ then
 	mkdir -p inputs
 	wget -N -P inputs $osslPatchUrl
 	wget -N -P inputs $osslTarUrl
-	make -C ../blocknetdx/depends download SOURCES_PATH=`pwd`/cache/common
+	make -C ../xcurrency/depends download SOURCES_PATH=`pwd`/cache/common
 
 	# Linux
 	if [[ $linux = true ]]
@@ -274,9 +274,9 @@ then
             echo ""
 	    echo "Compiling ${VERSION} Linux"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit blocknetdx=${COMMIT} --url blocknetdx=${url} ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
-	    mv build/out/blocknetdx-*.tar.gz build/out/src/blocknetdx-*.tar.gz ../blocknetdx-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit xcurrency=${COMMIT} --url xcurrency=${url} ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+	    mv build/out/xcurrency-*.tar.gz build/out/src/xcurrency-*.tar.gz ../xcurrency-binaries/${VERSION}
 	fi
 	# Windows
 	if [[ $windows = true ]]
@@ -284,10 +284,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit blocknetdx=${COMMIT} --url blocknetdx=${url} ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
-	    mv build/out/blocknetdx-*-win-unsigned.tar.gz inputs/blocknetdx-win-unsigned.tar.gz
-	    mv build/out/blocknetdx-*.zip build/out/blocknetdx-*.exe ../blocknetdx-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit xcurrency=${COMMIT} --url xcurrency=${url} ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+	    mv build/out/xcurrency-*-win-unsigned.tar.gz inputs/xcurrency-win-unsigned.tar.gz
+	    mv build/out/xcurrency-*.zip build/out/xcurrency-*.exe ../xcurrency-binaries/${VERSION}
 	fi
 	# Mac OSX
 	if [[ $osx = true ]]
@@ -295,10 +295,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit blocknetdx=${COMMIT} --url blocknetdx=${url} ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
-	    mv build/out/blocknetdx-*-osx-unsigned.tar.gz inputs/blocknetdx-osx-unsigned.tar.gz
-	    mv build/out/blocknetdx-*.tar.gz build/out/blocknetdx-*.dmg ../blocknetdx-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit xcurrency=${COMMIT} --url xcurrency=${url} ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
+	    mv build/out/xcurrency-*-osx-unsigned.tar.gz inputs/xcurrency-osx-unsigned.tar.gz
+	    mv build/out/xcurrency-*.tar.gz build/out/xcurrency-*.dmg ../xcurrency-binaries/${VERSION}
 	fi
 	popd
 
@@ -325,27 +325,27 @@ then
 	echo ""
 	echo "Verifying v${VERSION} Linux"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../blocknetdx/contrib/gitian-descriptors/gitian-linux.yml
+	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
 	# Windows
 	echo ""
 	echo "Verifying v${VERSION} Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../blocknetdx/contrib/gitian-descriptors/gitian-win.yml
+	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
 	# Mac OSX
 	echo ""
 	echo "Verifying v${VERSION} Mac OSX"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../blocknetdx/contrib/gitian-descriptors/gitian-osx.yml
+	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
 	# Signed Windows
 	echo ""
 	echo "Verifying v${VERSION} Signed Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
+	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
 	# Signed Mac OSX
 	echo ""
 	echo "Verifying v${VERSION} Signed Mac OSX"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
+	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
 	popd
 fi
 
@@ -360,10 +360,10 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../blocknetdx/contrib/gitian-descriptors/gitian-win-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-win-signer.yml
-	    mv build/out/blocknetdx-*win64-setup.exe ../blocknetdx-binaries/${VERSION}
-	    mv build/out/blocknetdx-*win32-setup.exe ../blocknetdx-binaries/${VERSION}
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
+	    mv build/out/xcurrency-*win64-setup.exe ../xcurrency-binaries/${VERSION}
+	    mv build/out/xcurrency-*win32-setup.exe ../xcurrency-binaries/${VERSION}
 	fi
 	# Sign Mac OSX
 	if [[ $osx = true ]]
@@ -371,9 +371,9 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../blocknetdx/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    mv build/out/blocknetdx-osx-signed.dmg ../blocknetdx-binaries/${VERSION}/blocknetdx-${VERSION}-osx.dmg
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    mv build/out/xcurrency-osx-signed.dmg ../xcurrency-binaries/${VERSION}/xcurrency-${VERSION}-osx.dmg
 	fi
 	popd
 

@@ -1,0 +1,26 @@
+# /etc/conf.d/xc3d: config file for /etc/init.d/xc3d
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/xcurrency/xcurrency.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/xc3d"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/xc3d.pid"
+
+# Where to write xc3d data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/xc3d"
+
+# User and group to own xc3d process
+#BITCOIND_USER="blocknetdx"
+#BITCOIND_GROUP="blocknetdx"
+
+# Path to xc3d executable
+#BITCOIND_BIN="/usr/bin/xc3d"
+
+# Nice value to run xc3d under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

@@ -800,7 +800,20 @@ padding-right:5px;
 /**************************** OVERVIEW SCREEN *******************************************/
 
 QWidget .QFrame#frame { /* Wallet Balance */
-min-width:490px;
+min-width:190px;
+margin-right:20px;
+margin-left:0;
+margin-top:0;
+
+/*background-image: url(':/icons/res/images/XC_256px.png');*/
+}
+QWidget .QFrame#frame_3 { /* Wallet Balance */
+min-width:190px;
+margin-right:20px;
+margin-left:0;
+margin-top:150;
+
+background-image: url(':/icons/res/images/XC_256px.png');
 }
 
 QWidget .QFrame#frame > .QLabel {
@@ -927,6 +940,7 @@ qproperty-alignment: 'AlignVCenter | AlignLeft';
 font-size:12px;
 color:#5bd75a;
 margin-left:0px;
+
 }
 
 QWidget .QFrame#frame .QLabel#labelWatchTotal { /* Watch-only Total Balance */
@@ -940,14 +954,16 @@ margin-left:16px;
 
 QWidget .QFrame#frameObfuscation { /* Obfuscation Widget */
 background-color:transparent;
-qproperty-minimumSize: 451px 343px;
+/*qproperty-minimumSize: 401px 343px;*/
+background-image: url(':/icons/res/images/XC_256px.png');
 }
 
-QWidget .QFrame#frameObfuscation QWidget {
+/*QWidget .QFrame#frameObfuscation QWidget {
 qproperty-geometry: rect(10 0 431 35);
-}
 
-QWidget .QFrame#frameObfuscation .QLabel#label_2 { /* Obfuscation Header */
+}*/
+
+/*QWidget .QFrame#frameObfuscation .QLabel#label_2 {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:#1F487E;
@@ -957,15 +973,15 @@ padding-right:5px;
 font-weight:bold;
 font-size:14px;
 min-height:35px;
-}
+}*/
 
 /**************************** OBFUSCATION ***********************************************/
 
-QWidget .QFrame#frameObfuscation .QLabel#labelObfuscationSyncStatus { /* Obfuscation Sync Status */
+/*QWidget .QFrame#frameObfuscation .QLabel#labelObfuscationSyncStatus { /* Obfuscation Sync Status
 qproperty-alignment: 'AlignVCenter | AlignLeft';
 margin-left:2px;
-}
-
+}*/
+/*
 QWidget .QFrame#frameObfuscation #formLayoutWidget {
 qproperty-geometry: rect(10 51 451 175);
 }
@@ -976,7 +992,7 @@ font-weight:normal;
 min-height:25px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_6 { /* Obfuscation Status Label */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_6 {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:transparent;
@@ -985,11 +1001,11 @@ margin-right:5px;
 padding-right:5px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#obfuscationEnabled { /* Obfuscation Status */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#obfuscationEnabled {
 
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_7 { /* Obfuscation Completion Label */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_7 {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:transparent;
@@ -999,20 +1015,20 @@ padding-right:5px;
 
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QProgressBar#obfuscationProgress { /* Obfuscation Completion */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QProgressBar#obfuscationProgress {
 border: 1px solid #818181;
 border-radius: 1px;
 margin-right:43px;
 text-align: right;
 color:#818181;
-}
+}*/
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QProgressBar#obfuscationProgress::chunk {
+/*QWidget .QFrame#frameObfuscation #formLayoutWidget .QProgressBar#obfuscationProgress::chunk {
 background-color: #101341;
 width:1px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAnonymizedText { /* Obfuscation Balance Label */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAnonymizedText {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:transparent;
@@ -1021,11 +1037,11 @@ margin-right:5px;
 padding-right:5px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAnonymized { /* Obfuscation Balance */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAnonymized {
 
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_8 { /* Obfuscation Amount and Rounds Label */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_8 {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:transparent;
@@ -1034,11 +1050,11 @@ margin-right:5px;
 padding-right:5px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAmountRounds { /* Obfuscation Amount and Rounds */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelAmountRounds {
 
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_9 { /* Obfuscation Submitted Denom Label */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#label_9 {
 qproperty-alignment: 'AlignVCenter | AlignRight';
 min-width:160px;
 background-color:transparent;
@@ -1047,20 +1063,20 @@ margin-right:5px;
 padding-right:5px;
 }
 
-QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelSubmittedDenom { /* Obfuscation Submitted Denom */
+QWidget .QFrame#frameObfuscation #formLayoutWidget .QLabel#labelSubmittedDenom {
 
 }
 
-QWidget .QFrame#frameObfuscation .QLabel#obfuscationStatus { /* Obfuscation Status Notifications */
+QWidget .QFrame#frameObfuscation .QLabel#obfuscationStatus {
 qproperty-alignment: 'AlignVCenter | AlignCenter';
 qproperty-geometry: rect(70 226 395 34);
 font-size:11px;
 color:#818181;
-}
+}*/
 
 /**************************** OBFUSCATION BUTTONS ***************************************/
 
-QWidget .QFrame#frameObfuscation .QPushButton { /* Obfuscation Buttons - General Attributes */
+/*QWidget .QFrame#frameObfuscation .QPushButton {
 border:0px solid #ffffff;
 }
 
@@ -1069,11 +1085,11 @@ border:none;
 outline:none;
 }
 
-QWidget .QFrame#frameObfuscation .QPushButton#runAutoDenom { /* No idea why this button is in the .UI file... */
+QWidget .QFrame#frameObfuscation .QPushButton#runAutoDenom {
 qproperty-geometry: rect(0 0 0 0);
 }
 
-QWidget .QFrame#frameObfuscation .QPushButton#toggleObfuscation { /* Start Obfuscation Mixing */
+QWidget .QFrame#frameObfuscation .QPushButton#toggleObfuscation {
 qproperty-geometry: rect(115 268 295 40);
 font-size:15px;
 font-weight:bold;
@@ -1088,7 +1104,7 @@ QWidget .QFrame#frameObfuscation .QPushButton#toggleObfuscation:hover {
 
 }
 
-QWidget .QFrame#frameObfuscation .QPushButton#obfuscationAuto { /* Try Mix Button */
+QWidget .QFrame#frameObfuscation .QPushButton#obfuscationAuto {
 qproperty-geometry: rect(120 314 140 25);
 background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #f6f6f6, stop: .1 rgba(250, 250, 250, 128), stop: .95 rgba(250, 250, 250, 255), stop: 1 #ebebeb);
 border:1px solid #d2d2d2;
@@ -1107,7 +1123,7 @@ QWidget .QFrame#frameObfuscation .QPushButton#obfuscationAuto:pressed {
 border:1px solid #9e9e9e;
 }
 
-QWidget .QFrame#frameObfuscation .QPushButton#obfuscationReset { /* Reset Button */
+QWidget .QFrame#frameObfuscation .QPushButton#obfuscationReset {
 qproperty-geometry: rect(265 314 140 25);
 background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #f6f6f6, stop: .1 rgba(250, 250, 250, 128), stop: .95 rgba(250, 250, 250, 255), stop: 1 #ebebeb);
 border:1px solid #d2d2d2;
@@ -1124,7 +1140,7 @@ color:#333;
 
 QWidget .QFrame#frameObfuscation .QPushButton#obfuscationReset:pressed {
 border:1px solid #9e9e9e;
-}
+}*/
 
 /**************************** RECENT TRANSACTIONS ***************************************/
 
@@ -1133,7 +1149,8 @@ min-width:410px;
 margin-right:20px;
 margin-left:0;
 margin-top:0;
-background-image: url(':/images/blocknetdx_logo_horizontal');
+/*background-image: url(':/images/blocknetdx_logo_horizontal');*/
+/*background-image: url(':/images/wallet');*/
 background-repeat:none;
 }
 
@@ -1141,7 +1158,7 @@ QWidget .QFrame#frame_2 .QLabel#label_4 { /* Recent Transactions Label */
 min-width:180px;
 color:#7777AA;
 margin-left:67px;
-margin-top:83px;
+/*margin-top:83px;*/
 margin-right:5px;
 padding-right:5px;
 font-weight:bold;

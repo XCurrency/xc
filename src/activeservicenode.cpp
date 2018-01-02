@@ -6,10 +6,9 @@
 #include "servicenodeman.h"
 #include "protocol.h"
 #include "spork.h"
-#include "xbridge/xbridgeexchange.h"
 
 //
-// Bootup the Servicenode, look for a 5000 BlocknetDX input and register on the network
+// Bootup the Servicenode, look for a 5000 XCurrency input and register on the network
 //
 void CActiveServicenode::ManageStatus()
 {
@@ -65,13 +64,13 @@ void CActiveServicenode::ManageStatus()
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (service.GetPort() != 41412) {
-                notCapableReason = strprintf("Invalid port: %u - only 41412 is supported on mainnet.", service.GetPort());
+            if (service.GetPort() != 14333) {
+                notCapableReason = strprintf("Invalid port: %u - only 14333 is supported on mainnet.", service.GetPort());
                 LogPrintf("CActiveServicenode::ManageStatus() - not capable: %s\n", notCapableReason);
                 return;
             }
-        } else if (service.GetPort() == 41412) {
-            notCapableReason = strprintf("Invalid port: %u - 41412 is only supported on mainnet.", service.GetPort());
+        } else if (service.GetPort() == 14333) {
+            notCapableReason = strprintf("Invalid port: %u - 14333 is only supported on mainnet.", service.GetPort());
             LogPrintf("CActiveServicenode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;
         }
@@ -267,13 +266,13 @@ bool CActiveServicenode::Register(std::string strService, std::string strKeyServ
 
     CService service = CService(strService);
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (service.GetPort() != 41412) {
-            errorMessage = strprintf("Invalid port %u for servicenode %s - only 41412 is supported on mainnet.", service.GetPort(), strService);
+        if (service.GetPort() != 14333) {
+            errorMessage = strprintf("Invalid port %u for servicenode %s - only 14333 is supported on mainnet.", service.GetPort(), strService);
             LogPrintf("CActiveServicenode::Register() - %s\n", errorMessage);
             return false;
         }
-    } else if (service.GetPort() == 41412) {
-        errorMessage = strprintf("Invalid port %u for servicenode %s - 41412 is only supported on mainnet.", service.GetPort(), strService);
+    } else if (service.GetPort() == 14333) {
+        errorMessage = strprintf("Invalid port %u for servicenode %s - 14333 is only supported on mainnet.", service.GetPort(), strService);
         LogPrintf("CActiveServicenode::Register() - %s\n", errorMessage);
         return false;
     }
@@ -296,12 +295,9 @@ bool CActiveServicenode::Register(CTxIn vin, CService service, CKey keyCollatera
 
     LogPrintf("CActiveServicenode::Register() - Adding to Servicenode list\n    service: %s\n    vin: %s\n", service.ToString(), vin.ToString());
 
-    XBridgeExchange & e = XBridgeExchange::instance();
-
     mnb = CServicenodeBroadcast(service, vin,
                                 pubKeyCollateralAddress, pubKeyServicenode,
-                                PROTOCOL_VERSION,
-                                e.isEnabled() ? e.connectedWallets() : std::vector<std::string>());
+                                PROTOCOL_VERSION);
     mnb.lastPing = mnp;
     if (!mnb.Sign(keyCollateralAddress)) {
         errorMessage = strprintf("Failed to sign broadcast, vin: %s", vin.ToString());
@@ -500,24 +496,6 @@ bool CActiveServicenode::EnableHotColdServiceNode(CTxIn& newVin, CService& newSe
     //The values below are needed for signing mnping messages going forward
     vin = newVin;
     service = newService;
-
-    // update xbridge info for my servicenode
-    CServicenode * mn = mnodeman.Find(vin);
-    if (mn)
-    {
-        XBridgeExchange & e = XBridgeExchange::instance();
-        if (e.isEnabled())
-        {
-            mn->connectedWallets = e.connectedWallets();
-
-            CServicenodeBroadcast mnb(*mn);
-            uint256 hash = mnb.GetHash();
-            if (mnodeman.mapSeenServicenodeBroadcast.count(hash))
-            {
-                mnodeman.mapSeenServicenodeBroadcast[hash].connectedWallets = mn->connectedWallets;
-            }
-        }
-    }
 
     LogPrintf("CActiveServicenode::EnableHotColdServiceNode() - Enabled! You may shut down the cold daemon.\n");
 

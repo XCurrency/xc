@@ -1,6 +1,6 @@
 UNIX BUILD NOTES
 ====================
-Some notes on how to build BlocknetDX in Unix.
+Some notes on how to build XCurrency in Unix.
 
 Note
 ---------------------
@@ -22,7 +22,7 @@ make
 make install # optional
 ```
 
-This will build blocknetdx-qt as well if the dependencies are met.
+This will build xc3-qt as well if the dependencies are met.
 
 Dependencies
 ---------------------
@@ -50,7 +50,7 @@ System requirements
 --------------------
 
 C++ compilers are memory-hungry. It is recommended to have at least 1 GB of
-memory available when compiling BlocknetDX Core. With 512MB of memory or less
+memory available when compiling XCurrency Core. With 512MB of memory or less
 compilation will take much longer due to swap thrashing.
 
 Dependency Build Instructions: Ubuntu & Debian
@@ -83,7 +83,7 @@ Optional:
 Dependencies for the GUI: Ubuntu & Debian
 -----------------------------------------
 
-If you want to build BlocknetDX-Qt, make sure that the required packages for Qt development
+If you want to build XCurrency-Qt, make sure that the required packages for Qt development
 are installed. Qt 5 is necessary to build the GUI.
 If both Qt 4 and Qt 5 are installed, Qt 5 will be used.
 To build without GUI pass `--without-gui`.
@@ -96,12 +96,12 @@ libqrencode (optional) can be installed with:
 
     sudo apt-get install libqrencode-dev
 
-Once these are installed, they will be found by configure and a blocknetdx-qt executable will be
+Once these are installed, they will be found by configure and a xc3-qt executable will be
 built by default.
 
 Notes
 -----
-The release is built with GCC and then "strip blocknetdxd" to strip the debug
+The release is built with GCC and then "strip xc3d" to strip the debug
 symbols, which reduces the executable size by about 90%.
 
 
@@ -130,10 +130,10 @@ Berkeley DB
 It is recommended to use Berkeley DB 4.8. If you have to build it yourself:
 
 ```bash
-BlocknetDX_ROOT=$(pwd)
+XCurrency_ROOT=$(pwd)
 
 # Pick some path to install BDB to, here we create a directory within the blocknetdx directory
-BDB_PREFIX="${BlocknetDX_ROOT}/db4"
+BDB_PREFIX="${XCurrency_ROOT}/db4"
 mkdir -p $BDB_PREFIX
 
 # Fetch the source and verify that it is not tampered with
@@ -148,8 +148,8 @@ cd db-4.8.30.NC/build_unix/
 ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$BDB_PREFIX
 make install
 
-# Configure BlocknetDX Core to use our own-built instance of BDB
-cd $BlocknetDX_ROOT
+# Configure XCurrency Core to use our own-built instance of BDB
+cd $XCurrency_ROOT
 ./configure (other args...) LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/"
 ```
 
@@ -166,7 +166,7 @@ If you need to build Boost yourself:
 
 Security
 --------
-To help make your BlocknetDX installation more secure by making certain attacks impossible to
+To help make your XCurrency installation more secure by making certain attacks impossible to
 exploit even if a vulnerability is found, binaries are hardened by default.
 This can be disabled with:
 
@@ -190,7 +190,7 @@ Hardening enables the following features:
 
     To test that you have built PIE executable, install scanelf, part of paxutils, and use:
 
-    	scanelf -e ./blocknetdxd
+    	scanelf -e ./xc3d
 
     The output should contain:
      TYPE
@@ -204,7 +204,7 @@ Hardening enables the following features:
     executable without the non-executable stack protection.
 
     To verify that the stack is non-executable after compiling use:
-    `scanelf -e ./blocknetdxd`
+    `scanelf -e ./xc3d`
 
     the output should contain:
 	STK/REL/PTL

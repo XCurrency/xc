@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The BlocknetDX developers
+// Copyright (c) 2015-2017 The XCurrency developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,18 +19,18 @@ BitcoinUnits::BitcoinUnits(QObject* parent) : QAbstractListModel(parent),
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(BLOCK);
-    unitlist.append(mBLOCK);
-    unitlist.append(uBLOCK);
+    unitlist.append(XC);
+    unitlist.append(mXC);
+    unitlist.append(uXC);
     return unitlist;
 }
 
 bool BitcoinUnits::valid(int unit)
 {
     switch (unit) {
-    case BLOCK:
-    case mBLOCK:
-    case uBLOCK:
+    case XC:
+    case mXC:
+    case uXC:
         return true;
     default:
         return false;
@@ -40,12 +40,12 @@ bool BitcoinUnits::valid(int unit)
 QString BitcoinUnits::id(int unit)
 {
     switch (unit) {
-    case BLOCK:
-        return QString("blocknetdx");
-    case mBLOCK:
-        return QString("mblocknetdx");
-    case uBLOCK:
-        return QString::fromUtf8("ublocknetdx");
+    case XC:
+        return QString("xcurrency");
+    case mXC:
+        return QString("mxcurrency");
+    case uXC:
+        return QString::fromUtf8("uxcurrency");
     default:
         return QString("???");
     }
@@ -55,23 +55,23 @@ QString BitcoinUnits::name(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case BLOCK:
-            return QString("BLOCK");
-        case mBLOCK:
-            return QString("mBLOCK");
-        case uBLOCK:
-            return QString::fromUtf8("μBLOCK");
+        case XC:
+            return QString("XC");
+        case mXC:
+            return QString("mXC");
+        case uXC:
+            return QString::fromUtf8("μXC");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case BLOCK:
-            return QString("tBLOCK");
-        case mBLOCK:
-            return QString("mtBLOCK");
-        case uBLOCK:
-            return QString::fromUtf8("μtBLOCK");
+        case XC:
+            return QString("tXC");
+        case mXC:
+            return QString("mtXC");
+        case uXC:
+            return QString::fromUtf8("μtXC");
         default:
             return QString("???");
         }
@@ -82,23 +82,23 @@ QString BitcoinUnits::description(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case BLOCK:
-            return QString("BLOCK");
-        case mBLOCK:
-            return QString("Milli-BLOCK (1 / 1" THIN_SP_UTF8 "000)");
-        case uBLOCK:
-            return QString("Micro-BLOCK (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case XC:
+            return QString("XC");
+        case mXC:
+            return QString("Milli-XC (1 / 1" THIN_SP_UTF8 "000)");
+        case uXC:
+            return QString("Micro-XC (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case BLOCK:
-            return QString("TestBLOCKs");
-        case mBLOCK:
-            return QString("Milli-TestBLOCK (1 / 1" THIN_SP_UTF8 "000)");
-        case uBLOCK:
-            return QString("Micro-TestBLOCK (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case XC:
+            return QString("TestXCs");
+        case mXC:
+            return QString("Milli-TestXC (1 / 1" THIN_SP_UTF8 "000)");
+        case uXC:
+            return QString("Micro-TestXC (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
@@ -108,11 +108,11 @@ QString BitcoinUnits::description(int unit)
 qint64 BitcoinUnits::factor(int unit)
 {
     switch (unit) {
-    case BLOCK:
+    case XC:
         return 100000000;
-    case mBLOCK:
+    case mXC:
         return 100000;
-    case uBLOCK:
+    case uXC:
         return 100;
     default:
         return 100000000;
@@ -122,11 +122,11 @@ qint64 BitcoinUnits::factor(int unit)
 int BitcoinUnits::decimals(int unit)
 {
     switch (unit) {
-    case BLOCK:
+    case XC:
         return 8;
-    case mBLOCK:
+    case mXC:
         return 5;
-    case uBLOCK:
+    case uXC:
         return 2;
     default:
         return 0;

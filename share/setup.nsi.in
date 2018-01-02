@@ -7,7 +7,7 @@ SetCompressor /SOLID lzma
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION @CLIENT_VERSION_MAJOR@.@CLIENT_VERSION_MINOR@.@CLIENT_VERSION_REVISION@
 !define COMPANY "Blocknetdx Core project"
-!define URL https://www.blocknetdx.org
+!define URL https://www.xcurrency.org
 
 # MUI Symbol Definitions
 !define MUI_ICON "@abs_top_srcdir@/share/pixmaps/bitcoin.ico"
@@ -20,7 +20,7 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "@PACKAGE_NAME@"
-!define MUI_FINISHPAGE_RUN $INSTDIR\blocknetdx-qt.exe
+!define MUI_FINISHPAGE_RUN $INSTDIR\xc3-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "@abs_top_srcdir@/share/pixmaps/nsis-wizard.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -73,12 +73,12 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File @abs_top_srcdir@/release/blocknetdx-qt.exe
+    File @abs_top_srcdir@/release/xc3-qt.exe
     File /oname=COPYING.txt @abs_top_srcdir@/COPYING
     File /oname=readme.txt @abs_top_srcdir@/doc/README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File @abs_top_srcdir@/release/blocknetdxd.exe
-    File @abs_top_srcdir@/release/blocknetdx-cli.exe
+    File @abs_top_srcdir@/release/xc3d.exe
+    File @abs_top_srcdir@/release/xc3-cli.exe
     SetOutPath $INSTDIR\doc
     File /r @abs_top_srcdir@/doc\*.*
     SetOutPath $INSTDIR
@@ -95,7 +95,7 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk" $INSTDIR\blocknetdx-qt.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk" $INSTDIR\xc3-qt.exe
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
@@ -108,8 +108,8 @@ Section -post SEC0001
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
     WriteRegStr HKCR "blocknetdx" "URL Protocol" ""
     WriteRegStr HKCR "blocknetdx" "" "URL:Blocknetdx"
-    WriteRegStr HKCR "blocknetdx\DefaultIcon" "" $INSTDIR\blocknetdx-qt.exe
-    WriteRegStr HKCR "blocknetdx\shell\open\command" "" '"$INSTDIR\blocknetdx-qt.exe" "%1"'
+    WriteRegStr HKCR "blocknetdx\DefaultIcon" "" $INSTDIR\xc3-qt.exe
+    WriteRegStr HKCR "blocknetdx\shell\open\command" "" '"$INSTDIR\xc3-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -127,7 +127,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK $INSTDIR\blocknetdx-qt.exe
+    Delete /REBOOTOK $INSTDIR\xc3-qt.exe
     Delete /REBOOTOK $INSTDIR\COPYING.txt
     Delete /REBOOTOK $INSTDIR\readme.txt
     RMDir /r /REBOOTOK $INSTDIR\daemon

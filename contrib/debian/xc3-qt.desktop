@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XCurrency
+Comment=XCurrency P2P Cryptocurrency
+Comment[fr]=XCurrency, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=XCurrency, eşten eşe kriptografik sanal para birimi
+Exec=xc3-qt %u
+Terminal=false
+Type=Application
+Icon=xcurrency128
+MimeType=x-scheme-handler/xcurrency;
+Categories=Office;Finance;
