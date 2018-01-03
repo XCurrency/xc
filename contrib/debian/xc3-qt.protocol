@@ -1,6 +1,6 @@
 [Protocol]
 exec=xc3-qt '%u'
-protocol=blocknetdx
+protocol=xcurrency
 input=none
 output=none
 helper=true

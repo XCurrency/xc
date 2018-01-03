@@ -13,7 +13,7 @@ can be found in the contrib/init folder.
 1. Service User
 ---------------------------------
 
-All three startup configurations assume the existence of a "blocknetdx" user
+All three startup configurations assume the existence of a "xcurrency" user
 and group.  They must be created before attempting to use these scripts.
 
 2. Configuration

@@ -1,4 +1,4 @@
-Source: blocknetdx
+Source: xcurrency
 Section: utils
 Priority: optional
 Maintainer: Jonas Smedegaard <dr@jones.dk> ***TODO***
@@ -22,7 +22,7 @@ Build-Depends: debhelper,
  libqrencode-dev,
  libprotobuf-dev, protobuf-compiler
 Standards-Version: 3.9.2
-Homepage: http://www.xcurrency.org
+Homepage: http://www.xcurrency.co
 Vcs-Git: https://github.com/XCurrency/xc.git
 Vcs-Browser: https://github.com/XCurrency/xc
 
