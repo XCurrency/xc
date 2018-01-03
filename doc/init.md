@@ -52,9 +52,9 @@ PID file:            /var/run/xc3d/xc3d.pid (OpenRC and Upstart)
                      /var/lib/xc3d/xc3d.pid (systemd)
 
 The configuration file, PID directory (if applicable) and data directory
-should all be owned by the blocknetdx user and group.  It is advised for security
+should all be owned by the xcurrency user and group.  It is advised for security
 reasons to make the configuration file and data directory only readable by the
-blocknetdx user and group.  Access to xc3-cli and other xc3d rpc clients
+xcurrency user and group.  Access to xc3-cli and other xc3d rpc clients
 can then be controlled by group membership.
 
 4. Installing Service Configuration

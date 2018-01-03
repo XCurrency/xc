@@ -174,7 +174,7 @@ void PrepareShutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("blocknetdx-shutoff");
+    RenameThread("xcurrency-shutoff");
     mempool.AddTransactionsUpdated(1);
     StopRPCThreads();
 #ifdef ENABLE_WALLET
@@ -417,7 +417,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-stopafterblockimport", strprintf(_("Stop running after importing blocks from disk (default: %u)"), 0));
         strUsage += HelpMessageOpt("-sporkkey=<privkey>", _("Enable spork administration functionality with the appropriate private key."));
     }
-    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, mempool, net, blocknetdx, (obfuscation, swifttx, servicenode, mnpayments, mnbudget)"; // Don't translate these and qt below
+    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, mempool, net, xcurrency, (obfuscation, swifttx, servicenode, mnpayments, mnbudget)"; // Don't translate these and qt below
     if (mode == HMM_BITCOIN_QT)
         debugCategories += ", qt";
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
@@ -471,7 +471,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageGroup(_("Obfuscation options:"));
     strUsage += HelpMessageOpt("-enableobfuscation=<n>", strprintf(_("Enable use of automated obfuscation for funds stored in this wallet (0-1, default: %u)"), 0));
     strUsage += HelpMessageOpt("-obfuscationrounds=<n>", strprintf(_("Use N separate servicenodes to anonymize funds  (2-8, default: %u)"), 2));
-    strUsage += HelpMessageOpt("-anonymizeblocknetdxamount=<n>", strprintf(_("Keep N XC anonymized (default: %u)"), 0));
+    strUsage += HelpMessageOpt("-anonymizexcurrencyamount=<n>", strprintf(_("Keep N XC anonymized (default: %u)"), 0));
     strUsage += HelpMessageOpt("-liquidityprovider=<n>", strprintf(_("Provide liquidity to Obfuscation by infrequently mixing coins on a continual basis (0-100, default: %u, 1=very frequent, high fees, 100=very infrequent, low fees)"), 0));
 
     strUsage += HelpMessageGroup(_("SwiftTX options:"));
@@ -550,7 +550,7 @@ struct CImportingNow {
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("blocknetdx-loadblk");
+    RenameThread("xcurrency-loadblk");
 
     // -reindex
     if (fReindex) {
@@ -625,7 +625,7 @@ bool InitSanityCheck(void)
 }
 
 
-/** Initialize blocknetdx.
+/** Initialize xcurrency.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2(boost::thread_group& threadGroup)
@@ -1589,9 +1589,9 @@ bool AppInit2(boost::thread_group& threadGroup)
         nObfuscationRounds = 99999;
     }
 
-    nAnonymizeBlocknetdxAmount = GetArg("-anonymizeblocknetdxamount", 0);
-    if (nAnonymizeBlocknetdxAmount > 999999) nAnonymizeBlocknetdxAmount = 999999;
-    if (nAnonymizeBlocknetdxAmount < 2) nAnonymizeBlocknetdxAmount = 2;
+    nAnonymizeXCurrencyAmount = GetArg("-anonymizexcurrencyamount", 0);
+    if (nAnonymizeXCurrencyAmount > 999999) nAnonymizeXCurrencyAmount = 999999;
+    if (nAnonymizeXCurrencyAmount < 2) nAnonymizeXCurrencyAmount = 2;
 
     fEnableSwiftTX = GetBoolArg("-enableswifttx", fEnableSwiftTX);
     nSwiftTXDepth = GetArg("-swifttxdepth", nSwiftTXDepth);
@@ -1606,7 +1606,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     LogPrintf("fLiteMode %d\n", fLiteMode);
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
     LogPrintf("Obfuscation rounds %d\n", nObfuscationRounds);
-    LogPrintf("Anonymize XCurrency Amount %d\n", nAnonymizeBlocknetdxAmount);
+    LogPrintf("Anonymize XCurrency Amount %d\n", nAnonymizeXCurrencyAmount);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
     /* Denominations

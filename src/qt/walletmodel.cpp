@@ -233,7 +233,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                 return InvalidAmount;
             }
             total += subtotal;
-        } else { // User-entered blocknetdx address / amount:
+        } else { // User-entered xcurrency address / amount:
             if (!validateAddress(rcp.address)) {
                 return InvalidAddress;
             }

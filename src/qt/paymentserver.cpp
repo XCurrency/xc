@@ -57,9 +57,9 @@ const QString BITCOIN_IPC_PREFIX("xcurrency:");
 const char* BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char* BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
 // BIP71 payment protocol media types
-const char* BIP71_MIMETYPE_PAYMENT = "application/blocknetdx-payment";
-const char* BIP71_MIMETYPE_PAYMENTACK = "application/blocknetdx-paymentack";
-const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/blocknetdx-paymentrequest";
+const char* BIP71_MIMETYPE_PAYMENT = "application/xcurrency-payment";
+const char* BIP71_MIMETYPE_PAYMENTACK = "application/xcurrency-paymentack";
+const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/xcurrency-paymentrequest";
 // BIP70 max payment request size in bytes (DoS protection)
 const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
 
@@ -524,7 +524,7 @@ bool PaymentServer::processPaymentRequest(PaymentRequestPlus& request, SendCoins
             // Append destination address
             addresses.append(QString::fromStdString(CBitcoinAddress(dest).ToString()));
         } else if (!recipient.authenticatedMerchant.isEmpty()) {
-            // Insecure payments to custom blocknetdx addresses are not supported
+            // Insecure payments to custom xcurrency addresses are not supported
             // (there is no good way to tell the user where they are paying in a way
             // they'd have a chance of understanding).
             emit message(tr("Payment request rejected"),

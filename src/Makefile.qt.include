@@ -1,7 +1,7 @@
 bin_PROGRAMS += qt/xc3-qt
 EXTRA_LIBRARIES += qt/libbitcoinqt.a
 
-# blocknetdx qt core #
+# xcurrency qt core #
 QT_TS = \
   qt/locale/xc3_bg.ts \
   qt/locale/xc3_de.ts \
@@ -225,12 +225,12 @@ RES_ICONS = \
   qt/res/icons/tx_input.png \
   qt/res/icons/tx_output.png \
   qt/res/icons/tx_mined.png \
-  qt/res/icons/unit_blocknetdx.png \
-  qt/res/icons/unit_mblocknetdx.png \
-  qt/res/icons/unit_ublocknetdx.png \
-  qt/res/icons/unit_tblocknetdx.png \
-  qt/res/icons/unit_tmblocknetdx.png \
-  qt/res/icons/unit_tublocknetdx.png
+  qt/res/icons/unit_xcurrency.png \
+  qt/res/icons/unit_mxcurrency.png \
+  qt/res/icons/unit_uxcurrency.png \
+  qt/res/icons/unit_txcurrency.png \
+  qt/res/icons/unit_tmxcurrency.png \
+  qt/res/icons/unit_tuxcurrency.png
 
 BITCOIN_QT_CPP = \
   qt/bitcoinaddressvalidator.cpp \
@@ -297,7 +297,7 @@ RES_IMAGES = \
   qt/res/images/about.png \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
-  qt/res/images/blocknetdx_logo_horizontal.png \
+  qt/res/images/xcurrency_logo_horizontal.png \
   qt/res/images/downArrow.png \
   qt/res/images/downArrow_small.png \
   qt/res/images/upArrow_small.png \
@@ -386,7 +386,7 @@ $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_MOVIES) $(PROTOBUF_H)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name blocknetdx $< | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name xcurrency $< | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 
 CLEAN_QT = $(nodist_qt_libbitcoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno

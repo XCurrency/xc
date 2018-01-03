@@ -36,7 +36,7 @@ extern bool fLiteMode;
 extern bool fEnableSwiftTX;
 extern int nSwiftTXDepth;
 extern int nObfuscationRounds;
-extern int nAnonymizeBlocknetdxAmount;
+extern int nAnonymizeXCurrencyAmount;
 extern int nLiquidityProvider;
 extern bool fEnableObfuscation;
 extern int64_t enforceServicenodePaymentsTime;
@@ -213,7 +213,7 @@ void RenameThread(const char* name);
 template <typename Callable>
 void LoopForever(const char* name, Callable func, int64_t msecs)
 {
-    std::string s = strprintf("blocknetdx-%s", name);
+    std::string s = strprintf("xcurrency-%s", name);
     RenameThread(s.c_str());
     LogPrintf("%s thread start\n", name);
     try {
@@ -239,7 +239,7 @@ void LoopForever(const char* name, Callable func, int64_t msecs)
 template <typename Callable>
 void TraceThread(const char* name, Callable func)
 {
-    std::string s = strprintf("blocknetdx-%s", name);
+    std::string s = strprintf("xcurrency-%s", name);
     RenameThread(s.c_str());
     try {
         LogPrintf("%s thread start\n", name);
