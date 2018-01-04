@@ -805,15 +805,6 @@ margin-right:20px;
 margin-left:0;
 margin-top:0;
 
-/*background-image: url(':/icons/res/images/XC_256px.png');*/
-}
-QWidget .QFrame#frame_3 { /* Wallet Balance */
-min-width:190px;
-margin-right:20px;
-margin-left:0;
-margin-top:150;
-
-background-image: url(':/icons/res/images/XC_256px.png');
 }
 
 QWidget .QFrame#frame > .QLabel {
