@@ -8,7 +8,7 @@
 #else
 #define UNUSED
 #endif
-static const char UNUSED* blocknetdx_strings[] = {
+static const char UNUSED* xcurrency_strings[] = {
     QT_TRANSLATE_NOOP("xc3-core", ""
                                    "(1 = keep tx meta data e.g. account owner and payment request information, 2 "
                                    "= drop tx meta data)"),

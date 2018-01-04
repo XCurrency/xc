@@ -307,7 +307,7 @@
     </message>
     <message>
         <location line="+6"/>
-        <source>Enter a Blocknetdx Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
+        <source>Enter a XCurrency Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2199,7 +2199,7 @@ Please check the address and try again.</source>
     <message>
         <location line="+21"/>
         <source>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations</source>
+https://www.transifex.com/xcurrency-project/xcurrency-project-translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6706,7 +6706,7 @@ for example: alertnotify=echo %%s | mail -s &quot;XCurrency Alert&quot; admin@fo
     </message>
     <message>
         <location line="+13"/>
-        <source>Generate Blocknetdx Deposit Address</source>
+        <source>Generate XCurrency Deposit Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

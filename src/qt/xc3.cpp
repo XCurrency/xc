@@ -536,7 +536,7 @@ int main(int argc, char* argv[])
 #endif
 
     Q_INIT_RESOURCE(xc3_locale);
-    Q_INIT_RESOURCE(blocknetdx);
+    Q_INIT_RESOURCE(xcurrency);
 
     // stg An attempt to resolve the scaling issues for small high DPI screens
     //QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // Needs QT5.6 or higher

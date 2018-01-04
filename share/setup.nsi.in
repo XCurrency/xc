@@ -6,8 +6,8 @@ SetCompressor /SOLID lzma
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION @CLIENT_VERSION_MAJOR@.@CLIENT_VERSION_MINOR@.@CLIENT_VERSION_REVISION@
-!define COMPANY "Blocknetdx Core project"
-!define URL https://www.xcurrency.org
+!define COMPANY "XCurrency Core project"
+!define URL https://www.xcurrency.co
 
 # MUI Symbol Definitions
 !define MUI_ICON "@abs_top_srcdir@/share/pixmaps/bitcoin.ico"
@@ -48,18 +48,18 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile @abs_top_srcdir@/blocknetdx-${VERSION}-win@WINDOWS_BITS@-setup.exe
+OutFile @abs_top_srcdir@/xcurrency-${VERSION}-win@WINDOWS_BITS@-setup.exe
 !if "@WINDOWS_BITS@" == "64"
-InstallDir $PROGRAMFILES64\Blocknetdx
+InstallDir $PROGRAMFILES64\XCurrency
 !else
-InstallDir $PROGRAMFILES\Blocknetdx
+InstallDir $PROGRAMFILES\XCurrency
 !endif
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
 VIProductVersion ${VERSION}.@CLIENT_VERSION_BUILD@
-VIAddVersionKey ProductName "Blocknetdx Core"
+VIAddVersionKey ProductName "XCurrency Core"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
@@ -84,8 +84,8 @@ Section -Main SEC0000
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 
-    # Remove old wxwidgets-based-blocknetdx executable and locales:
-    Delete /REBOOTOK $INSTDIR\blocknetdx.exe
+    # Remove old wxwidgets-based-xcurrency executable and locales:
+    Delete /REBOOTOK $INSTDIR\xcurrency.exe
     RMDir /r /REBOOTOK $INSTDIR\locale
 SectionEnd
 
@@ -106,10 +106,10 @@ Section -post SEC0001
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" UninstallString $INSTDIR\uninstall.exe
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
-    WriteRegStr HKCR "blocknetdx" "URL Protocol" ""
-    WriteRegStr HKCR "blocknetdx" "" "URL:Blocknetdx"
-    WriteRegStr HKCR "blocknetdx\DefaultIcon" "" $INSTDIR\xc3-qt.exe
-    WriteRegStr HKCR "blocknetdx\shell\open\command" "" '"$INSTDIR\xc3-qt.exe" "%1"'
+    WriteRegStr HKCR "xcurrency" "URL Protocol" ""
+    WriteRegStr HKCR "xcurrency" "" "URL:XCurrency"
+    WriteRegStr HKCR "xcurrency\DefaultIcon" "" $INSTDIR\xc3-qt.exe
+    WriteRegStr HKCR "xcurrency\shell\open\command" "" '"$INSTDIR\xc3-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -139,7 +139,7 @@ Section -un.post UNSEC0001
     DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Blocknetdx.lnk"
+    Delete /REBOOTOK "$SMSTARTUP\XCurrency.lnk"
     Delete /REBOOTOK $INSTDIR\uninstall.exe
     Delete /REBOOTOK $INSTDIR\debug.log
     Delete /REBOOTOK $INSTDIR\db.log
@@ -147,7 +147,7 @@ Section -un.post UNSEC0001
     DeleteRegValue HKCU "${REGKEY}" Path
     DeleteRegKey /IfEmpty HKCU "${REGKEY}\Components"
     DeleteRegKey /IfEmpty HKCU "${REGKEY}"
-    DeleteRegKey HKCR "blocknetdx"
+    DeleteRegKey HKCR "xcurrency"
     RmDir /REBOOTOK $SMPROGRAMS\$StartMenuGroup
     RmDir /REBOOTOK $INSTDIR
     Push $R0

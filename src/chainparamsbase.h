@@ -10,7 +10,7 @@
 
 /**
  * CBaseChainParams defines the base parameters (shared between xc3-cli and xc3d)
- * of a given instance of the Blocknetdx system.
+ * of a given instance of the XCurrency system.
  */
 class CBaseChainParams
 {

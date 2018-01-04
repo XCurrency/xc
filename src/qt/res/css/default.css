@@ -780,12 +780,12 @@ QDialog#HelpMessageDialog QScrollBar:vertical, QDialog#HelpMessageDialog QScroll
 border:0;
 }
 
-/* About Blocknetdx Dialog */
-QDialog#AboutDialog QLabel#label, QDialog#AboutDialog QLabel#copyrightLabel, QDialog#AboutDialog QLabel#label_2 { /* About Blocknetdx Contents */
+/* About XCurrency Dialog */
+QDialog#AboutDialog QLabel#label, QDialog#AboutDialog QLabel#copyrightLabel, QDialog#AboutDialog QLabel#label_2 { /* About XCurrency Contents */
 margin-left:10px;
 }
 
-QDialog#AboutDialog QLabel#label_2 { /* Margin for About Blocknetdx text */
+QDialog#AboutDialog QLabel#label_2 { /* Margin for About XCurrency text */
 margin-right:10px;
 }
 
@@ -805,15 +805,6 @@ margin-right:20px;
 margin-left:0;
 margin-top:0;
 
-/*background-image: url(':/icons/res/images/XC_256px.png');*/
-}
-QWidget .QFrame#frame_3 { /* Wallet Balance */
-min-width:190px;
-margin-right:20px;
-margin-left:0;
-margin-top:150;
-
-background-image: url(':/icons/res/images/XC_256px.png');
 }
 
 QWidget .QFrame#frame > .QLabel {
@@ -1149,7 +1140,7 @@ min-width:410px;
 margin-right:20px;
 margin-left:0;
 margin-top:0;
-/*background-image: url(':/images/blocknetdx_logo_horizontal');*/
+/*background-image: url(':/images/xcurrency_logo_horizontal');*/
 /*background-image: url(':/images/wallet');*/
 background-repeat:none;
 }

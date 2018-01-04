@@ -75,11 +75,11 @@ void OptionsModel::Init()
     if (!settings.contains("nObfuscationRounds"))
         settings.setValue("nObfuscationRounds", 2);
 
-    if (!settings.contains("nAnonymizeBlocknetdxAmount"))
-        settings.setValue("nAnonymizeBlocknetdxAmount", 1000);
+    if (!settings.contains("nAnonymizeXCurrencyAmount"))
+        settings.setValue("nAnonymizeXCurrencyAmount", 1000);
 
     nObfuscationRounds = settings.value("nObfuscationRounds").toLongLong();
-    nAnonymizeBlocknetdxAmount = settings.value("nAnonymizeBlocknetdxAmount").toLongLong();
+    nAnonymizeXCurrencyAmount = settings.value("nAnonymizeXCurrencyAmount").toLongLong();
 
     if (!settings.contains("fShowServicenodesTab"))
         settings.setValue("fShowServicenodesTab", servicenodeConfig.getCount());
@@ -146,8 +146,8 @@ void OptionsModel::Init()
 
     if (settings.contains("nObfuscationRounds"))
         SoftSetArg("-obfuscationrounds", settings.value("nObfuscationRounds").toString().toStdString());
-    if (settings.contains("nAnonymizeBlocknetdxAmount"))
-        SoftSetArg("-anonymizeblocknetdxamount", settings.value("nAnonymizeBlocknetdxAmount").toString().toStdString());
+    if (settings.contains("nAnonymizeXCurrencyAmount"))
+        SoftSetArg("-anonymizexcurrencyamount", settings.value("nAnonymizeXCurrencyAmount").toString().toStdString());
 
     language = settings.value("language").toString();
 }
@@ -227,8 +227,8 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("nThreadsScriptVerif");
         case ObfuscationRounds:
             return QVariant(nObfuscationRounds);
-        case AnonymizeBlocknetdxAmount:
-            return QVariant(nAnonymizeBlocknetdxAmount);
+        case AnonymizeXCurrencyAmount:
+            return QVariant(nAnonymizeXCurrencyAmount);
         case Listen:
             return settings.value("fListen");
         default:
@@ -337,10 +337,10 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
             settings.setValue("nObfuscationRounds", nObfuscationRounds);
             emit obfuscationRoundsChanged(nObfuscationRounds);
             break;
-        case AnonymizeBlocknetdxAmount:
-            nAnonymizeBlocknetdxAmount = value.toInt();
-            settings.setValue("nAnonymizeBlocknetdxAmount", nAnonymizeBlocknetdxAmount);
-            emit anonymizeBlocknetdxAmountChanged(nAnonymizeBlocknetdxAmount);
+        case AnonymizeXCurrencyAmount:
+            nAnonymizeXCurrencyAmount = value.toInt();
+            settings.setValue("nAnonymizeXCurrencyAmount", nAnonymizeXCurrencyAmount);
+            emit anonymizeXCurrencyAmountChanged(nAnonymizeXCurrencyAmount);
             break;
         case CoinControlFeatures:
             fCoinControlFeatures = value.toBool();
