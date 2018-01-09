@@ -13,8 +13,8 @@
 #BITCOIND_DATADIR="/var/lib/xc3d"
 
 # User and group to own xc3d process
-#BITCOIND_USER="blocknetdx"
-#BITCOIND_GROUP="blocknetdx"
+#BITCOIND_USER="xcurrency"
+#BITCOIND_GROUP="xcurrency"
 
 # Path to xc3d executable
 #BITCOIND_BIN="/usr/bin/xc3d"

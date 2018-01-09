@@ -13,7 +13,7 @@ static const int MODEL_UPDATE_DELAY = 250;
 /* AskPassphraseDialog -- Maximum passphrase length */
 static const int MAX_PASSPHRASE_SIZE = 1024;
 
-/* Blocknetdx GUI -- Size of icons in status bar */
+/* XCurrency GUI -- Size of icons in status bar */
 static const int STATUSBAR_ICONSIZE = 16;
 
 static const bool DEFAULT_SPLASHSCREEN = true;
@@ -49,7 +49,7 @@ static const int MAX_URI_LENGTH = 255;
 #define SPINNER_FRAMES 35
 
 #define QAPP_ORG_NAME "XCurrency"
-#define QAPP_ORG_DOMAIN "blocknetdx.org"
+#define QAPP_ORG_DOMAIN "xcurrency.org"
 #define QAPP_APP_NAME_DEFAULT "XCurrency-Qt"
 #define QAPP_APP_NAME_TESTNET "XCurrency-Qt-testnet"
 

@@ -402,7 +402,7 @@ xc3d_SOURCES = xc3d.cpp
 #
 
 if TARGET_WINDOWS
-xc3d_SOURCES += xc3d-res.rc
+xc3d_SOURCES += xc3-res.rc
 endif
 
 xc3d_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)

@@ -81,7 +81,7 @@ Creating a release build
 ------------------------
 You can ignore this section if you are building `xc3d` for your own use.
 
-xc3d/xc3-cli binaries are not included in the blocknetdx-Qt.app bundle.
+xc3d/xc3-cli binaries are not included in the xcurrency-Qt.app bundle.
 
 If you are building `xc3d` or `xc3-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
@@ -116,6 +116,6 @@ you can monitor its process by looking at the debug.log file, like this:
 Other commands:
 -------
 
-    ./xc3d -daemon # to start the blocknetdx daemon.
+    ./xc3d -daemon # to start the xcurrency daemon.
     ./xc3-cli --help  # for a list of command-line options.
     ./xc3-cli help    # When the daemon is running, to get a list of RPC commands

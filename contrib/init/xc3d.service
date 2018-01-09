@@ -3,8 +3,8 @@ Description=XCurrency's distributed currency daemon
 After=network.target
 
 [Service]
-User=blocknetdx
-Group=blocknetdx
+User=xcurrency
+Group=xcurrency
 
 Type=forking
 PIDFile=/var/lib/xc3d/xc3d.pid

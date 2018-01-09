@@ -7,7 +7,7 @@
 #  spendfrom.py  # Lists available funds
 #  spendfrom.py --from=ADDRESS --to=ADDRESS --amount=11.00
 #
-# Assumes it will talk to a xc3d or blocknetdx-Qt running
+# Assumes it will talk to a xc3d or xcurrency-Qt running
 # on localhost.
 #
 # Depends on jsonrpc
@@ -33,7 +33,7 @@ def check_json_precision():
         raise RuntimeError("JSON encode/decode loses precision")
 
 def determine_db_dir():
-    """Return the default location of the blocknetdx data directory"""
+    """Return the default location of the xcurrency data directory"""
     if platform.system() == "Darwin":
         return os.path.expanduser("~/Library/Application Support/XCurrency/")
     elif platform.system() == "Windows":
@@ -63,7 +63,7 @@ def read_bitcoin_config(dbdir):
     return dict(config_parser.items("all"))
 
 def connect_JSON(config):
-    """Connect to a blocknetdx JSON-RPC server"""
+    """Connect to a xcurrency JSON-RPC server"""
     testnet = config.get('testnet', '0')
     testnet = (int(testnet) > 0)  # 0/1 in config file, convert to True/False
     if not 'rpcport' in config:
@@ -110,7 +110,7 @@ def list_available(xc3d):
         vout = rawtx["vout"][output['vout']]
         pk = vout["scriptPubKey"]
 
-        # This code only deals with ordinary pay-to-blocknetdx-address
+        # This code only deals with ordinary pay-to-xcurrency-address
         # or pay-to-script-hash outputs right now; anything exotic is ignored.
         if pk["type"] != "pubkeyhash" and pk["type"] != "scripthash":
             continue

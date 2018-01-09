@@ -24,7 +24,7 @@
  *
  * \section intro_sec Introduction
  *
- * This is the developer documentation of the reference client for an experimental new digital currency called XCurrency (http://www.xcurrency.org),
+ * This is the developer documentation of the reference client for an experimental new digital currency called XCurrency (http://www.xcurrency.co),
  * which enables instant payments to anyone, anywhere in the world. XCurrency uses peer-to-peer technology to operate
  * with no central authority: managing transactions and issuing money are carried out collectively by the network.
  *
@@ -69,13 +69,13 @@ bool AppInit(int argc, char* argv[])
 
     // Process help and version before taking care about datadir
     if (mapArgs.count("-?") || mapArgs.count("-help") || mapArgs.count("-version")) {
-        std::string strUsage = _("Blocknetdx Core Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
+        std::string strUsage = _("XCurrency Core Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
 
         if (mapArgs.count("-version")) {
             strUsage += LicenseInfo();
         } else {
             strUsage += "\n" + _("Usage:") + "\n" +
-                        "  xc3d [options]                     " + _("Start Blocknetdx Core Daemon") + "\n";
+                        "  xc3d [options]                     " + _("Start XCurrency Core Daemon") + "\n";
 
             strUsage += "\n" + HelpMessage(HMM_BITCOIND);
         }

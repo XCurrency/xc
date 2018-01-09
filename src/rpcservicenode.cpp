@@ -37,7 +37,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
     }
 
-    // Parse Blocknetdx address
+    // Parse XCurrency address
     CScript scriptPubKey = GetScriptForDestination(address);
 
     // Create and send the transaction
@@ -57,8 +57,8 @@ Value obfuscation(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() == 0)
         throw runtime_error(
-            "obfuscation <blocknetdxaddress> <amount>\n"
-            "blocknetdxaddress, reset, or auto (AutoDenominate)"
+            "obfuscation <xcurrencyaddress> <amount>\n"
+            "xcurrencyaddress, reset, or auto (AutoDenominate)"
             "<amount> is a real and will be rounded to the next 0.1" +
             HelpRequiringPassphrase());
 
@@ -79,14 +79,14 @@ Value obfuscation(const Array& params, bool fHelp)
 
     if (params.size() != 2)
         throw runtime_error(
-            "obfuscation <blocknetdxaddress> <amount>\n"
-            "blocknetdxaddress, denominate, or auto (AutoDenominate)"
+            "obfuscation <xcurrencyaddress> <amount>\n"
+            "xcurrencyaddress, denominate, or auto (AutoDenominate)"
             "<amount> is a real and will be rounded to the next 0.1" +
             HelpRequiringPassphrase());
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Blocknetdx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid XCurrency address");
 
     // Amount
     CAmount nAmount = AmountFromValue(params[1]);

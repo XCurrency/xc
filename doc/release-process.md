@@ -50,7 +50,7 @@ If you're using the automated script (found in [contrib/gitian-build.sh](/contri
 
 Setup Gitian descriptors:
 
-    pushd ./blocknetdx
+    pushd ./xcurrency
     export SIGNER=(your Gitian key, ie bluematt, sipa, etc)
     export VERSION=(new version, e.g. 0.8.0)
     git fetch
@@ -92,7 +92,7 @@ Only missing files will be fetched, so this is safe to re-run for each build.
 NOTE: Offline builds must use the --url flag to ensure Gitian fetches only from local URLs. For example:
 
     pushd ./gitian-builder
-    ./bin/gbuild --url blocknetdx=/path/to/blocknetdx,signature=/path/to/sigs {rest of arguments}
+    ./bin/gbuild --url xcurrency=/path/to/xcurrency,signature=/path/to/sigs {rest of arguments}
     popd
 
 The gbuild invocations below <b>DO NOT DO THIS</b> by default.
@@ -100,34 +100,34 @@ The gbuild invocations below <b>DO NOT DO THIS</b> by default.
 ### Build and sign XCurrency Core for Linux, Windows, and OS X:
 
     pushd ./gitian-builder
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gbuild --memory 3000 --commit xcurrency=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
     ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-linux.yml
-    mv build/out/blocknetdx-*.tar.gz build/out/src/blocknetdx-*.tar.gz ../
+    mv build/out/xcurrency-*.tar.gz build/out/src/xcurrency-*.tar.gz ../
 
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gbuild --memory 3000 --commit xcurrency=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
     ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win.yml
-    mv build/out/blocknetdx-*-win-unsigned.tar.gz inputs/blocknetdx-win-unsigned.tar.gz
-    mv build/out/blocknetdx-*.zip build/out/blocknetdx-*.exe ../
+    mv build/out/xcurrency-*-win-unsigned.tar.gz inputs/xcurrency-win-unsigned.tar.gz
+    mv build/out/xcurrency-*.zip build/out/xcurrency-*.exe ../
 
-    ./bin/gbuild --memory 3000 --commit blocknetdx=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gbuild --memory 3000 --commit xcurrency=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
     ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx.yml
-    mv build/out/blocknetdx-*-osx-unsigned.tar.gz inputs/blocknetdx-osx-unsigned.tar.gz
-    mv build/out/blocknetdx-*.tar.gz build/out/blocknetdx-*.dmg ../
+    mv build/out/xcurrency-*-osx-unsigned.tar.gz inputs/xcurrency-osx-unsigned.tar.gz
+    mv build/out/xcurrency-*.tar.gz build/out/xcurrency-*.dmg ../
     popd
 
 Build output expected:
 
-  1. source tarball (`blocknetdx-${VERSION}.tar.gz`)
-  2. linux 32-bit and 64-bit dist tarballs (`blocknetdx-${VERSION}-linux[32|64].tar.gz`)
-  3. windows 32-bit and 64-bit unsigned installers and dist zips (`blocknetdx-${VERSION}-win[32|64]-setup-unsigned.exe`, `blocknetdx-${VERSION}-win[32|64].zip`)
-  4. OS X unsigned installer and dist tarball (`blocknetdx-${VERSION}-osx-unsigned.dmg`, `blocknetdx-${VERSION}-osx64.tar.gz`)
+  1. source tarball (`xcurrency-${VERSION}.tar.gz`)
+  2. linux 32-bit and 64-bit dist tarballs (`xcurrency-${VERSION}-linux[32|64].tar.gz`)
+  3. windows 32-bit and 64-bit unsigned installers and dist zips (`xcurrency-${VERSION}-win[32|64]-setup-unsigned.exe`, `xcurrency-${VERSION}-win[32|64].zip`)
+  4. OS X unsigned installer and dist tarball (`xcurrency-${VERSION}-osx-unsigned.dmg`, `xcurrency-${VERSION}-osx64.tar.gz`)
   5. Gitian signatures (in `gitian.sigs/${VERSION}-<linux|{win,osx}-unsigned>/(your Gitian key)/`)
 
 ### Verify other gitian builders signatures to your own. (Optional)
 
 Add other gitian builders keys to your gpg keyring, and/or refresh keys.
 
-    gpg --import blocknetdx/contrib/gitian-keys/*.pgp
+    gpg --import xcurrency/contrib/gitian-keys/*.pgp
     gpg --refresh-keys
 
 Verify the signatures
@@ -156,22 +156,22 @@ Codesigner only: Create Windows/OS X detached signatures:
 
 Codesigner only: Sign the osx binary:
 
-    transfer blocknetdx-osx-unsigned.tar.gz to osx for signing
-    tar xf blocknetdx-osx-unsigned.tar.gz
+    transfer xcurrency-osx-unsigned.tar.gz to osx for signing
+    tar xf xcurrency-osx-unsigned.tar.gz
     ./detached-sig-create.sh -s "Key ID"
     Enter the keychain password and authorize the signature
     Move signature-osx.tar.gz back to the gitian host
 
 Codesigner only: Sign the windows binaries:
 
-    tar xf blocknetdx-win-unsigned.tar.gz
+    tar xf xcurrency-win-unsigned.tar.gz
     ./detached-sig-create.sh -key /path/to/codesign.key
     Enter the passphrase for the key when prompted
     signature-win.tar.gz will be created
 
 Codesigner only: Commit the detached codesign payloads:
 
-    cd ~/blocknetdx-detached-sigs
+    cd ~/xcurrency-detached-sigs
     checkout the appropriate branch for this release series
     rm -rf *
     tar xf signature-osx.tar.gz
@@ -184,7 +184,7 @@ Codesigner only: Commit the detached codesign payloads:
 Non-codesigners: wait for Windows/OS X detached signatures:
 
 - Once the Windows/OS X builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [blocknetdx-detached-sigs](https://github.com/XCurrency-Project/blocknetdx-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [xcurrency-detached-sigs](https://github.com/XCurrency-Project/xcurrency-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 Create (and optionally verify) the signed OS X binary:
 
@@ -192,7 +192,7 @@ Create (and optionally verify) the signed OS X binary:
     ./bin/gbuild -i --commit signature=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
     ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../xcurrency/contrib/gitian-descriptors/gitian-osx-signer.yml
-    mv build/out/blocknetdx-osx-signed.dmg ../blocknetdx-${VERSION}-osx.dmg
+    mv build/out/xcurrency-osx-signed.dmg ../xcurrency-${VERSION}-osx.dmg
     popd
 
 Create (and optionally verify) the signed Windows binaries:
@@ -201,8 +201,8 @@ Create (and optionally verify) the signed Windows binaries:
     ./bin/gbuild -i --commit signature=v${VERSION} ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
     ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../xcurrency/contrib/gitian-descriptors/gitian-win-signer.yml
-    mv build/out/blocknetdx-*win64-setup.exe ../blocknetdx-${VERSION}-win64-setup.exe
-    mv build/out/blocknetdx-*win32-setup.exe ../blocknetdx-${VERSION}-win32-setup.exe
+    mv build/out/xcurrency-*win64-setup.exe ../xcurrency-${VERSION}-win64-setup.exe
+    mv build/out/xcurrency-*win32-setup.exe ../xcurrency-${VERSION}-win32-setup.exe
     popd
 
 Commit your signature for the signed OS X/Windows binaries:
@@ -224,23 +224,23 @@ sha256sum * > SHA256SUMS
 
 The list of files should be:
 ```
-blocknetdx-${VERSION}-aarch64-linux-gnu.tar.gz
-blocknetdx-${VERSION}-arm-linux-gnueabihf.tar.gz
-blocknetdx-${VERSION}-i686-pc-linux-gnu.tar.gz
-blocknetdx-${VERSION}-x86_64-linux-gnu.tar.gz
-blocknetdx-${VERSION}-osx64.tar.gz
-blocknetdx-${VERSION}-osx.dmg
-blocknetdx-${VERSION}.tar.gz
-blocknetdx-${VERSION}-win32-setup.exe
-blocknetdx-${VERSION}-win32.zip
-blocknetdx-${VERSION}-win64-setup.exe
-blocknetdx-${VERSION}-win64.zip
+xcurrency-${VERSION}-aarch64-linux-gnu.tar.gz
+xcurrency-${VERSION}-arm-linux-gnueabihf.tar.gz
+xcurrency-${VERSION}-i686-pc-linux-gnu.tar.gz
+xcurrency-${VERSION}-x86_64-linux-gnu.tar.gz
+xcurrency-${VERSION}-osx64.tar.gz
+xcurrency-${VERSION}-osx.dmg
+xcurrency-${VERSION}.tar.gz
+xcurrency-${VERSION}-win32-setup.exe
+xcurrency-${VERSION}-win32.zip
+xcurrency-${VERSION}-win64-setup.exe
+xcurrency-${VERSION}-win64.zip
 ```
 The `*-debug*` files generated by the gitian build contain debug symbols
 for troubleshooting by developers. It is assumed that anyone that is interested
 in debugging can run gitian to generate the files for themselves. To avoid
 end-user confusion about which file to pick, as well as save storage
-space *do not upload these to the blocknetdx.org server*.
+space *do not upload these to the xcurrency.org server*.
 
 - GPG-sign it, delete the unsigned file:
 ```
@@ -256,7 +256,7 @@ Note: check that SHA256SUMS itself doesn't end up in SHA256SUMS, which is a spur
 
   - bitcointalk announcement thread
 
-  - Optionally twitter, reddit /r/blocknetdx, ... but this will usually sort out itself
+  - Optionally twitter, reddit /r/xcurrency, ... but this will usually sort out itself
 
   - Archive release notes for the new version to `doc/release-notes/` (branch `master` and branch of the release)
 

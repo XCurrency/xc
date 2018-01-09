@@ -16,14 +16,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Blocknetdx"
-            VALUE "FileDescription",    "Blocknetdx-cli (OSS RPC client for Blocknetdx)"
+            VALUE "CompanyName",        "XCurrency"
+            VALUE "FileDescription",    "XCurrency-cli (OSS RPC client for XCurrency)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "xc3-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "xc3-cli.exe"
-            VALUE "ProductName",        "Blocknetdx-cli"
+            VALUE "ProductName",        "XCurrency-cli"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

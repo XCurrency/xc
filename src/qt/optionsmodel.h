@@ -44,7 +44,7 @@ public:
         DatabaseCache,       // int
         SpendZeroConfChange, // bool
         ObfuscationRounds,   // int
-        AnonymizeBlocknetdxAmount, //int
+        AnonymizeXCurrencyAmount, //int
         ShowServicenodesTab,  // bool
         Listen,              // bool
         OptionIDRowCount,
@@ -90,7 +90,7 @@ private:
 signals:
     void displayUnitChanged(int unit);
     void obfuscationRoundsChanged(int);
-    void anonymizeBlocknetdxAmountChanged(int);
+    void anonymizeXCurrencyAmountChanged(int);
     void coinControlFeaturesChanged(bool);
 };
 
