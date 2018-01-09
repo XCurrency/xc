@@ -6,4 +6,5 @@
 ## 2018 Roadmap and Beyond
 - Next Gen ZK Privacy (TBD)
 - Document Signing
+- IPFS Support
 
