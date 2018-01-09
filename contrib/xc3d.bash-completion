@@ -6,7 +6,7 @@
 have xc3d && {
 
 # call $xc3d for RPC
-_blocknetdx_rpc() {
+_xcurrency_rpc() {
     # determine already specified args necessary for RPC
     local rpcargs=()
     for i in ${COMP_LINE}; do
@@ -19,10 +19,10 @@ _blocknetdx_rpc() {
     $xc3d "${rpcargs[@]}" "$@"
 }
 
-# Add blocknetdx accounts to COMPREPLY
-_blocknetdx_accounts() {
+# Add xcurrency accounts to COMPREPLY
+_xcurrency_accounts() {
     local accounts
-    accounts=$(_blocknetdx_rpc listaccounts | awk '/".*"/ { a=$1; gsub(/"/, "", a); print a}')
+    accounts=$(_xcurrency_rpc listaccounts | awk '/".*"/ { a=$1; gsub(/"/, "", a); print a}')
     COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W "$accounts" -- "$cur" ) )
 }
 
@@ -53,7 +53,7 @@ _xc3d() {
     if ((cword > 3)); then
         case ${words[cword-3]} in
             addmultisigaddress)
-                _blocknetdx_accounts
+                _xcurrency_accounts
                 return 0
                 ;;
             getbalance|gettxout|importaddress|importprivkey|listreceivedbyaccount|listreceivedbyaddress|listsinceblock)
@@ -74,7 +74,7 @@ _xc3d() {
                 return 0
                 ;;
             move|setaccount)
-                _blocknetdx_accounts
+                _xcurrency_accounts
                 return 0
                 ;;
         esac
@@ -90,7 +90,7 @@ _xc3d() {
             return 0
             ;;
         getaccountaddress|getaddressesbyaccount|getbalance|getnewaddress|getreceivedbyaccount|listtransactions|move|sendfrom|sendmany)
-            _blocknetdx_accounts
+            _xcurrency_accounts
             return 0
             ;;
     esac
@@ -119,7 +119,7 @@ _xc3d() {
 
             # only parse help if senseful
             if [[ -z "$cur" || "$cur" =~ ^[a-z] ]]; then
-                commands=$(_blocknetdx_rpc help 2>/dev/null | awk '$1 ~ /^[a-z]/ { print $1; }')
+                commands=$(_xcurrency_rpc help 2>/dev/null | awk '$1 ~ /^[a-z]/ { print $1; }')
             fi
 
             COMPREPLY=( $( compgen -W "$helpopts $commands" -- "$cur" ) )

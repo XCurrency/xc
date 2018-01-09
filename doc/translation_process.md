@@ -8,11 +8,11 @@ Transifex is setup to monitor the GitHub repo for updates, and when code contain
 
 Multiple language support is critical in assisting XCurrency's global adoption, and growth. One of XCurrency's greatest strengths is cross-border money transfers, any help making that easier is greatly appreciated.
 
-See the [Transifex XCurrency project](https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations/) to assist in translations.
+See the [Transifex XCurrency project](https://www.transifex.com/xcurrency-project/xcurrency-project-translations/) to assist in translations.
 
 ### Writing code with translations
 We use automated scripts to help extract translations in both Qt, and non-Qt source files. It is rarely necessary to manually edit the files in `src/qt/locale/`. The translation source files must adhere to the following format:
-`blocknetdx_xx_YY.ts or blocknetdx_xx.ts`
+`xcurrency_xx_YY.ts or xcurrency_xx.ts`
 
 `src/qt/locale/xc3_en.ts` is treated in a special way. It is used as the source for all other translations. Whenever a string in the source code is changed, this file must be updated to reflect those changes. A custom script is used to extract strings from the non-Qt parts. This script makes use of `gettext`, so make sure that utility is installed (ie, `apt-get install gettext` on Ubuntu/Debian). Once this has been updated, `lupdate` (included in the Qt SDK) is used to update `xc3_en.ts`.
 
@@ -43,7 +43,7 @@ git commit
 ### Creating a Transifex account
 Visit the [Transifex Signup](https://www.transifex.com/signup/) page to create an account. Take note of your username and password, as they will be required to configure the command-line tool.
 
-You can find the XCurrency translation project at [https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations/](https://www.transifex.com/blocknetdx-project/blocknetdx-project-translations/).
+You can find the XCurrency translation project at [https://www.transifex.com/xcurrency-project/xcurrency-project-translations/](https://www.transifex.com/xcurrency-project/xcurrency-project-translations/).
 
 ### Installing the Transifex client command-line tool
 The client it used to fetch updated translations. If you are having problems, or need more details, see [http://docs.transifex.com/developer/client/setup](http://docs.transifex.com/developer/client/setup)
@@ -75,9 +75,9 @@ To assist in updating translations, we have created a script to help.
 
 1. `python contrib/devtools/update-translations.py`
 2. Update `src/qt/xc3_locale.qrc` manually or via
-   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(blocknetdx_\(.*\)\).ts/<file alias="\2">locale\/\1.qm<\/file>/'`
+   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(xcurrency_\(.*\)\).ts/<file alias="\2">locale\/\1.qm<\/file>/'`
 3. Update `src/Makefile.qt.include` manually or via
-   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(blocknetdx_\(.*\)\).ts/  qt\/locale\/\1.ts \\/'`
+   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(xcurrency_\(.*\)\).ts/  qt\/locale\/\1.ts \\/'`
 4. `git add` new translations from `src/qt/locale/`
 
 **Do not directly download translations** one by one from the Transifex website, as we do a few post-processing steps before committing the translations.
@@ -106,6 +106,6 @@ To create a new language template, you will need to edit the languages manifest 
 **Note:** that the language translation file **must end in `.qm`** (the compiled extension), and not `.ts`.
 
 ### Questions and general assistance
-The XCurrency Core translation maintainers include *Fuzzbawls and s3v3nh4cks*. You can find them, and others, in the [XCurrency Slack](https://blocknetdx.slack.com).
+The XCurrency Core translation maintainers include *Fuzzbawls and s3v3nh4cks*. You can find them, and others, in the [XCurrency Slack](https://xcurrency.slack.com).
 
 Announcements will be posted during application pre-releases to notify translators to check for updates.

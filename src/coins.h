@@ -457,7 +457,7 @@ public:
     unsigned int GetCacheSize() const;
 
     /** 
-     * Amount of blocknetdx coming in to a transaction
+     * Amount of xcurrency coming in to a transaction
      * Note that lightweight clients may not know anything besides the hash of previous transactions,
      * so may not be able to calculate this.
      *

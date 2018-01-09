@@ -14,8 +14,8 @@ To install:
 	sudo update-desktop-database
 
 If you build yourself, you will either need to modify the paths in
-the .desktop file or copy or symlink your blocknetdxqt binary to `/usr/bin`
-and the `../../share/pixmaps/blocknetdx128.png` to `/usr/share/pixmaps`
+the .desktop file or copy or symlink your xcurrencyqt binary to `/usr/bin`
+and the `../../share/pixmaps/xcurrency128.png` to `/usr/share/pixmaps`
 
 xc3-qt.protocol (KDE)
 

@@ -100,12 +100,12 @@ CLEAN_BITCOIN_TEST = test/*.gcda test/*.gcno $(GENERATED_TEST_FILES)
 
 CLEANFILES += $(CLEAN_BITCOIN_TEST)
 
-blocknetdx_test: $(TEST_BINARY)
+xcurrency_test: $(TEST_BINARY)
 
-blocknetdx_test_check: $(TEST_BINARY) FORCE
+xcurrency_test_check: $(TEST_BINARY) FORCE
 	$(MAKE) check-TESTS TESTS=$^
 
-blocknetdx_test_clean : FORCE
+xcurrency_test_clean : FORCE
 	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_xc3_OBJECTS) $(TEST_BINARY)
 
 check-local:

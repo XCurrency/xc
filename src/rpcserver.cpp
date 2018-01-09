@@ -303,16 +303,16 @@ static const CRPCCommand vRPCCommands[] =
         {"hidden", "reconsiderblock", &reconsiderblock, true, true, false},
         {"hidden", "setmocktime", &setmocktime, true, false, false},
 
-        /* Blocknetdx features */
-        {"blocknetdx", "servicenode", &servicenode, true, true, false},
-        {"blocknetdx", "servicenodelist", &servicenodelist, true, true, false},
-        {"blocknetdx", "mnbudget", &mnbudget, true, true, false},
-        {"blocknetdx", "mnbudgetvoteraw", &mnbudgetvoteraw, true, true, false},
-        {"blocknetdx", "mnfinalbudget", &mnfinalbudget, true, true, false},
-        {"blocknetdx", "mnsync", &mnsync, true, true, false},
-        {"blocknetdx", "spork", &spork, true, true, false},
+        /* XCurrency features */
+        {"xcurrency", "servicenode", &servicenode, true, true, false},
+        {"xcurrency", "servicenodelist", &servicenodelist, true, true, false},
+        {"xcurrency", "mnbudget", &mnbudget, true, true, false},
+        {"xcurrency", "mnbudgetvoteraw", &mnbudgetvoteraw, true, true, false},
+        {"xcurrency", "mnfinalbudget", &mnfinalbudget, true, true, false},
+        {"xcurrency", "mnsync", &mnsync, true, true, false},
+        {"xcurrency", "spork", &spork, true, true, false},
 #ifdef ENABLE_WALLET
-        {"blocknetdx", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
+        {"xcurrency", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
 
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
