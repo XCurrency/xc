@@ -122,7 +122,7 @@ If you generated a new servicenode private key, you will need to update the remo
 
 Shut down the daemon and then edit the file.
 
-```sudo nano .xcurrency/xcurrency.conf```
+```sudo nano .xc3/xcurrency.conf```
 
 ### Edit the servicenodeprivkey
 If you generated a new servicenode private key, you will need to update the servicenodeprivkey value in your remote xcurrency.conf file.
