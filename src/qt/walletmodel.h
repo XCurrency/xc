@@ -38,29 +38,59 @@ QT_END_NAMESPACE
 class SendCoinsRecipient
 {
 public:
-    explicit SendCoinsRecipient() : amount(0), nVersion(SendCoinsRecipient::CURRENT_VERSION) {}
-    explicit SendCoinsRecipient(const QString& addr, const QString& label, const CAmount& amount, const QString& message) : address(addr), label(label), amount(amount), message(message), nVersion(SendCoinsRecipient::CURRENT_VERSION) {}
+    explicit SendCoinsRecipient()
+        : inputType(ALL_COINS)
+        , useSwiftTX(false)
+        , amount(0)
+        , nVersion(SendCoinsRecipient::CURRENT_VERSION)
+    {}
+    explicit SendCoinsRecipient(const QString & addr,   const QString & label,
+                                const CAmount & amount, const QString & message)
+        : address(addr)
+        , label(label)
+        , inputType(ALL_COINS)
+        , useSwiftTX(false)
+        , amount(amount)
+        , message(message)
+        , nVersion(SendCoinsRecipient::CURRENT_VERSION)
+    {}
+    explicit SendCoinsRecipient(const QByteArray & data)
+        : dataToSend(data)
+    {
+
+    }
+
+    void clear()
+    {
+        *this = SendCoinsRecipient();
+    }
 
     // If from an insecure payment request, this is used for storing
     // the addresses, e.g. address-A<br />address-B<br />address-C.
     // Info: As we don't need to process addresses in here when using
     // payment requests, we can abuse it for displaying an address list.
     // Todo: This is a hack, should be replaced with a cleaner solution!
-    QString address;
-    QString label;
+    QString            address;
+    QString            label;
     AvailableCoinsType inputType;
-    bool useSwiftTX;
-    CAmount amount;
+    bool               useSwiftTX;
+    CAmount            amount;
+
     // If from a payment request, this is used for storing the memo
-    QString message;
+    QString            message;
 
     // If from a payment request, paymentRequest.IsInitialized() will be true
     PaymentRequestPlus paymentRequest;
-    // Empty if no authentication or invalid signature/cert/etc.
-    QString authenticatedMerchant;
 
-    static const int CURRENT_VERSION = 1;
-    int nVersion;
+    // Empty if no authentication or invalid signature/cert/etc.
+    QString            authenticatedMerchant;
+
+    // data to send via OP_RETURN
+    QByteArray         dataToSend;
+
+    static const int   CURRENT_VERSION = 1;
+    int                nVersion;
+
 
     ADD_SERIALIZE_METHODS;
 
@@ -84,12 +114,15 @@ public:
         READWRITE(sPaymentRequest);
         READWRITE(sAuthenticatedMerchant);
 
-        if (ser_action.ForRead()) {
+        if (ser_action.ForRead())
+        {
             address = QString::fromStdString(sAddress);
             label = QString::fromStdString(sLabel);
             message = QString::fromStdString(sMessage);
             if (!sPaymentRequest.empty())
+            {
                 paymentRequest.parse(QByteArray::fromRawData(sPaymentRequest.data(), sPaymentRequest.size()));
+            }
             authenticatedMerchant = QString::fromStdString(sAuthenticatedMerchant);
         }
     }

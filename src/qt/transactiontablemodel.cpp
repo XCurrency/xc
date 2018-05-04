@@ -26,12 +26,13 @@
 
 // Amount column is right-aligned it contains numbers
 static int column_alignments[] = {
-    Qt::AlignLeft | Qt::AlignVCenter, /* status */
-    Qt::AlignLeft | Qt::AlignVCenter, /* watchonly */
-    Qt::AlignLeft | Qt::AlignVCenter, /* date */
-    Qt::AlignLeft | Qt::AlignVCenter, /* type */
-    Qt::AlignLeft | Qt::AlignVCenter, /* address */
-    Qt::AlignRight | Qt::AlignVCenter /* amount */
+    Qt::AlignLeft   | Qt::AlignVCenter, /* status */
+    Qt::AlignLeft   | Qt::AlignVCenter, /* watchonly */
+    Qt::AlignCenter | Qt::AlignVCenter, /* data marker */
+    Qt::AlignLeft   | Qt::AlignVCenter, /* date */
+    Qt::AlignLeft   | Qt::AlignVCenter, /* type */
+    Qt::AlignLeft   | Qt::AlignVCenter, /* address */
+    Qt::AlignRight  | Qt::AlignVCenter /* amount */
 };
 
 // Comparison operator for sort/binary search of model tx list
@@ -210,7 +211,10 @@ TransactionTableModel::TransactionTableModel(CWallet* wallet, WalletModel* paren
                                                                                      priv(new TransactionTablePriv(wallet, this)),
                                                                                      fProcessingQueuedTransactions(false)
 {
-    columns << QString() << QString() << tr("Date") << tr("Type") << tr("Address") << BitcoinUnits::getAmountColumnTitle(walletModel->getOptionsModel()->getDisplayUnit());
+    columns << QString() << QString() << QString()
+            << tr("Date") << tr("Type") << tr("Address")
+            << BitcoinUnits::getAmountColumnTitle(walletModel->getOptionsModel()->getDisplayUnit());
+
     priv->refreshWallet();
 
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
@@ -380,6 +384,27 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord* wtx
     }
 }
 
+QVariant TransactionTableModel::txDataDecoration(const TransactionRecord * wtx) const
+{
+    CTransaction tx;
+    uint256 block;
+    if (!GetTransaction(wtx->hash, tx, block))
+    {
+        return QVariant();
+    }
+
+    const std::vector<CTxOut> & vout = tx.vout;
+    for (const CTxOut & out : vout)
+    {
+        if (out.scriptPubKey.Find(OP_RETURN) > 0)
+        {
+            return QIcon(":/icons/eye");
+        }
+    }
+
+    return QVariant();
+}
+
 QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, bool tooltip) const
 {
     QString watchAddress;
@@ -513,7 +538,8 @@ QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
             return txWatchonlyDecoration(rec);
         case ToAddress:
             return txAddressDecoration(rec);
-        }
+        case DataMarker:
+            return txDataDecoration(rec);        }
         break;
     case Qt::DisplayRole:
         switch (index.column()) {
@@ -590,6 +616,8 @@ QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
         return formatTxAmount(rec, false, BitcoinUnits::separatorNever);
     case StatusRole:
         return rec->status.status;
+    case DataRole:
+        return txData(rec);
     }
     return QVariant();
 }
@@ -605,6 +633,8 @@ QVariant TransactionTableModel::headerData(int section, Qt::Orientation orientat
             switch (section) {
             case Status:
                 return tr("Transaction status. Hover over this field to show number of confirmations.");
+            case DataMarker:
+                return tr("Contains data in transaction");
             case Date:
                 return tr("Date and time that the transaction was received.");
             case Type:
@@ -711,4 +741,46 @@ void TransactionTableModel::unsubscribeFromCoreSignals()
     // Disconnect signals from wallet
     wallet->NotifyTransactionChanged.disconnect(boost::bind(NotifyTransactionChanged, this, _1, _2, _3));
     wallet->ShowProgress.disconnect(boost::bind(ShowProgress, this, _1, _2));
+}
+
+//*****************************************************************************
+//*****************************************************************************
+QVariant TransactionTableModel::txData(const TransactionRecord * txr) const
+{
+    CTransaction tx;
+    uint256 block;
+    if (!GetTransaction(txr->hash, tx, block))
+    {
+        return QVariant();
+    }
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << txr->hash.ToString().c_str();
+    qDebug() << tx.GetHash().ToString().c_str();
+
+    uint32_t cnt = 0;
+    const std::vector<CTxOut> & vout = tx.vout;
+    for (const CTxOut & out : vout)
+    {
+        auto it = out.scriptPubKey.begin();
+        opcodetype op;
+        out.scriptPubKey.GetOp(it, op);
+        if (op == OP_RETURN)
+        {
+            std::vector<unsigned char> data;
+            out.scriptPubKey.GetOp(it, op, data);
+
+            // QByteArray imgData(out.scriptPubKey.begin()+1, out.scriptPubKey.end());
+            // std::vector<std::vector<unsigned char> > stack;
+            // if (EvalScript(stack, out.scriptPubKey, tx, cnt, 0))
+            // {
+            //     return QVariant();
+            // }
+            return QVariant(QByteArray(reinterpret_cast<const char *>(&data[0]), data.size()));
+        }
+
+        ++cnt;
+    }
+
+    return QVariant();
 }

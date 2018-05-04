@@ -205,11 +205,13 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
     QList<SendCoinsRecipient> recipients = transaction.getRecipients();
     std::vector<std::pair<CScript, CAmount> > vecSend;
 
-    if (recipients.empty()) {
+    if (recipients.empty())
+    {
         return OK;
     }
 
-    if (isAnonymizeOnlyUnlocked()) {
+    if (isAnonymizeOnlyUnlocked())
+    {
         return AnonymizeOnlyUnlocked;
     }
 
@@ -217,11 +219,15 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
     int nAddresses = 0;
 
     // Pre-check input data for validity
-    foreach (const SendCoinsRecipient& rcp, recipients) {
-        if (rcp.paymentRequest.IsInitialized()) { // PaymentRequest...
+    foreach (const SendCoinsRecipient& rcp, recipients)
+    {
+        if (rcp.paymentRequest.IsInitialized())
+        {
+            // PaymentRequest...
             CAmount subtotal = 0;
             const payments::PaymentDetails& details = rcp.paymentRequest.getDetails();
-            for (int i = 0; i < details.outputs_size(); i++) {
+            for (int i = 0; i < details.outputs_size(); i++)
+            {
                 const payments::Output& out = details.outputs(i);
                 if (out.amount() <= 0) continue;
                 subtotal += out.amount();
@@ -229,17 +235,24 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                 CScript scriptPubKey(scriptStr, scriptStr + out.script().size());
                 vecSend.push_back(std::pair<CScript, CAmount>(scriptPubKey, out.amount()));
             }
-            if (subtotal <= 0) {
+            if (subtotal <= 0)
+            {
                 return InvalidAmount;
             }
             total += subtotal;
-        } else { // User-entered xcurrency address / amount:
-            if (!validateAddress(rcp.address)) {
+        }
+        else if (!rcp.address.isEmpty())
+        {
+            // User-entered xcurrency address / amount:
+            if (!validateAddress(rcp.address))
+            {
                 return InvalidAddress;
             }
-            if (rcp.amount <= 0) {
+            if (rcp.amount <= 0)
+            {
                 return InvalidAmount;
             }
+
             setAddress.insert(rcp.address);
             ++nAddresses;
 
@@ -248,14 +261,26 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
             total += rcp.amount;
         }
+        else if (!rcp.dataToSend.isEmpty())
+        {
+            // data to send with transaction
+            CScript scriptPubKey = GetScriptForData(std::vector<unsigned char>(rcp.dataToSend.begin(), rcp.dataToSend.end()));
+            if (!scriptPubKey.empty())
+            {
+                vecSend.push_back(std::pair<CScript, CAmount>(scriptPubKey, rcp.amount));
+            }
+        }
     }
-    if (setAddress.size() != nAddresses) {
+
+    if (setAddress.size() != nAddresses)
+    {
         return DuplicateAddress;
     }
 
     CAmount nBalance = getBalance(coinControl);
 
-    if (total > nBalance) {
+    if (total > nBalance)
+    {
         return AmountExceedsBalance;
     }
 
@@ -270,33 +295,41 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CReserveKey* keyChange = transaction.getPossibleKeyChange();
 
 
-        if (recipients[0].useSwiftTX && total > GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
-            emit message(tr("Send Coins"), tr("SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 BLOCK.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
-                CClientUIInterface::MSG_ERROR);
+        if (recipients[0].useSwiftTX && total > GetSporkValue(SPORK_5_MAX_VALUE) * COIN)
+        {
+            emit message(tr("Send Coins"),
+                         tr("SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 BLOCK.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
+                         CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
 
         bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, strFailReason, coinControl, recipients[0].inputType, recipients[0].useSwiftTX);
         transaction.setTransactionFee(nFeeRequired);
 
-        if (recipients[0].useSwiftTX && newTx->GetValueOut() > GetSporkValue(SPORK_5_MAX_VALUE) * COIN) {
-            emit message(tr("Send Coins"), tr("SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 BLOCK.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
-                CClientUIInterface::MSG_ERROR);
+        if (recipients[0].useSwiftTX && newTx->GetValueOut() > GetSporkValue(SPORK_5_MAX_VALUE) * COIN)
+        {
+            emit message(tr("Send Coins"),
+                         tr("SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 BLOCK.").arg(GetSporkValue(SPORK_5_MAX_VALUE)),
+                         CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
 
-        if (!fCreated) {
-            if ((total + nFeeRequired) > nBalance) {
+        if (!fCreated)
+        {
+            if ((total + nFeeRequired) > nBalance)
+            {
                 return SendCoinsReturn(AmountWithFeeExceedsBalance);
             }
             emit message(tr("Send Coins"), QString::fromStdString(strFailReason),
-                CClientUIInterface::MSG_ERROR);
+                         CClientUIInterface::MSG_ERROR);
             return TransactionCreationFailed;
         }
 
         // reject insane fee
         if (nFeeRequired > ::minRelayTxFee.GetFee(transaction.getTransactionSize()) * 10000)
+        {
             return InsaneFee;
+        }
     }
 
     return SendCoinsReturn(OK);
