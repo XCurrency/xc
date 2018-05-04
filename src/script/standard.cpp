@@ -317,3 +317,16 @@ CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys)
     script << CScript::EncodeOP_N(keys.size()) << OP_CHECKMULTISIG;
     return script;
 }
+
+CScript GetScriptForData(const std::vector<unsigned char> & data)
+{
+    CScript script;
+
+    if (data.size() > 512*1024)
+    {
+        return script;
+    }
+
+    script << OP_RETURN << data;
+    return script;
+}
