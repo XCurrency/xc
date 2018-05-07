@@ -304,8 +304,19 @@ void SendCoinsDialog::on_sendButton_clicked()
     if (ui->txWithImage->isChecked())
     {
         QByteArray data;
-        if (!loadDataFile(data) || data.size() == 0)
+        try
         {
+            if (!loadDataFile(data) || data.size() == 0)
+            {
+                return;
+            }
+        }
+        catch (const std::exception & e)
+        {
+            QMessageBox::warning(this,
+                                 tr("Send Coins"),
+                                 tr("Exception: %1").arg(QString::fromStdString(e.what())),
+                                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         }
 
@@ -324,9 +335,10 @@ void SendCoinsDialog::on_sendButton_clicked()
     {
         CoinControlDialog::coinControl->fSplitBlock = false;
         ui->splitBlockCheckBox->setCheckState(Qt::Unchecked);
-        QMessageBox::warning(this, tr("Send Coins"),
-            tr("The split block tool does not work with multiple addresses. Try again."),
-            QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this,
+                             tr("Send Coins"),
+                             tr("The split block tool does not work with multiple addresses. Try again."),
+                             QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
@@ -1190,7 +1202,7 @@ bool SendCoinsDialog::loadDataFile(QByteArray & data)
         // throw std::runtime_error("File not found");
         return false;
     }
-    if (inf.size() > 1024*1024)
+    if (inf.size() > MAX_OP_RETURN_RELAY)
     {
         // size must be less than 1M
         // throw std::runtime_error("Image file size too big");
