@@ -8,6 +8,7 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "util.h"
+#include "spork.h"
 #include "utilstrencodings.h"
 
 #include <boost/foreach.hpp>
@@ -16,7 +17,11 @@ using namespace std;
 
 typedef vector<unsigned char> valtype;
 
-unsigned nMaxDatacarrierBytes = MAX_OP_RETURN_RELAY;
+//!< bytes (+1 for OP_RETURN, +2 for the pushdata opcodes)
+unsigned int maxOpReturnRelayValue()
+{
+    return static_cast<unsigned int>(GetSporkValue(SPORK_19_OP_RETURN_VALUE));
+}
 
 CScriptID::CScriptID(const CScript& in) : uint160(Hash160(in.begin(), in.end())) {}
 
@@ -194,9 +199,11 @@ bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType)
             return false;
         if (m < 1 || m > n)
             return false;
-    } else if (whichType == TX_NULL_DATA &&
-                (!GetBoolArg("-datacarrier", true) || scriptPubKey.size() > nMaxDatacarrierBytes))
+    }
+    else if (whichType == TX_NULL_DATA && scriptPubKey.size() > maxOpReturnRelayValue())
+    {
         return false;
+    }
 
     return whichType != TX_NONSTANDARD;
 }

@@ -1202,7 +1202,7 @@ bool SendCoinsDialog::loadDataFile(QByteArray & data)
         // throw std::runtime_error("File not found");
         return false;
     }
-    if (inf.size() > MAX_OP_RETURN_RELAY)
+    if (inf.size() > maxOpReturnRelayValue())
     {
         // size must be less than 1M
         // throw std::runtime_error("Image file size too big");
