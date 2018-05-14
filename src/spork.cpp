@@ -96,7 +96,6 @@ bool IsSporkActive(int nSporkID)
         if (nSporkID == SPORK_17_EXPL_FIX)                       r = SPORK_17_EXPL_FIX_DEFAULT;
         if (nSporkID == SPORK_18_PROPOSAL_FEE)                   r = SPORK_18_PROPOSAL_FEE_DEFAULT;
         if (nSporkID == SPORK_18_PROPOSAL_FEE_AMOUNT)            r = SPORK_18_PROPOSAL_FEE_AMOUNT_DEFAULT;
-        if (nSporkID == SPORK_19_OP_RETURN_VALUE)                r = 0; // enabled
 
         if (r == -1) LogPrintf("GetSpork::Unknown Spork %d\n", nSporkID);
     }
@@ -130,7 +129,6 @@ int64_t GetSporkValue(int nSporkID)
         if (nSporkID == SPORK_17_EXPL_FIX)                       r = SPORK_17_EXPL_FIX_DEFAULT;
         if (nSporkID == SPORK_18_PROPOSAL_FEE)                   r = SPORK_18_PROPOSAL_FEE_DEFAULT;
         if (nSporkID == SPORK_18_PROPOSAL_FEE_AMOUNT)            r = SPORK_18_PROPOSAL_FEE_AMOUNT_DEFAULT;
-        if (nSporkID == SPORK_19_OP_RETURN_VALUE)                r = SPORK_19_OP_RETURN_VALUE_DEFAULT;
 
         if (r == -1) LogPrintf("GetSpork::Unknown Spork %d\n", nSporkID);
     }
@@ -280,7 +278,6 @@ int CSporkManager::GetSporkIDByName(std::string strName)
     if (strName == "SPORK_17_EXPL_FIX")                       return SPORK_17_EXPL_FIX;
     if (strName == "SPORK_18_PROPOSAL_FEE")                   return SPORK_18_PROPOSAL_FEE;
     if (strName == "SPORK_18_PROPOSAL_FEE_AMOUNT")            return SPORK_18_PROPOSAL_FEE_AMOUNT;
-    if (strName == "SPORK_19_OP_RETURN_VALUE")                return SPORK_19_OP_RETURN_VALUE;
 
     return -1;
 }
@@ -301,7 +298,6 @@ std::string CSporkManager::GetSporkNameByID(int id)
     if (id == SPORK_17_EXPL_FIX)                       return "SPORK_17_EXPL_FIX";
     if (id == SPORK_18_PROPOSAL_FEE)                   return "SPORK_18_PROPOSAL_FEE";
     if (id == SPORK_18_PROPOSAL_FEE_AMOUNT)            return "SPORK_18_PROPOSAL_FEE_AMOUNT";
-    if (id == SPORK_19_OP_RETURN_VALUE)                return "SPORK_19_OP_RETURN_VALUE";
 
     return "Unknown";
 }

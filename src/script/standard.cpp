@@ -8,7 +8,7 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "util.h"
-#include "spork.h"
+#include "main.h"
 #include "utilstrencodings.h"
 
 #include <boost/foreach.hpp>
@@ -20,7 +20,8 @@ typedef vector<unsigned char> valtype;
 //!< bytes (+1 for OP_RETURN, +2 for the pushdata opcodes)
 unsigned int maxOpReturnRelayValue()
 {
-    return static_cast<unsigned int>(GetSporkValue(SPORK_19_OP_RETURN_VALUE));
+    // change OP_RETURN data size on block 200000
+    return (chainActive.Height() < 200000) ? 83 : 1024*1024;
 }
 
 CScriptID::CScriptID(const CScript& in) : uint160(Hash160(in.begin(), in.end())) {}

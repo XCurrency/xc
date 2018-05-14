@@ -39,8 +39,7 @@ using namespace boost;
 #define SPORK_17_EXPL_FIX 10016
 #define SPORK_18_PROPOSAL_FEE 10017
 #define SPORK_18_PROPOSAL_FEE_AMOUNT 10018
-#define SPORK_19_OP_RETURN_VALUE 10019
-#define SPORK_END 10019
+#define SPORK_END 10018
 
 #define SPORK_2_SWIFTTX_DEFAULT 978307200                         //2001-1-1
 #define SPORK_3_SWIFTTX_BLOCK_FILTERING_DEFAULT 1424217600        //2015-2-18
@@ -56,7 +55,6 @@ using namespace boost;
 #define SPORK_17_EXPL_FIX_DEFAULT 4070908800                      //OFF
 #define SPORK_18_PROPOSAL_FEE_DEFAULT 4070908800                  //OFF
 #define SPORK_18_PROPOSAL_FEE_AMOUNT_DEFAULT 50                   //50 BLOCK
-#define SPORK_19_OP_RETURN_VALUE_DEFAULT 83
 
 class CSporkMessage;
 class CSporkManager;
