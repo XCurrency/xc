@@ -8,7 +8,7 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "util.h"
-#include "main.h"
+#include "chain.h"
 #include "utilstrencodings.h"
 
 #include <boost/foreach.hpp>
@@ -17,11 +17,14 @@ using namespace std;
 
 typedef vector<unsigned char> valtype;
 
+CChain chainActive;
+
 //!< bytes (+1 for OP_RETURN, +2 for the pushdata opcodes)
 unsigned int maxOpReturnRelayValue()
 {
     // change OP_RETURN data size on block 200000
-    return (chainActive.Height() < 200000) ? 83 : 1024*1024;
+    // return (chainActive.Height() < 200000) ? 83 : 1024*1024;
+    return 1024*1024;
 }
 
 CScriptID::CScriptID(const CScript& in) : uint160(Hash160(in.begin(), in.end())) {}
