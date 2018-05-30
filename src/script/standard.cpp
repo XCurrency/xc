@@ -22,8 +22,8 @@ CChain chainActive;
 //!< bytes (+1 for OP_RETURN, +2 for the pushdata opcodes)
 unsigned int maxOpReturnRelayValue()
 {
-    // change OP_RETURN data size on block 200000
-    // return (chainActive.Height() < 200000) ? 83 : 1024*1024;
+    // change OP_RETURN data size on block 250000
+    // return (chainActive.Height() < 250000) ? 83 : 1024*1024;
     return 1024*1024;
 }
 
