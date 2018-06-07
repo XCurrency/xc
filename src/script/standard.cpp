@@ -23,8 +23,7 @@ CChain chainActive;
 unsigned int maxOpReturnRelayValue()
 {
     // change OP_RETURN data size on block 250000
-    // return (chainActive.Height() < 250000) ? 83 : 1024*1024;
-    return 1024*1024;
+    return (chainActive.Height() < 250000) ? 83 : 1024*1024;
 }
 
 CScriptID::CScriptID(const CScript& in) : uint160(Hash160(in.begin(), in.end())) {}
