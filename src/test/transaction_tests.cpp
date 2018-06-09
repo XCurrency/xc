@@ -22,6 +22,8 @@
 #include <boost/assign/list_of.hpp>
 #include "json/json_spirit_writer_template.h"
 
+#define MAX_OP_RETURN_RELAY 10
+
 using namespace std;
 using namespace json_spirit;
 using namespace boost::algorithm;
