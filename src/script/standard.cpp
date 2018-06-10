@@ -8,6 +8,7 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "util.h"
+#include "chain.h"
 #include "utilstrencodings.h"
 
 #include <boost/foreach.hpp>
@@ -16,7 +17,15 @@ using namespace std;
 
 typedef vector<unsigned char> valtype;
 
-unsigned nMaxDatacarrierBytes = MAX_OP_RETURN_RELAY;
+CChain chainActive;
+
+//!< bytes (+1 for OP_RETURN, +2 for the pushdata opcodes)
+unsigned int maxOpReturnRelayValue()
+{
+    // change OP_RETURN data size on block 200000
+    // return (chainActive.Height() < 200000) ? 83 : 1024*1024;
+    return 1024*1024;
+}
 
 CScriptID::CScriptID(const CScript& in) : uint160(Hash160(in.begin(), in.end())) {}
 
@@ -194,9 +203,11 @@ bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType)
             return false;
         if (m < 1 || m > n)
             return false;
-    } else if (whichType == TX_NULL_DATA &&
-                (!GetBoolArg("-datacarrier", true) || scriptPubKey.size() > nMaxDatacarrierBytes))
+    }
+    else if (whichType == TX_NULL_DATA && scriptPubKey.size() > maxOpReturnRelayValue())
+    {
         return false;
+    }
 
     return whichType != TX_NONSTANDARD;
 }
@@ -315,5 +326,18 @@ CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys)
     BOOST_FOREACH(const CPubKey& key, keys)
         script << ToByteVector(key);
     script << CScript::EncodeOP_N(keys.size()) << OP_CHECKMULTISIG;
+    return script;
+}
+
+CScript GetScriptForData(const std::vector<unsigned char> & data)
+{
+    CScript script;
+
+    if (data.size() > 512*1024)
+    {
+        return script;
+    }
+
+    script << OP_RETURN << data;
     return script;
 }

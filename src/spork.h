@@ -25,8 +25,6 @@ using namespace boost;
     - This would result in old clients getting confused about which spork is for what
 */
 #define SPORK_START 10001
-#define SPORK_END 10018
-
 #define SPORK_2_SWIFTTX 10001
 #define SPORK_3_SWIFTTX_BLOCK_FILTERING 10002
 #define SPORK_5_MAX_VALUE 10004
@@ -41,6 +39,7 @@ using namespace boost;
 #define SPORK_17_EXPL_FIX 10016
 #define SPORK_18_PROPOSAL_FEE 10017
 #define SPORK_18_PROPOSAL_FEE_AMOUNT 10018
+#define SPORK_END 10018
 
 #define SPORK_2_SWIFTTX_DEFAULT 978307200                         //2001-1-1
 #define SPORK_3_SWIFTTX_BLOCK_FILTERING_DEFAULT 1424217600        //2015-2-18

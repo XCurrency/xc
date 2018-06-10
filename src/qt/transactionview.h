@@ -50,6 +50,7 @@ public:
 
     enum ColumnWidths {
         STATUS_COLUMN_WIDTH = 23,
+        DATAMARKER_COLUMN_WIDTH = 23,
         WATCHONLY_COLUMN_WIDTH = 23,
         DATE_COLUMN_WIDTH = 120,
         TYPE_COLUMN_WIDTH = 240,
@@ -86,6 +87,7 @@ private slots:
     void contextualMenu(const QPoint&);
     void dateRangeChanged();
     void showDetails();
+    void showTxData();
     void copyAddress();
     void editLabel();
     void copyLabel();

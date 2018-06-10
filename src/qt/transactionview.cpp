@@ -34,6 +34,12 @@
 #include <QTableView>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QDesktopServices>
+#include <QUuid>
+#include <QFile>
+#include <QUrl>
 
 TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), transactionProxyModel(0),
                                                     transactionView(0)
@@ -46,10 +52,10 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     hlayout->setContentsMargins(0, 0, 0, 0);
 #ifdef Q_OS_MAC
     hlayout->setSpacing(5);
-    hlayout->addSpacing(26);
+    hlayout->addSpacing(26*2);
 #else
     hlayout->setSpacing(0);
-    hlayout->addSpacing(23);
+    hlayout->addSpacing(23*2);
 #endif
 
     watchOnlyWidget = new QComboBox(this);
@@ -144,12 +150,13 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     transactionView = view;
 
     // Actions
-    QAction* copyAddressAction = new QAction(tr("Copy address"), this);
-    QAction* copyLabelAction = new QAction(tr("Copy label"), this);
-    QAction* copyAmountAction = new QAction(tr("Copy amount"), this);
-    QAction* copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
-    QAction* editLabelAction = new QAction(tr("Edit label"), this);
-    QAction* showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction * copyAddressAction = new QAction(tr("Copy address"), this);
+    QAction * copyLabelAction   = new QAction(tr("Copy label"), this);
+    QAction * copyAmountAction  = new QAction(tr("Copy amount"), this);
+    QAction * copyTxIDAction    = new QAction(tr("Copy transaction ID"), this);
+    QAction * editLabelAction   = new QAction(tr("Edit label"), this);
+    QAction * showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction * showTxDataAction  = new QAction(tr("Show transaction data"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -158,28 +165,30 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     contextMenu->addAction(copyTxIDAction);
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
+    contextMenu->addAction(showTxDataAction);
 
     mapperThirdPartyTxUrls = new QSignalMapper(this);
 
     // Connect actions
     connect(mapperThirdPartyTxUrls, SIGNAL(mapped(QString)), this, SLOT(openThirdPartyTxUrl(QString)));
 
-    connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
-    connect(typeWidget, SIGNAL(activated(int)), this, SLOT(chooseType(int)));
-    connect(watchOnlyWidget, SIGNAL(activated(int)), this, SLOT(chooseWatchonly(int)));
-    connect(addressWidget, SIGNAL(textChanged(QString)), this, SLOT(changedPrefix(QString)));
-    connect(amountWidget, SIGNAL(textChanged(QString)), this, SLOT(changedAmount(QString)));
+    connect(dateWidget,      SIGNAL(activated(int)),       this, SLOT(chooseDate(int)));
+    connect(typeWidget,      SIGNAL(activated(int)),       this, SLOT(chooseType(int)));
+    connect(watchOnlyWidget, SIGNAL(activated(int)),       this, SLOT(chooseWatchonly(int)));
+    connect(addressWidget,   SIGNAL(textChanged(QString)), this, SLOT(changedPrefix(QString)));
+    connect(amountWidget,    SIGNAL(textChanged(QString)), this, SLOT(changedAmount(QString)));
 
-    connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SIGNAL(doubleClicked(QModelIndex)));
-    connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(computeSum()));
+    connect(view, SIGNAL(doubleClicked(QModelIndex)),         this, SIGNAL(doubleClicked(QModelIndex)));
+    connect(view, SIGNAL(clicked(QModelIndex)),               this, SLOT(computeSum()));
     connect(view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
 
     connect(copyAddressAction, SIGNAL(triggered()), this, SLOT(copyAddress()));
-    connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(copyLabel()));
-    connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
-    connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
-    connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
+    connect(copyLabelAction,   SIGNAL(triggered()), this, SLOT(copyLabel()));
+    connect(copyAmountAction,  SIGNAL(triggered()), this, SLOT(copyAmount()));
+    connect(copyTxIDAction,    SIGNAL(triggered()), this, SLOT(copyTxID()));
+    connect(editLabelAction,   SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
+    connect(showTxDataAction,  SIGNAL(triggered()), this, SLOT(showTxData()));
 }
 
 void TransactionView::setModel(WalletModel* model)
@@ -205,6 +214,7 @@ void TransactionView::setModel(WalletModel* model)
         transactionView->verticalHeader()->hide();
 
         transactionView->setColumnWidth(TransactionTableModel::Status, STATUS_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::DataMarker, DATAMARKER_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Date, DATE_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Type, TYPE_COLUMN_WIDTH);
@@ -374,9 +384,15 @@ void TransactionView::exportClicked()
 void TransactionView::contextualMenu(const QPoint& point)
 {
     QModelIndex index = transactionView->indexAt(point);
-    if (index.isValid()) {
-        contextMenu->exec(QCursor::pos());
+    if (!index.isValid())
+    {
+        return;
     }
+
+    // TODO disable last action when no tx data
+    // contextMenu->actions().last()->setVisible(false);
+
+    contextMenu->exec(QCursor::pos());
 }
 
 void TransactionView::copyAddress()
@@ -561,4 +577,49 @@ void TransactionView::updateWatchOnlyColumn(bool fHaveWatchOnly)
 {
     watchOnlyWidget->setVisible(fHaveWatchOnly);
     transactionView->setColumnHidden(TransactionTableModel::Watchonly, !fHaveWatchOnly);
+}
+
+void TransactionView::showTxData()
+{
+    if (!transactionView->selectionModel())
+    {
+        return;
+    }
+
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    if (selection.isEmpty())
+    {
+        return;
+    }
+
+    QModelIndex idx = selection.at(0);
+
+    QByteArray ba = idx.data(TransactionTableModel::DataRole).toByteArray();
+    if (!ba.size())
+    {
+        QMessageBox::warning(this, trUtf8("Data view"), trUtf8("No op_return data in transaction"));
+        return;
+    }
+
+    QMimeDatabase mimeDb;
+    QMimeType mimeType = mimeDb.mimeTypeForData(ba);
+
+    if (!mimeType.inherits(QLatin1String("application/pdf")))
+    {
+        QMessageBox::warning(this, trUtf8("Data view"), trUtf8("Data is not PDF type."));
+        return;
+    }
+
+    QString location = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QString fileName = QStringLiteral("%1.pdf").arg(QUuid::createUuid().toString());
+    QFile saveFile(QStringLiteral("%1/%2").arg(location).arg(fileName));
+
+    saveFile.open(QFile::WriteOnly);
+    saveFile.write(ba);
+    saveFile.close();
+
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(saveFile.fileName())))
+    {
+        QMessageBox::warning(this, trUtf8("Data view"), trUtf8("Can't find program to open PDF documents"));
+    }
 }

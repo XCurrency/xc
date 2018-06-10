@@ -10,6 +10,8 @@
 #include <QDialog>
 #include <QString>
 
+//******************************************************************************
+//******************************************************************************
 static const int MAX_SEND_POPUP_ENTRIES = 10;
 
 class ClientModel;
@@ -17,6 +19,8 @@ class OptionsModel;
 class SendCoinsEntry;
 class SendCoinsRecipient;
 
+//******************************************************************************
+//******************************************************************************
 namespace Ui
 {
 class SendCoinsDialog;
@@ -26,7 +30,9 @@ QT_BEGIN_NAMESPACE
 class QUrl;
 QT_END_NAMESPACE
 
+//******************************************************************************
 /** Dialog for sending bitcoins */
+//******************************************************************************
 class SendCoinsDialog : public QDialog
 {
     Q_OBJECT
@@ -70,6 +76,9 @@ private:
     void minimizeFeeSection(bool fMinimize);
     void updateFeeMinimizedLabel();
 
+    bool loadDataFile(QByteArray & data);
+    void processPaymentsWithImage();
+
 private slots:
     void on_sendButton_clicked();
     void on_buttonChooseFee_clicked();
@@ -97,6 +106,9 @@ private slots:
     void updateMinFeeLabel();
     void updateSmartFeeLabel();
     void updateGlobalFeeVariables();
+
+    void on_txWithImage_clicked();
+    void on_selectImageButton_clicked();
 
 signals:
     // Fired when a message should be reported to the user

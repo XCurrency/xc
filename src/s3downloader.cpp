@@ -184,6 +184,9 @@ void S3Downloader::handleReadHeaders(const boost::system::error_code &error)
 
 void S3Downloader::handleReadContent(const boost::system::error_code &error)
 {
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L 
+    // static_assert(false, "fix for openssl 1.1"); 
+#else
     if (error &&
         error != boost::asio::error::eof &&
         error != boost::system::error_code(ERR_PACK(ERR_LIB_SSL, 0, SSL_R_SHORT_READ), boost::asio::error::get_ssl_category()))
@@ -228,10 +231,14 @@ void S3Downloader::handleReadContent(const boost::system::error_code &error)
         callback(list, "");
         close();
     }
+#endif
 }
 
 bool S3Downloader::verifyCertificate(bool preverified, ssl::verify_context &ctx)
 {
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L 
+    // static_assert(false, "fix for openssl 1.1"); 
+#else
     int8_t subject_name[256];
     X509_STORE_CTX *cts = ctx.native_handle();
 
@@ -249,6 +256,7 @@ bool S3Downloader::verifyCertificate(bool preverified, ssl::verify_context &ctx)
 
     const int32_t name_length = 256;
     X509_NAME_oneline(X509_get_subject_name(cert), reinterpret_cast<char*>(subject_name), name_length);
+#endif 
 
     return true;
 }
