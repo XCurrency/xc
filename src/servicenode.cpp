@@ -326,10 +326,11 @@ std::string CServicenode::GetStatus()
 
 bool CServicenode::IsValidNetAddr()
 {
+    SetReachable(Network::NET_IPV4, true);
+
     // TODO: regtest is fine with any addresses for now,
     // should probably be a bit smarter if one day we start to implement tests for this
-    return Params().NetworkID() == CBaseChainParams::REGTEST ||
-           (IsReachable(addr) && addr.IsRoutable());
+    return Params().NetworkID() == CBaseChainParams::REGTEST || (IsReachable(addr) && addr.IsRoutable());
 }
 
 CServicenodeBroadcast::CServicenodeBroadcast()
